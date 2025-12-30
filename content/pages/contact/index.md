@@ -5,9 +5,11 @@ template = "page.html"
 draft = false
 +++
 
-## Контакты для связи
+Лучший способ связаться со мной — через **Telegram**. Отвечаю лично и почти всегда в течение дня.
 
-- [Telegram Channel](https://t.me/bald_man_g/)
-- [Telegram Account](https://t.me/ni_gushch/)
-- [YouTube](https://www.youtube.com/@baldman_g)
-- [Mail](nikolaigusharin@ya.ru)
+- **Telegram-канал**: [@bald_man_g](https://t.me/bald_man_g) — полезные технические заметки и мысли  
+- **Личный Telegram**: [@gnikodev](https://t.me/gnikodev) — для вопросов, предложений и нетворкинга  
+- **YouTube**: [@bald_man_g](https://youtube.com/@bald_man_g) — выступления и разборы кейсов  
+- **Email**: <nikolaigusharin@ya.ru>
+
+Если хочешь обсудить выступление, коллаборацию, менторство или просто поделиться идеей — не стесняйся. Я за содержательный диалог, а не формальности.
