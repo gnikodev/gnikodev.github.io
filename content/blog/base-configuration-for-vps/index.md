@@ -10,8 +10,7 @@ in_search_index = true
 tags = ["linux", "vps", "servers"]
 [extra]
 keywords = "Linux, VPS"
-#thumbnail = "ferris-gesture.png"
-#toc = true
+giscus = true
 series = "linux"
 +++
 
@@ -173,7 +172,7 @@ ssh root@your_server_ip
 
 2. Найди строку #Port 22. Раскомментируй ее (убери знак комментария #) и измени номер порта на выбранный ранее.
 
-   ```text
+   ```txt
    Port 53982   # Замени 53982 на свой порт
    ```
 
@@ -373,7 +372,7 @@ sudo visudo
 
 Которая откроет редактор с конфигурацией утилиты. По умолчанию открывается редактор `nano`. После этого необходимо прописать следующие строки, после блока со всеми настройками `Defaults`
 
-```text
+```txt
 Defaults logfile=/var/log/sudo.log
 Defaults log_input,log_output
 ```
@@ -423,7 +422,7 @@ Defaults log_input,log_output
 
    там нужно будет прописать строки
 
-   ```text
+   ```txt
    apply_updates = yes
    upgrade_type = security
    ```
@@ -470,7 +469,7 @@ sudo nano /etc/pam.d/common-password
 
 Нужно найти следующую строку и отредактировать ее, если такой строки нет, то нужно будет ее создать.
 
-```text
+```txt
 password required pam_cracklib.so try_first_pass retry=3 minlen=12 lcredit=1 ucredit=1 dcredit=2 ocredit=1 difok=2 reject_username
 ```
 
@@ -491,7 +490,7 @@ password required pam_cracklib.so try_first_pass retry=3 minlen=12 lcredit=1 ucr
 
 Разберем работу на примере:
 
-```text
+```txt
 password required pam_cracklib.so minlen=8 lcredit=-1 ucredit=-1 dcredit=-2 ocredit=-1 difok=2 reject_username
 ```
 

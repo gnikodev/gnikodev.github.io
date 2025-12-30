@@ -1,7 +1,7 @@
 +++
 title = "Обо мне"
 path = "about"
-template = "pages.html"
+template = "page.html"
 draft = false
 +++
 

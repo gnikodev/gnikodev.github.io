@@ -9,8 +9,7 @@ in_search_index = true
 tags = ["kubernetes", "k3s", "k8s", "certmanager", "letsencrypt"]
 [extra]
 keywords = "kubernetes, k3s, k8s, cert-manager, letsencrypt"
-#thumbnail = "ferris-gesture.png"
-#toc = true
+giscus = true
 series = "kubernetes"
 +++
 

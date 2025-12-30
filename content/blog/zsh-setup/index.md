@@ -9,8 +9,7 @@ in_search_index = true
 tags = ["linux", "zsh","oh-my-zsh",]
 [extra]
 keywords = "zsh, oh-my-zsh, powerlevel10k"
-#thumbnail = "ferris-gesture.png"
-#toc = true
+giscus = true
 series = "linux"
 +++
 

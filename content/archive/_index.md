@@ -1,6 +1,7 @@
 +++
+title = "Архив"
 template = "archive.html"
 
 [extra]
-sec = ""
+social_media_card = "archive.jpg"
 +++
