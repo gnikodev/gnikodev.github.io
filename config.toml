@@ -4,16 +4,17 @@ base_url = "https://baldman.justsquad.su"
 # Also set index format = "elasticlunr_javascript", and in [extra] uglyurls = true, integrity = false
 # If you use the npm/node script then all you have to do is set offline = true, and everything else is automatic.
 
-title = "BaldMan"
+title = "bald_man"
 #for SEO aim for 140-180 Characters
 description = "Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки."
+author = "gnikodev"
 theme = "tabi"
 
 default_language = "ru"
 compile_sass = true
 minify_html = false
 build_search_index = true
-generate_feeds = true
+generate_feeds = false
 taxonomies = [
 #    {name = "categories", feed = true},
     {name = "tags", feed = true},
@@ -29,358 +30,349 @@ taxonomies = [
 index_format = "elasticlunr_json"
 include_title = true        # include title of page/section in index
 include_description = true # include description of page/section in index
+include_path = true
 include_content = true      # include rendered content of page/section in index
 # truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
 
 [markdown]
 highlight_code = true
+bottom_footnotes = true
 highlight_theme = "css"
 render_emoji = false
+external_links_class = "external"
 external_links_target_blank = true # rel="noopener"
 external_links_no_follow = false   # rel="nofollow"
 external_links_no_referrer = false # rel="noreferrer"
-smart_punctuation = false          # `...` to `…`, `"quote"` to `“curly”` etc
+smart_punctuation = true          # `...` to `…`, `"quote"` to `“curly”` etc
 
-# Any Extra language you do not use, delete or comment out the extra language sections:
-#[languages.fr]
-#title = "Abridge"
-#description = "Abridge est un thème Zola rapide et léger utilisant le html sémantique, le CSS abridge.css class-light et aucun JS obligatoire."
-#generate_feeds = true
-#build_search_index = true
-#search.include_title = true # include title of page/section in index
-#search.include_description = true # include description of page/section in index
-#earch.include_content = true # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-#taxonomies = [
-#    {name = "categories", feed = true},
-#    {name = "tags", feed = true},
-#]
-
-#[languages.es]
-#title = "Abridge"
-#description = "Abridge es un tema de Zola rápido y liviano que utiliza HTML semántico, CSS ligero de clase abridge.css y JS no obligatorio."
-#generate_feeds = true
-#build_search_index = true
-#search.include_title = true # include title of page/section in index
-#search.include_description = true # include description of page/section in index
-#search.include_content = true # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-#taxonomies = [
-#    {name = "categories", feed = true},
-#    {name = "tags", feed = true},
-#]
-
-#[languages.pt]
-#title = "Abridge"
-#description = "Abridge é um tema rápido e leve que usa HTML semântico, CSS de clase leve abridge.css y JS não obrigatório."
-#generate_feeds = true
-#build_search_index = true
-#search.include_title = true # include title of page/section in index
-#search.include_description = true # include description of page/section in index
-#search.include_content = true # include rendered content of page/section in index
-# search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
-#taxonomies = [
-#    {name = "categories", feed = true},
-#    {name = "tags", feed = true},
-#]
+[languages.en]
+title = "BaldMan"
+description = "Nikolay Gushcharin's blog. Here you can find articles on .NET, building a smart home system, as well as about interesting development tools."
+generate_feeds = true
+build_search_index = true
+search.include_title = true # include title of page/section in index
+search.include_description = true # include description of page/section in index
+search.include_content = true # include rendered content of page/section in index
+search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
+taxonomies = [
+    {name = "tags", feed = true},
+]
 
 [extra]
-###############################################################################
-### Layout & Format
-### position: top, bottom, both, false(hidden)
-### size: s150, s140, s130, s120, s110, s95, s90, s85, s80, s75, s70, false(full size)
-### divider:    " "        "&middot;"        "&bull;"
-###############################################################################
+# Check out the documentation (or the comments below) to learn how to customise tabi:
+# https://welpo.github.io/tabi/blog/mastering-tabi-settings/
+
+# Search index format.
+# For Zola 0.17.X users only.
+# This MUST MATCH the setting in [search].index_format.
+# Example: If [search].index_format is "elasticlunr_javascript", set:
+# index_format = "elasticlunr_javascript"
+# index_format = ""
+
+# Enable JavaScript theme toggler to allow users to switch between dark/light mode.
+# If disabled, your site will use the theme specified in the `default_theme` variable.
+theme_switcher = true
+
+# Use sans-serif font everywhere.
+# By default, the serif font is only used in articles.
+override_serif_with_sans = false
+
+# This setting determines the default theme on load ("light" or "dark").
+# To follow the user's OS theme, leave it empty or unset.
+default_theme = ""
+
+# Choose the colourscheme (skin) for the theme. Default is "teal".
+# Skin available: blue, lavender, mint, red, sakura, teal, monochrome, lowcontrast_orange, lowcontrast_peach, lowcontrast_pink, indigo_ingot, evangelion
+# See them live and learn how to create your own: https://welpo.github.io/tabi/blog/customise-tabi/#skins
+# WARNING! "lowcontrast" skins, while aesthetically pleasing, may not provide optimal
+# contrast (in light theme) for readability and might not be suitable for all users.
+# Furthermore, low contrasting elements will affect your Google Lighthouse rating.
+# All other skins have optimal contrast.
+skin = "monochrome"
+
+# Set browser theme colour. Can be a single colour or [light, dark].
+# Note: Bright colors may be ignored in dark mode.
+# More details: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
+# browser_theme_color = "#968a08ff"
+browser_theme_color = ["#ffffff", "#000000"]  # Example of light/dark colours.
+
+# For multilingual sites: show current language code on the language switcher.
+show_selected_language_code_in_language_switcher = false
+
+# List additional stylesheets to load site-wide.
+# These stylesheets should be located in your site's `static` directory.
+# Example: stylesheets = ["extra1.css", "path/extra2.css"]
+# You can load a stylesheet for a single post by adding it to the [extra] section of the post's front matter, following this same format.
+stylesheets = []
+
+# Sets the default canonical URL for all pages.
+# Individual pages can override this in the [extra] section using canonical_url.
+# Example: "$base_url/blog/post1" will get the canonical URL "https://example.com/blog/post1".
+# Note: To ensure accuracy in terms of matching content, consider setting 'canonical_url' individually per page.
+# base_canonical_url = "https://example.com"
+
+# Remote repository for your Zola site.
+# Used for `show_remote_changes` and `show_remote_source` (see below).
+# Supports GitHub, GitLab, Gitea, and Codeberg.
+remote_repository_url = "https://github.com/gnikodev/gnikodev.github.io"
+# Set this to "auto" to try and auto-detect the platform based on the repository URL.
+# Accepted values are "github", "gitlab", "gitea", and "codeberg".
+remote_repository_git_platform = "auto"  # Defaults to "auto".
+# Branch in the repo hosting the Zola site.
+remote_repository_branch = "main"  # Defaults to "main".
+# Show a link to the commit history of updated posts, right next to the last updated date.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_remote_changes = true  # Defaults to true.
+# Show a link to the repository of the site, right next to the "Powered by Zola & tabi" text.
+show_remote_source = true  # Defaults to true.
+
+# Add a "copy" button to code blocks (loads ~700 bytes of JavaScript).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+copy_button = true
+
+# Make code block names clickable if they are URLs (loads ~400 bytes of JavaScript).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+code_block_name_links = false
+
+# Force left-to-right (LTR) direction for code blocks.
+# Set to false to allow code to follow the document's natural direction.
+# Can be set at page or section levels. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+force_codeblock_ltr = true
+
+# Show the author(s) of a page.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_author = false
+
+# Show the reading time of a page.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_reading_time = true
+
+# Show the date of a page below its title.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_date = true
+
+# Determines how dates are displayed in the post listing (e.g. front page or /blog). Options:
+# "date" - Show only the original date of the post (default if unset).
+# "updated" - Show only the last updated date of the post. If there is no last updated date, it shows the original date.
+# "both" - Show both the original date and the last updated date.
+post_listing_date = "date"
+
+# Enable iine like buttons on all posts: https://iine.to/
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+iine = true
+iine_icon = "thumbs_up"  # See https://iine.to/#customise
+# Unify like counts across all language versions of the same page.
+# When enabled, likes on /es/blog/hello/ will count towards /blog/hello/ (default language).
+iine_unified_languages = true
+
+# Show "Jump to posts" link next to series' title.
+# By default, the link appears automatically when a series description exceeds 2000 characters.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+# show_jump_to_posts = true
+
+# Determines if indexes should be increasing (false) or decreasing (true) in series' posts list.
+# It has only effect if the section uses indexes metadata (which is only the case for series as of now).
+# Can be set at section levels, following the hierarchy: section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+post_listing_index_reversed = false  # Defaults to false.
+
+# DEPRECATED!
+# Use Zola's built-in `bottom_footnotes = true` in the [markdown] section instead. (Available since v0.19.0)
+# Adds backlinks to footnotes (loads ~500 bytes of JavaScripts).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+footnote_backlinks = false
+
+# Enable KaTeX for all posts.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+katex = false
+
+# Enable Mermaid diagrams for all posts.
+# Loads ~2.5MB of JavaScript.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+mermaid = false
+
+# Serve Mermaid JavaScript locally. Version bundled with tabi.
+# If set to false, it will load the latest version from JSDelivr.
+# Only relevant when `mermaid = true`.
+serve_local_mermaid = true
+
+# Show links to previous and next articles at the bottom of posts.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+show_previous_next_article_links = false
+
+# Invert order of the links to previous and next articles at the bottom of posts.
+# By default, next articles are on the left side of the page and previous articles are on the right side.
+# To reverse the order (next articles on the right and previous articles on the left), set it to true.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+invert_previous_next_article_links = false
+
+# Whether the navigation for previous/next article should match the full width of the site (same as the navigation bar at the top) or the article width.
+# To match the navigation bar at the top, set it to true.
+previous_next_article_links_full_width = true
+
+# Quick navigation buttons.
+# Adds "go up" and "go to comments" buttons on the bottom right (hidden for mobile).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+quick_navigation_buttons = false
+
+# Add a Table of Contents to posts, right below the title and metadata.
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+toc = false
+
+# Date format used when listing posts (main page, /blog section, tag posts list…)
+# Default is "6th July 2049" in English and "%d %B %Y" in other languages.
+long_date_format = "%d %B %Y"
+
+# Date format used for blog posts.
+# Default is "6th July 2049" in English and "%-d %B %Y" in other languages.
+short_date_format = ""
+
+# Date format used for the archive page.
+# Default is "06 July" in English and "%d %b" in other languages.
+archive_date_format = ""
+
+# Per-language date format overrides.
+# Examples: Spanish uses "3 de febrero de 2024", German uses "3. Februar 2024"
+date_formats = [
+    { lang = "es", long = "%d de %B de %Y", short = "%-d %b %Y" },
+    { lang = "de", long = "%d. %B %Y", short = "%d.%m.%Y", archive = "%d. %b" },
+]
+
+# Custom separator used in title tag and posts metadata (between date, time to read, and tags).
+separator = "•"
+
+# Use a shorter layout for All tags listing.
+# Default: tag_name – n post[s]
+# Compact: tag_name^n (superscript number)
+compact_tags = false
+
+# How tags are sorted in a Tags listing based on templates/tags/list.html.
+# "name" for alphabetical, "frequency" for descending count of posts.
+# Default: "name".
+tag_sorting = "name"
+
+# Show clickable tags above cards.html template (e.g. projects/) to filter the displayed items.
+# Loads JS to filter. If JS is disabled, the buttons are links to the tag's page.
+# Can be set at the section or config.toml level, following the hierarchy: section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+# Default: true
+enable_cards_tag_filtering = true
+
+# Invert the order of the site title and page title in the browser tab.
+# Example: true => "Blog • ~/tabi", false => "~/tabi • Blog"
+invert_title_order = false
+
+# Full path after the base URL required. So if you were to place it in "static" it would be "/favicon.png"
+favicon = "m1024.png"
+
+# Add an emoji here to use it as favicon.
+# Compatibility: https://caniuse.com/link-icon-svg
+favicon_emoji = "🌱"
+
+# Path to the fallback image for social media cards (the preview image shown when sharing a link on WhatsApp, LinkedIn…).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+# Learn how to create these images in batch and automatically:
+# https://osc.garden/blog/automating-social-media-cards-zola/
+social_media_card = "index.jpg"
 
 menu = [
-#    {url = "blog", name = "Блог", slash = true, blank = false, size="s110"},
-#    {url = "about", name = "About", slash = true, blank = false, size="s110"},
-    {url = "archive", name = "Архив", slash = true, blank = false, size="s110"},
-#    {url = "categories", name = "Categories", slash = true, blank = false, size="s110"},
-    {url = "tags", name = "Теги", slash = true, blank = false, size="s110"},
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "archive", url = "archive", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "projects", url = "projects", trailing_slash = true },
+    #    {url = "about", name = "About", slash = true, blank = false, size="s110"},
 ]
-menu_footer = [
-    {url = "about", name = "Обо мне", slash = true, blank = false, size="s90"},
-    {url = "contact", name = "Контакты", slash = true, blank = false, size="s90"},
-    {url = "sitemap.xml", name = "Карта сайта", slash = false, blank = true, size="s90"},
+footer_menu = [
+    { name = "about", url = "about", trailing_slash = true},
+    { name = "contact", url = "contact", trailing_slash = true},
+    { name = "sitemap", url = "sitemap.xml", trailing_slash = true},
 ]
-
-toc = true
-recent = true # TOC / index
-recent_items = 15
-series = true
-series_items = 9 # Max number of items to display in series list, use 0 to disable
-#Series_parts = "$NUMBER_OF_PARTS part Series"
-
-#arrow_pagination = true # If set to true then the pagination will use the old arrows mode, be sure to also enable the icons.
-
-meta_index = { position="bottom", size="s90", author=false, readtime=false, readstring="min", date=true, updated=false, categories_tags=true, divider="" }
-meta_post = { position="top", size="s95", author=true, readtime=false, readstring="min read", date=true, updated=true, categories_tags=true, divider="" }
-
-hide_section_dates = false # hides the date for sections that use posts.html as their template.
-hide_page_nextprev_titles = false # hides the next/previous titles for pages that use page.html as their template.
-title_size_index = "s85"
-footer_size = "s80" # the size of the copyright and powered by text
-footer_credit = true
-#footer_credit_override = '<p class="s90">Powered by <a href="https://www.getzola.org/" target="_blank">Zola</a> &#38; <a href="https://github.com/Jieiku/abridge/" target="_blank">Abridge</a></p>'
-#archive_reverse = true # Set to True to sort posts chronologically per year instead of newest first on the archive page: example.com/archive/
 
 ### Uncomment one of the below lines, or neither, depending on which type of logo you want to use:
 logo = { file="logo.svg", width="128", height="128", alt="BaldManLogo", text="BaldMan", vertical-align="middle" }
 #textlogo = '<font color="#f90">A</font>bridge'
 #textlogo = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f90" viewBox="0 0 96 96" width="28" height="28"><path stroke-width="14" d="M14 99 46 7h4l32 92"/><path stroke-width="9" d="M-3 82c43-26 59-26 102 0"/><path stroke-linecap="round" stroke-width="1.5" d="M94 72v7m-5-9.8v7m-5-9.8v7.1M79 64v7M63 57.7v7m-5-8.2v7m-5-7.8v7m-5-7.2v7m-5-6.7v7m-5-6.3v7m-5-5.8v7M17 64v7m-5-4.6v7m-5-4.2v7M2 72v7"/></svg>BaldMan'
 
-sitedesc = false # enables or disables the display of the site description below the logo.
-headhr = true # show or hide horizontal rule below header
-foothr = false # show or hide horizontal rule above footer
-
-### $CURRENT_YEAR and $SITE_TITLE can be used anywhere within the copyright, you can change their position or you can also delete them and type whatever you want instead.
-#copyright = false # set to false to disable the copyright.
-#copyright_override = '© 2019-$CURRENT_YEAR $SITE_TITLE'
-#copyright_override = '© $CURRENT_YEAR $SITE_TITLE • Website content is licensed <a rel="noopener" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.'
-
-
-###############################################################################
-### meta/seo/analytic tags
-### To disable title_addition but keep built in page additions eg, Posts page: "Posts | Abridge" set title_addition to an empty string
-### To always set the page title exactly eg "Abridge" then comment out title_addition or set to false (not recommend, bad for SEO)
-###############################################################################
-
-title_separator = "|"  # Separator between title and title_addition, set as |, -, _, etc
-title_addition = "Блог Николая Гущарина" # a default value for title addition (for SEO aim for 50-70 characters including the title and separator 'Abridge | title_addition')
-author = "Nikolay Gushcharin" # Put Your Name here
-keywords = ".NET, C#, Rust, k8s, k3s, Gushcharin, Гущарин, Николай Гущарин, Nikolay Gushcharin, BaldMan" # used for the primary site index
-banner = "banner.png" # Used as default image for OpenGraph/Twitter if page specific image is undefined.
-twitter_meta = "your-user-name" # for SEO: twitter:site and twitter:creator
-google = "Your Google Site verification code."
-bing = "Your Bing Site verification code."
-seo = true  # enable or disable seo-related meta tags: opengraph, facebook, twitter
-#dev = false # development mode, if true then robots.txt should prevent search indexing.
-
 head_extra = "<meta name=\"analytics\" content=\"my-analytics-id\" /><meta name=\"advertising\" content=\"my-advertising-id\" /> <!-- Google tag (gtag.js) --> <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX\"></script> <script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js\\', new Date());  gtag('config', 'G-8T5L2SDRTX'); </script> <meta name=\"yandex-verification\" content=\"b387010222fc81c7\" />"
-
 
 ###############################################################################
 ### Footer social links; these are used in macros/social.html
 ###   https://github.com/Jieiku/abridge/blob/master/templates/macros/social.html
 ###############################################################################
 
-feed = false # this adds the RSS feed icon in the footer.
-mail = "nikolaigusharin@ya.ru"
-#mastodon = "https://mastodon.example.com/@username"
-#element = "matrix.example.com"
-#buymeacoffee = "your-user-name"
-#kofi = "your-user-name"
-#discord = "your-discord" # Everything after https://discord.com/   eg: invite/my-server  *or*  servers/my-server-id
-#twitter = "your-user-name"
-#facebook = "your-user-name"
-#linkedin = "your-user-name"
-#gitlab = "your-user-name"
-github = "ni-gushch"
-#codeberg = "your-user-name" # Everything after https://codeberg.org/   eg: username  *or*  username/repository
-#github_sponsor = "your-user-name"
-#bitbucket = "your-user-name"
-#python = "your-user-name"
-#docker = "your-user-name"
-#stack = "your-user-name"
-#instagram = "your-user-name"
-#pixelfed = "https://pixelfed.example.com/" # Heaviest icon, off by default
-#pinterest = "your-user-name"
-#twitch = "your-user-name"
-youtube = "@baldman_g"
-#peertube = "https://peertube.example.com/@username"
-#researchgate = "your-profile-id"
-telegram = "bald_man_g"
+# Email address for footer's social section.
+# Protect against spambots:
+# 1. Use base64 for email (convert at https://www.base64encode.org/ or `printf 'your@email.com' | base64`).
+# 2. Or, set 'encode_plaintext_email' to true for auto-encoding (only protects on site, not in public repos).
+email = "bmlrb2xhaWd1c2hhcmluQHlhLnJ1"
+# Decoding requires ~400 bytes of JavaScript. If JS is disabled, the email won't be displayed.
+encode_plaintext_email = true  # Setting is ignored if email is already encoded.
 
+# Social media links for the footer.
+# Built-in icons: https://github.com/welpo/tabi/tree/main/static/social_icons
+# To use a custom icon, add it to your site's `static/social_icons` directory.
+socials = [
+    { name = "github", url = "https://github.com/gnikodev/", icon = "github" },
+    { name = "telegram", url = "https://t.me/bald_man_g", icon = "telegram" },
+    { name = "instagram", url = "https://instagram.com/gnikodev", icon = "instagram" },
+    { name = "youtube", url = "https://youtube.com/@baldman_g", icon = "youtube" },
+]
 
-###############################################################################
-### Resource Files
-### You can load extra css files if you need to, just separate by comma:
-### stylesheets = [ "abridge.css", "extra.css" ]
-### search_library, library to use. valid values:
-###   false, "elasticlunr", "elasticlunrjava", "pagefind", "tinysearch", "offline"
-###     elasticlunr - elasticlunr using the elasticlunr_json index format
-###     elasticlunrjava - elasticlunr using the elasticlunr_javascript index format
-###     pagefind - pagefind using the fuse_json index format
-###     tinysearch - tinysearch using the fuse_json index format
-###     offline - elasticlunr using the elasticlunr_javascript index format with content paths relative to the location on disk.
-###       (offline: implies uglyurls=true and integrity=false, node script will pass base_url argument as the path on disk.)
-###
-###       The PWA feature is another way to build an offline site, so there are now two
-###       different ways to build an offline site with Abridge.
-###############################################################################
+# Enable a copyright notice for the footer, shown between socials and the "Powered by" text.
+# $TITLE will be replaced by the website's title.
+# $CURRENT_YEAR will be replaced by the current year.
+# $AUTHOR will be replaced by the `author` variable.
+# $SEPARATOR will be replaced by the `separator` variable.
+# Markdown is supported (links, emphasis, etc).
+# copyright = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR Unless otherwise noted, the content in this website is available under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license."
 
-uglyurls = false # if set to true then links are generated with the full path. eg https://abridge.netlify.app/index.html
-integrity = true # increases site security, should normally be true. (setting to false is useful during js development)
-js_bundle = true # multiple javascript files combined into a single file (setting to false is useful during js development)
+# For multi-language sites, you can set a different copyright for each language.
+# The old way of setting `translated_copyright = true` and using i18n files is deprecated.
+# If a translation is missing for language, the `copyright` value will be used.
+# copyright_translations.es = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR A menos que se indique lo contrario, el contenido de esta web está disponible bajo la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es)."
 
-js_copycode = true # The copy button on code blocks that allows you to copy them to the clipboard.
-js_email_encode = true # obfuscates email address in footer
-js_prestyle = true # used to preload: FontAwesome, Katex, external Google Fonts
-js_switcher = true # The button that allows manually changing between light/dark mode.
-js_switcher_default = "dark" # default nojs switcher mode: dark, light (make sure to also set $switcherDefault in abridge.scss)
+# Custom security headers. What urls should your website be able to connect to?
+# You need to specify the CSP and the URLs associated with the directive.
+# Useful if you want to load remote content safely (embed YouTube videos, which needs frame-src, for example).
+# Default directive is self.
+# Default config, allows for https remote images and embedding YouTube and Vimeo content.
+# This configuration (along with the right webserver settings) gets an A+ in Mozilla's Observatory: https://observatory.mozilla.org
+# Note: to use a Zola built-in syntax highlighting theme, allow unsafe-inline for style-src.
+allowed_domains = [
+    { directive = "font-src", domains = ["'self'", "data:"] },
+    { directive = "img-src", domains = ["'self'", "https://*", "data:"] },
+    { directive = "media-src", domains = ["'self'", "https://cdn.jsdelivr.net/"] },
+    { directive = "script-src", domains = ["'self'"] },
+    { directive = "style-src", domains = ["'self'"] },
+    { directive = "frame-src", domains = ["player.vimeo.com", "https://www.youtube-nocookie.com"] },
+]
 
-search_library = "elasticlunr"
-stylesheets = ["abridge.css"]
+# Enable the CSP directives configured (or default).
+# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
+enable_csp = true
 
-webmanifest = "manifest.min.json" # Required for PWAs
+# Font subsetting configuration.
+# This feature helps prevent text flashing in Firefox when using custom fonts.
+# See: https://welpo.github.io/tabi/blog/custom-font-subset/
+# Enable or disable font subsetting completely, both built-in and custom subsets.
+enable_subset = true
+# Use a custom subset of characters for the header.
+# If true, tabi will load the `static/custom_subset.css` file.
+# If false, tabi will use the default language-specific subset (English or Spanish).
+custom_subset = true
 
-
-###############################################################################
-### PWA (Progressive Web Application)
-### By default Abridge has pwa_NORM_TTL and pwa_LONG_TTL set to 0, this essential turns the PWA cache strategy into network first.
-###  Abridge uses cachebust hashing on js and css files, so anytime a page cache is updated, these resources would also get updated if changed.
-###  Media files rarely change, especially font files, so it is a good idea cache indefinitely.
-###  For pwa_TTL_EXEMPT indefinitely cached resources, you can force a new cache by incrementing the pwa_VER (cache version number).
-### If you would like to try a cache first strategy then set a value higher than 0 for pwa_NORM_TTL and pwa_LONG_TTL.
-###  The options below other than pwa=true, only come into play when the npm/node script is ran.
-###############################################################################
-
-pwa = true # true to load the service worker
-pwa_VER = '3.12.1' # Service Worker cache version. (increment if you need to force a new cache)
-
-### 3600=1hour, 28800=8hours, 86400=1day, 604800=1week, 1209600=2weeks
-pwa_NORM_TTL = 0 #  86400 is reasonable. html, json, xml, anything else undefined
-pwa_LONG_TTL = 0 # 604800 is reasonable.
-
-### list of files that overrides TTL_LONG/TTL_EXEMPT to be a NORM TTL.
-pwa_TTL_NORM = '"sw.min.js", "sw_load.min.js"'
-
-### TTL_LONG file extensions will be cached for the LONG_TTL duration.
-pwa_TTL_LONG = '"jpg", "jpeg", "png", "gif", "webp", "avif", "ico", "svg", "xsl", "txt"'
-
-### TTL_EXEMPT file extensions will be cached indefinitely unless sw_load version is incremented, which would invalidate any existing cache. (and a new cache would be started)
-pwa_TTL_EXEMPT = '"js", "css", "otf", "eot", "ttf", "woff", "woff2", "mp4", "webm", "mp3", "ogg"'
-
-### If set to true then the entire site is cached. (useful for making an entire site usable while offline)
-pwa_cache_all = true
-
-### List of Files for the PWA to initially Cache, used if pwa_cache_all = false
-pwa_BASE_CACHE_FILES = "'/js/theme.min.js','/js/theme_light.min.js','/abridge.css','/js/abridge.min.js','/','/404.html','/offline/','/manifest.min.json'"
-
-
-###############################################################################
-### Favicons, comment out a line to disable loading some or all of these if needed.
-###############################################################################
-
-favicon_theme_color = "#333333"
-favicon_ms_color = "#333333"
-favicon_mask = "safari-pinned-tab.svg" # safari-pinned-tab.svg
-favicon_mask_color = "#ff9900"
-favicon_svg = "favicon.svg" # favicon.svg
-favicon180 = "apple-touch-icon.png" # apple-touch-icon.png
-favicon32 = "favicon-32x32.png" # favicon-32x32.png
-favicon16 = "favicon-16x16.png" # favicon-16x16.png
-
-
-###############################################################################
-### Commenting System for visitors to leave comments on pages.
-###   hyvor talk
-###############################################################################
-
-#comments.hyvor = "9366" # hyvor website id, comment out to disable.
-#comments.hyvorcolor = "os" # set the color property for hyvor
-
-
-###############################################################################
-### Icons
-### Loading the entire fontawesome icon collection will negatively impact your sites performance.
-### For a lightweight solution consider adding only the icons that you need.
-### you can load individual scss based svg icons by including them in the _extra.scss file
-### https://github.com/Jieiku/abridge/blob/master/COPY-TO-ROOT-SASS/_extra.scss
-###############################################################################
-
-### To disable any of these icons set them to "false" (will default to unicode icons instead)
-#icon_search = "svgs svgm search" # Search button in search box.
-#icon_adjust = "svgs adjust" # Theme Switcher button in top menu. (add class svgh to change colors on hover)
-#icon_first = "svgs svgh angll" # Pagination First Page.
-#icon_prev = "svgs svgh angl" # Pagination Previous Page.
-#icon_next = "svgs svgh angr" # Pagination Next Page.
-#icon_last = "svgs svgh angrr" # Pagination Last Page.
-#icon_top = "svgs svgh angu" # Back to Top Button.
-
-#icon_read = "svgs fa-solid fa-glasses" # displayed in metadata on index and below title on page.
-#icon_date = "svgs fa-solid fa-calendar" # displayed in metadata on index and below title on page.
-#icon_info = "svgs fa-solid fa-circle-info" # displayed in metadata on index and below title on page for categories/tags
-#icon_author = "svgs fa-solid fa-pen-fancy" # displayed in metadata on index and below title on page.
-
-### Uncomment below line to load fontawesome, eg: <i class="fa-solid fa-heart"></i>
-#fontawesome = "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"
-#icon_read = "svgs fa-solid fa-glasses" # displayed in metadata on index and below title on page.
-#icon_date = "svgs fa-solid fa-calendar" # displayed in metadata on index and below title on page.
-#icon_info = "svgs fa-solid fa-circle-info" # displayed in metadata on index and below title on page for categories/tags
-#icon_author = "svgs fa-solid fa-pen-fancy" # displayed in metadata on index and below title on page.
-
-
-###############################################################################
-### Security Settings
-### Security Headers should preferably be set by your webserver (Nginx, Apache)
-###   https://observatory.mozilla.org  https://csp-evaluator.withgoogle.com/
-### If you are unable to load your security headers with your webserver, this will load a couple of them as meta tags.
-### There are many other security related headers most of which can only be set by the webserver method.
-### If you happen to use Netlify, you can define all the headers in your netlify.toml file:
-###   https://github.com/Jieiku/abridge/blob/master/netlify.toml
-### UnComment any of these lines to enable their meta tags.
-###############################################################################
-
-security_header_referrer = "strict-origin-when-cross-origin"
-
-#security_header_csp = "default-src 'none'; object-src 'none'; base-uri 'self'; manifest-src 'self'; connect-src 'self'; form-action 'self'; script-src 'self'; img-src 'self' data: cdn.cloudflare.com; frame-src 'self' www.youtube-nocookie.com player.vimeo.com; media-src 'self' data: cdn.cloudflare.com www.youtube-nocookie.com player.vimeo.com; font-src 'self' cdn.cloudflare.com cdn.jsdelivr.net fonts.gstatic.com; style-src 'self' cdn.cloudflare.com cdn.jsdelivr.net fonts.googleapis.com;"
-
-
-###############################################################################
-### FONTS - Abridge by default uses the System Font Stack
-###   https://css-tricks.com/snippets/css/system-font-stack/
-### However if you need you can load a specific font below,
-###   make sure to have the relevant woff2 fonts in your static/fonts folder
-### I measured the least Cumulative Layout Shift with: Roboto, Lato, Arimo
-###############################################################################
-
-### For externally loaded Fonts, make sure to include the FULL url including the https prefix:
-
-#fonts = [ {url = "https://fonts.googleapis.com/css?family=Roboto:400,700,italic|Roboto+Mono:400,italic"} ]
-
-### Local fonts are defined in the css, https://github.com/Jieiku/abridge/tree/master/COPY-TO-ROOT-SASS/fonts/_Arimo.scss
-### To load a local font resource, look at the bottom of this file: https://github.com/Jieiku/abridge/blob/master/COPY-TO-ROOT-SASS/abridge.scss
-
-### After loading them in the CSS, You can also define them below and it will add the preload tag to the head.
-### preloading fonts will eliminate Content Layout Shift, but will hurt with page load time. (not recommended)
-
-#fonts = [
-#    {url = "fonts/Roboto-Mono.woff2"},
-#    {url = "fonts/Roboto-Mono-Italic.woff2"},
-#    {url = "fonts/Roboto.woff2"},
-#    {url = "fonts/Roboto-Italic.woff2"},
-#    {url = "fonts/Roboto-Bold.woff2"},
-#]
-
-
-###############################################################################
-### Katex - math js library, used to to render mathematical notations
-### It's best to enable katex on a per page bases as I did here:
-###   https://abridge.netlify.app/overview-math/
-###   https://github.com/Jieiku/abridge/blob/master/content/overview-math.md?plain=1#L11-L13
-### Otherwise you will load the katex related javascript on every page!
-###############################################################################
-
-#katex_options = "js/katexoptions.js"
-#katex_bundle = "js/katexbundle.min.js"
-
-### Load Katex Local Resources
-#katex_css = "katex.min.css" # Fonts - load the css/fonts locally
-#katex_js = "js/katex.min.js" # use local js, so that we dont have to whitelist cdn.jsdelivr.net for script src in CSP
-#mathtex_js = "js/mathtex-script-type.min.js" # use local js, so that we dont have to whitelist cdn.jsdelivr.net for script src in CSP
-#katex_autorender_js = "js/katex-auto-render.min.js"
-
-### Load Katex External Resources
-#katex_css = "https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" # Fonts - use remote fonts
-#katex_css_integrity = "sha384-ZPe7yZ91iWxYumsBEOn7ieg8q/o+qh/hQpSaPow8T6BwALcXSCS6C6fSRPIAnTQs"
-#katex_js = "https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"
-#katex_js_integrity = "sha384-ljao5I1l+8KYFXG7LNEA7DyaFvuvSCmedUf6Y6JI7LJqiu8q5dEivP2nDdFH31V4"
-#katex_autorender_js = "https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"
-#katex_autorender_js_integrity = "sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
-#mathtex_js = "https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/mathtex-script-type.min.js"
-#mathtex_js_integrity = "sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT"
-
-#math = false # Recommended setting false, and enable on per page bases instead.
-#math_auto_render = false # Recommended setting false, and enable on per page bases instead.
+# giscus support for comments. https://giscus.app
+# Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup
+[extra.giscus]
+enabled_for_all_posts = false  # Enables giscus on all posts. It can be enabled on individual posts by setting `giscus = true` in the [extra] section of a post's front matter.
+automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+repo = "gnikodev/gnikodev.github.io"
+repo_id = "R_kgDOMkqe1A"  # Find this value in https://giscus.app/
+category = "Q&A"
+category_id = "DIC_kwDOMkqe1M4C0Y8a"  # Find this value in https://giscus.app/
+mapping = "slug"  # Available: pathname; url; title; slug. "slug" will use the post's filename (slug); this is the only way to share comments between languages.
+strict_title_matching = 1  # 1 to enable, 0 to disable. https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#data-strict
+enable_reactions = 1  # 1 to enable, 0 to disable.
+comment_box_above_comments = false
+light_theme = "noborder_light"
+dark_theme = "noborder_dark"
+lang = ""  # Leave blank to match the page's language.
+lazy_loading = true

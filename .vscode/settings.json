@@ -1,13 +1,21 @@
 {
     "cSpell.words": [
+        "алерты",
+        "банов",
+        "забаненных",
+        "мониторить",
+        "Раскомментируй",
+        "файлик",
         "adduser",
         "bantime",
         "bruteforce",
         "cracklib",
         "dcredit",
         "difok",
+        "dotenvy",
         "dpkg",
         "findtime",
+        "gitingone",
         "ifok",
         "lcredit",
         "libpam",
@@ -19,16 +27,11 @@
         "Nmap",
         "ocredit",
         "powerlevel",
+        "println",
         "Tasker",
         "Termux",
         "timedatectl",
         "ucredit",
-        "usermod",
-        "алерты",
-        "банов",
-        "забаненных",
-        "мониторить",
-        "Раскомментируй",
-        "файлик"
+        "usermod"
     ]
 }

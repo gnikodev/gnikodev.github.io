@@ -10,8 +10,7 @@ in_search_index = true
 tags = ["obsidian","git",]
 [extra]
 keywords = "Obsidian, Obsidian Git, Obsidian Sync"
-#thumbnail = "ferris-gesture.png"
-#toc = true
+giscus = true
 series = "obsidian"
 +++
 

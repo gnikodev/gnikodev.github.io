@@ -10,8 +10,7 @@ in_search_index = true
 tags = ["dotnet","csharp","dictionary", "cs"]
 [extra]
 keywords = "DotNET, C#, Dictionary"
-#thumbnail = "ferris-gesture.png"
-#toc = true
+giscus = true
 series = "dotnet"
 +++
 

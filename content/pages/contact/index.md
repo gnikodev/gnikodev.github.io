@@ -1,7 +1,7 @@
 +++
 title = "Контакты"
 path = "contact"
-template = "pages.html"
+template = "page.html"
 draft = false
 +++
 
