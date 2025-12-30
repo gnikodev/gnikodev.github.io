@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="https://baldman.justsquad.su/feed_style.xsl" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ru">
+    <tabi:metadata xmlns:tabi="https://github.com/welpo/tabi">
+        <tabi:base_url>https:&#x2F;&#x2F;baldman.justsquad.su</tabi:base_url>
+        <tabi:separator>
+            •
+        </tabi:separator>
+        <tabi:about_feeds>Это веб-фид, известный также как Atom-фид. Чтобы подписаться, скопируйте URL из адресной строки в ваш RSS-ридер. Посетите About Feeds для дополнительной информации и начала использования.</tabi:about_feeds>
+        <tabi:visit_the_site>Посетить веб-сайт</tabi:visit_the_site>
+        <tabi:recent_posts>Последние посты</tabi:recent_posts>
+        <tabi:last_updated_on>Обновлено $DATE</tabi:last_updated_on>
+        <tabi:default_theme></tabi:default_theme>
+        <tabi:post_listing_date>date</tabi:post_listing_date>
+        <tabi:current_section>dotnet</tabi:current_section>
+    </tabi:metadata><link rel="extra-stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" /><title>bald_man - dotnet</title>
+        <subtitle>Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки.</subtitle>
+    <link href="https://baldman.justsquad.su/tags/dotnet/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://baldman.justsquad.su/tags/dotnet/" rel="alternate" type="text/html"/>
+    <generator uri="https://www.getzola.org/">Zola</generator><updated>2025-04-18T00:00:00+00:00</updated><id>https://baldman.justsquad.su/tags/dotnet/atom.xml</id><entry xml:lang="ru">
+        <title>Ускоряем работу C# Dictionary в 2 раза.</title>
+        <published>2025-04-18T00:00:00+00:00</published>
+        <updated>2025-04-18T00:00:00+00:00</updated>
+        <author>
+            <name>gnikodev</name>
+        </author>
+        <link rel="alternate" href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/" type="text/html"/>
+        <id>https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/</id>
+        <summary type="html">Способ оптимизации работы типа Dictionary в языке программирования C#.</summary>
+        </entry>
+</feed>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https://* data:;media-src 'self' https://cdn.jsdelivr.net/;style-src 'self';frame-src player.vimeo.com https://www.youtube-nocookie.com giscus.app;connect-src 'self' vhiweeypifbwacashxjz.supabase.co;script-src 'self'  giscus.app  cdn.jsdelivr.net 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>
+bald_man • Obsidian. Git синхронизация на Android.</title>
+
+    
+    
+        <link rel="icon" type="image/png" href="https://baldman.justsquad.su/m1024.png"/>
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50%" x="50%" dominant-baseline="central" text-anchor="middle" font-size="88">🌱</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/custom_subset.css?h=0b9535a28bc3d5bf2321">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=3716ab3457d2dd050b3c" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Способы синхронизации хранилищ Obsidian на Android устройствах через Git." />
+        <meta property="og:description" content="Способы синхронизации хранилищ Obsidian на Android устройствах через Git." />
+
+    
+
+    <meta property="og:title" content="Obsidian. Git синхронизация на Android." />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="2048" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/obsidian-android-git-sync/" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;blog&#x2F;obsidian-android-git-sync&#x2F;" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script>
+            <script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    
+</head>
+
+
+<body>
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский<a role="menuitem" lang="en" aria-label="English" href="https:&#x2F;&#x2F;baldman.justsquad.su/en/blog/obsidian-android-git-sync/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный&#x2F;светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Obsidian. Git синхронизация на Android.
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/obsidian-android-git-sync/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https:&#x2F;&#x2F;baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2024-08-18">18 авг 2024</time></li><li title="1110 слов"><span class='separator' aria-hidden='true'>•</span>6 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/obsidian/">obsidian</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/git/">git</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-02-23">Обновлено 23 фев 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog&#x2F;obsidian-android-git-sync&#x2F;index.md" target=_blank
+
+ rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            <p class="p-summary" hidden>Способы синхронизации хранилищ Obsidian на Android устройствах через Git.</p><section class="e-content body"><p><strong>Obsidian</strong> — очень удобный инструмент для работы с заметками разного рода. Можно составлять просто список дел на день, а некоторые люди пишут сценарии или наброски книг.</p>
+<p>Но при его использовании встаёт вопрос о синхронизации данных. Конечно, можно использовать функционал облака от разработчиков Obsidian, но иногда хочется получить независимость от “корпораций”. И <strong>Obsidian</strong> может предоставить такой вариант.</p>
+<p>Есть два способа: установить локальный сервер синхронизации, который использует CouchDB, либо можно воспользоваться системой контроля версий Git.</p>
+<p>В этой статье пойдёт речь о том, как реализовать синхронизацию хранилища через Git на Android устройствах.</p>
+<h2 id="podgotovitel-nyi-etap"><a class="header-anchor no-hover-padding" href="#podgotovitel-nyi-etap" aria-label="Anchor link for: podgotovitel-nyi-etap"><span class="link-icon" aria-hidden="true"></span></a>
+Подготовительный этап</h2>
+<p>Для реализации любого способа нам обязательно нужен репозиторий, в котором будут храниться все документы. Для этого заходим туда, где будем создавать репозиторий (GitLab, GitHub…), логинимся и создаём пустой приватный репозиторий. Чтобы автоматически создалась ветка, можно сразу добавить в репозиторий файл <code>.gitignore</code>.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_1.jpg" alt="github_repo" /></p>
+<p>Далее нам нужно как-то клонировать этот репозиторий на Android устройство. Так как встроенной поддержки командной строки в Android нет, придётся воспользоваться сторонним приложением, которое будет эмулировать работу командной строки Unix-системы.</p>
+<h3 id="ustanovka-termux-i-nastroika-git"><a class="header-anchor no-hover-padding" href="#ustanovka-termux-i-nastroika-git" aria-label="Anchor link for: ustanovka-termux-i-nastroika-git"><span class="link-icon" aria-hidden="true"></span></a>
+Установка Termux и настройка Git</h3>
+<p><strong>Termux</strong> — приложение с открытым исходным кодом, которое предназначено для эмуляции командной строки Linux с поддержкой пакетного менеджера. Скачать это приложение можно как из <a class="external" rel="noopener" target="_blank" href="https://play.google.com/store/apps/details?id=com.termux&amp;hl=ru">Google Play</a>, так и из альтернативного магазина <a class="external" rel="noopener" target="_blank" href="https://f-droid.org/packages/com.termux/">F-Droid</a>, в котором содержатся только приложения с открытым исходным кодом. За дополнительной информацией можно обратиться на их официальную <a class="external" rel="noopener" target="_blank" href="https://wiki.termux.com/wiki/Installation">Wiki страничку</a>.</p>
+<p>Теперь запускаем приложение и начинаем устанавливать необходимые пакеты.</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">pkg</span></span><span class="z-meta z-function-call z-arguments z-shell"> update</span> <span class="z-keyword z-operator z-logical z-and z-shell">&amp;&amp;</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">pkg</span></span><span class="z-meta z-function-call z-arguments z-shell"> upgrade<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>y</span></span> <span class="z-keyword z-operator z-logical z-and z-shell">&amp;&amp;</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">pkg</span></span><span class="z-meta z-function-call z-arguments z-shell"> install<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>y</span> git openssh termux-api</span>
+</span></code></pre>
+<p>Теперь определим, в какой папке будут расположены репозитории Vaults. Для примера создадим папку <code>repos</code> в папке <code>Documents</code>.</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">mkdir</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/storage/shared/Documents/repos <span class="z-punctuation z-separator z-continuation z-line z-shell">\
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-arguments z-shell">mkdir <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/storage/shared/Documents/repos/obsidian/</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/storage/shared/Documents/repos/obsidian</span>
+</span></code></pre>
+<p>Теперь нам нужно клонировать репозиторий в созданную папку.</p>
+<p>Если бы у нас репозиторий был публичный, проблем бы не было. Но у нас он приватный, и чтобы клонировать его, нужно пройти авторизацию.</p>
+<p>Для GitHub можно воспользоваться их фирменным CLI-приложением <code>gh</code>. Чтобы его установить, нужно выполнить команду:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">apt</span></span><span class="z-meta z-function-call z-arguments z-shell"> install gh</span>
+</span></code></pre>
+<p>Для авторизации на сайте можно использовать:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">gh</span></span><span class="z-meta z-function-call z-arguments z-shell"> login</span>
+</span></code></pre>
+<p>Нужно будет выбрать способ прохождения авторизации. Я обычно выбираю через браузер… после выбора параметров вас перебросит в браузер, где нужно будет ввести дополнительно код, сгенерированный в консоли.</p>
+<p>После подключения можно будет получить ссылку такого вида:</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_2.jpg" alt="repo_link" /></p>
+<p>И, выполнив её в консоли Termux, репозиторий будет клонирован в ту папку, в которой мы сейчас находимся.</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">gh</span></span><span class="z-meta z-function-call z-arguments z-shell"> repo clone <span class="z-keyword z-operator z-assignment z-redirection z-shell">&lt;</span>repo-link<span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span>
+</span></span></code></pre>
+<h3 id="dobavlenie-khranilishcha-v-obsidian"><a class="header-anchor no-hover-padding" href="#dobavlenie-khranilishcha-v-obsidian" aria-label="Anchor link for: dobavlenie-khranilishcha-v-obsidian"><span class="link-icon" aria-hidden="true"></span></a>
+Добавление хранилища в Obsidian</h3>
+<p>После клонирования репозитория мы можем добавить эту папку как хранилище в Obsidian.</p>
+<p>Если вы только скачали само приложение, на стартовом экране у вас появится кнопка “Выбор папки для хранилища”. Нажав её, укажите ту папку, которая была создана в результате клонирования репозитория.</p>
+<p>Теперь все добавляемые файлы будут индексироваться <code>git</code>, и их можно отправлять в удалённый репозиторий.</p>
+<p>С подготовительным этапом закончили. Теперь рассмотрим способы именно синхронизации.</p>
+<h2 id="ispol-zovanie-rasshireniia-git"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-rasshireniia-git" aria-label="Anchor link for: ispol-zovanie-rasshireniia-git"><span class="link-icon" aria-hidden="true"></span></a>
+Использование расширения Git</h2>
+<p>Самый простой способ. Он работает на любом устройстве, но разработчики пишут, что на мобильных устройствах может работать крайне нестабильно. Потому что расширение не может использовать нативные команды Git CLI, а использует библиотеку JavaScript, которая каким-то образом тоже умеет работать с Git.</p>
+<p>У меня получилось запустить его не с первого раза. Но после удачной попытки настроить синхронизацию через командную строку, расширение заработало. Я думаю, что это было просто совпадение. Давайте пройдём по шагам.</p>
+<h3 id="ustanovka-rasshireniia"><a class="header-anchor no-hover-padding" href="#ustanovka-rasshireniia" aria-label="Anchor link for: ustanovka-rasshireniia"><span class="link-icon" aria-hidden="true"></span></a>
+Установка расширения</h3>
+<p>Плагин разрабатывается сообществом, и поэтому его нет в составе <code>CorePlugins</code>. Нужно сначала включить поддержку <code>Community plugins</code>. Для этого нажмите на шестерёнку в правом верхнем углу меню.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_3.jpg" alt="obs-1" /></p>
+<p>После включаем поддержку <code>Community plugins</code>, как показано на рисунке.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_5.png" alt="obs-2" /></p>
+<p>Далее нажимаем на просмотр списка доступных расширений.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_6.png" alt="obs-3" /></p>
+<p>И ищем среди списка расширение с названием <code>Git</code>.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_7.png" alt="obs-4" /></p>
+<p>Нажимаем на это расширение -&gt; Установить -&gt; Активировать. Кнопка активировать будет там, где на картинке кнопка “отключить”.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_8.png" alt="obs-5" /></p>
+<p>Далее переходим в настройки плагина. Я установил время автоматического обновления репозитория: коммит изменений каждые 2 минуты, проверка обновлений каждые 5 минут. Так как мы всё-таки работаем одновременно на одном устройстве, не обязательно делать мгновенное обновление.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_9.png" alt="obs-5" /></p>
+<p>Включаем проверку обновления при старте приложения, Push изменений после локальной фиксации и обновление локального репозитория перед отправкой в удалённый (Pull before Push).</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_10.png" alt="obs-6" /></p>
+<p>Также обязательно нужно ввести свой логин, пароль (Public Access Token для GitHub, его можно получить в настройках пользователя GitHub). А также обязательно вводим имя пользователя и почту для пользователя Git.</p>
+<p><img src="https://baldman.justsquad.su/blog/obsidian-android-git-sync/./images/img_11.png" alt="obs-7" /></p>
+<p>Теперь у вас будет автоматически обновляться репозиторий хранилища. Вы можете заметить, что будут автоматически появляться всплывающие окна с описанием действия синхронизации.</p>
+<h2 id="ispol-zovanie-termux-emuliatora"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-termux-emuliatora" aria-label="Anchor link for: ispol-zovanie-termux-emuliatora"><span class="link-icon" aria-hidden="true"></span></a>
+Использование Termux эмулятора</h2>
+<p>Для реализации этого подхода у нас почти всё готово. Единственное, что нужно сделать, — это прописать имя пользователя и адрес электронной почты, а также настроить SSH-ключ для синхронизации. Заходим в приложение Termux и запускаем команды:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> config<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>global</span> user.name <span class="z-keyword z-operator z-assignment z-redirection z-shell">&lt;</span>name<span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span>
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> config<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>global</span> user.email <span class="z-keyword z-operator z-assignment z-redirection z-shell">&lt;</span>email<span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span>
+</span></span></code></pre>
+<p>Чтобы получить SSH-ключ, пропишем в командной строке:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cat</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/.ssh/id_rsa.pub</span>
+</span></code></pre>
+<p>Скопируйте то, что вывелось в результате команды, идите в настройки пользователя GitHub или другого репозитория и добавьте SSH-ключ авторизации.</p>
+<p>Минус этого подхода в том, что тут не будет никакой автоматики, и придётся прописывать все команды вручную. Но зато всё будет точно работать :D</p>
+<p>Заходим в папку, где находится наше хранилище:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/storage/Documents/repos/obsidian/my-obsidian-vault-repo</span>
+</span></code></pre>
+<p>Обновляем индекс удалённого репозитория:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> fetch<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>prune</span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> pull</span>
+</span></code></pre>
+<blockquote>
+<p>Заметка: чтобы постоянно не использовать <code>prune</code> для очистки локального индекса, можно использовать глобальную настройку:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> config remote.origin.prune true</span>
+</span></code></pre>
+</blockquote>
+<p>После синхронизации локальной копии с удалённой и добавления новых файлов можно отправить эти изменения в удалённый репозиторий. Для этого выполним следующее:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> add .</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> commit<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>m</span> <span class="z-keyword z-operator z-assignment z-redirection z-shell">&lt;</span>message<span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span>
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> push</span>
+</span></code></pre>
+<p>Вот так вручную можно обновлять данные в удалённом репозитории. Но этот способ не такой удобный. Давайте попробуем его улучшить.</p>
+<h2 id="ispol-zovanie-termux-i-otdel-nogo-planirovshchika-tasker"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-termux-i-otdel-nogo-planirovshchika-tasker" aria-label="Anchor link for: ispol-zovanie-termux-i-otdel-nogo-planirovshchika-tasker"><span class="link-icon" aria-hidden="true"></span></a>
+Использование Termux и отдельного планировщика Tasker</h2>
+<p>Если вы выполняли пункты, описанные ранее, то можно начать вот <a class="external" rel="noopener" target="_blank" href="https://github.com/DovieW/obsidian-android-sync/blob/master/README.md">ЭТУ</a> инструкцию с 7 шага, раздела <strong>Termux Setup</strong>.</p>
+<p>Только в нашей ситуации папка, в которую будет клонирован скрипт, будет чуть другой:</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> clone https://github.com/DovieW/obsidian-android-sync.git <span class="z-meta z-group z-expansion z-tilde"><span class="z-variable z-language z-tilde z-shell">~</span></span>/storage/shared/Documents/repos/obsidian/obsidian-android-sync</span>
+</span></code></pre>
+<p><strong>Плюс</strong> этого метода — потенциальная автоматизация, если правильно пройти все настройки. Если же не получится поработать с приложением Tasker, то останется скрипт, который можно вызывать для синхронизации хранилища.</p>
+<pre data-lang="sh" class="language-sh z-code"><code class="language-sh" data-lang="sh"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">./sync-vaults.sh</span></span>
+</span></code></pre>
+<p>Этот скрипт автоматически подтянет изменения из удалённого репозитория, сделает коммит и отправит его в удалённый репозиторий.</p>
+<p><strong>Минус</strong> этого подхода — приложение <strong>Tasker</strong> — ПЛАТНОЕ!!! А зачем нам использовать синхронизацию собственными руками, да ещё и платить за приложение? Но если оно уже у вас есть, то этот способ для вас.</p>
+<h2 id="ispol-zovanie-termux-i-planirovshchika-cron"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-termux-i-planirovshchika-cron" aria-label="Anchor link for: ispol-zovanie-termux-i-planirovshchika-cron"><span class="link-icon" aria-hidden="true"></span></a>
+Использование Termux и планировщика cron</h2>
+<p>Есть ещё один способ, который просто является альтернативой для предыдущего. В этом варианте мы заменяем приложение Tasker на возможности cron scheduler. Запускать и управлять им можно прямо в самом <strong>Termux</strong>.</p>
+<p>Для реализации такого подхода можно воспользоваться <a class="external" rel="noopener" target="_blank" href="https://www.reddit.com/r/ObsidianMD/comments/qep4gn/guide_obsidian_vault_github_sync_cron_on_termux/">этой инструкцией</a>. Но в качестве скрипта можно использовать тот, который мы получили в результате предыдущего способа.</p>
+<p>С помощью cron можно очень гибко настроить время синхронизации.</p>
+<p>На этом всё. Мы рассмотрели несколько способов реализации синхронизации хранилища через Git-репозиторий.</p>
+<p>Если остались вопросы, то можно задать их под постами в <a class="external" rel="noopener" target="_blank" href="https://t.me/bald_man_gushcharin">tg канале</a>.</p>
+
+        </section><form method="post" action="https://vhiweeypifbwacashxjz.supabase.co/rest/v1/rpc/increment_hits?apikey=sb_publishable_EoB7MFJhCmb6PiAk-GPJ4w_PGhQ44Ru" class="iine-form">
+  <input type="hidden" name="page_slug" value="&#x2F;blog&#x2F;obsidian-android-git-sync&#x2F;">
+  <button class="iine-button" type="submit" data-slug="&#x2F;blog&#x2F;obsidian-android-git-sync&#x2F;" data-icon="thumbs_up"
+    aria-label="Мне нравится эта статья" title="Мне нравится эта статья">👍</button>
+</form>
+
+                
+                
+                    
+                        
+                        
+                        
+                    
+                    
+                
+                
+            <nav class="full-width article-navigation">
+                <div><a href="https://baldman.justsquad.su/blog/unlock-chatgpt-with-dns/" aria-label="След." aria-describedby="left_title"><span class="arrow">←</span>&nbsp;След.</a>
+                <p aria-hidden="true" id="left_title">ChatGpt без регистрации и МЗТ.</p></div>
+                <div></div>
+            </nav>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev&#x2F;gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="obsidian-android-git-sync"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/gh/welpo/iine@main/iine.mini.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul><li class="js"><a class="nav-links no-hover-padding social" href="#" data-encoded-email="bmlrb2xhaWd1c2hhcmluQHlhLnJ1"><img loading="lazy" alt="email" title="email" src="https://baldman.justsquad.su/social_icons/email.svg">
+                            </a>
+                        </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;about&#x2F;">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;contact&#x2F;">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;sitemap.xml&#x2F;">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank
+
+ href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel="noopener" target=_blank
+
+ href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank
+
+ href="https:&#x2F;&#x2F;github.com&#x2F;gnikodev&#x2F;gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <script src="https://baldman.justsquad.su/js/decodeMail.min.js" async></script><div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

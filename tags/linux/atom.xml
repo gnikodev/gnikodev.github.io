@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="https://baldman.justsquad.su/feed_style.xsl" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ru">
+    <tabi:metadata xmlns:tabi="https://github.com/welpo/tabi">
+        <tabi:base_url>https:&#x2F;&#x2F;baldman.justsquad.su</tabi:base_url>
+        <tabi:separator>
+            •
+        </tabi:separator>
+        <tabi:about_feeds>Это веб-фид, известный также как Atom-фид. Чтобы подписаться, скопируйте URL из адресной строки в ваш RSS-ридер. Посетите About Feeds для дополнительной информации и начала использования.</tabi:about_feeds>
+        <tabi:visit_the_site>Посетить веб-сайт</tabi:visit_the_site>
+        <tabi:recent_posts>Последние посты</tabi:recent_posts>
+        <tabi:last_updated_on>Обновлено $DATE</tabi:last_updated_on>
+        <tabi:default_theme></tabi:default_theme>
+        <tabi:post_listing_date>date</tabi:post_listing_date>
+        <tabi:current_section>linux</tabi:current_section>
+    </tabi:metadata><link rel="extra-stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" /><title>bald_man - linux</title>
+        <subtitle>Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки.</subtitle>
+    <link href="https://baldman.justsquad.su/tags/linux/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://baldman.justsquad.su/tags/linux/" rel="alternate" type="text/html"/>
+    <generator uri="https://www.getzola.org/">Zola</generator><updated>2025-09-02T00:00:00+00:00</updated><id>https://baldman.justsquad.su/tags/linux/atom.xml</id><entry xml:lang="ru">
+        <title>Моя настройка оболочки ZSH.</title>
+        <published>2025-09-02T00:00:00+00:00</published>
+        <updated>2025-09-02T00:00:00+00:00</updated>
+        <author>
+            <name>gnikodev</name>
+        </author>
+        <link rel="alternate" href="https://baldman.justsquad.su/blog/zsh-setup/" type="text/html"/>
+        <id>https://baldman.justsquad.su/blog/zsh-setup/</id>
+        <summary type="html">Если вам не нравится стандартная оболочка командной строки типа bash и sh, то нужно ставить ZSH, расскажу как его установить и настроить.</summary>
+        </entry><entry xml:lang="ru">
+        <title>Базовая настройка VPS.</title>
+        <published>2025-08-24T00:00:00+00:00</published>
+        <updated>2025-08-24T00:00:00+00:00</updated>
+        <author>
+            <name>gnikodev</name>
+        </author>
+        <link rel="alternate" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/" type="text/html"/>
+        <id>https://baldman.justsquad.su/blog/base-configuration-for-vps/</id>
+        <summary type="html">Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера.</summary>
+        </entry>
+</feed>

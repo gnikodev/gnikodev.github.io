@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https://* data:;media-src 'self' https://cdn.jsdelivr.net/;style-src 'self';frame-src player.vimeo.com https://www.youtube-nocookie.com giscus.app;connect-src 'self' vhiweeypifbwacashxjz.supabase.co;script-src 'self'  giscus.app  cdn.jsdelivr.net 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>
+bald_man • Получение сертификатов в k3s (k8s) через cert-manager</title>
+
+    
+    
+        <link rel="icon" type="image/png" href="https://baldman.justsquad.su/m1024.png"/>
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50%" x="50%" dominant-baseline="central" text-anchor="middle" font-size="88">🌱</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/custom_subset.css?h=0b9535a28bc3d5bf2321">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=3716ab3457d2dd050b3c" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge." />
+        <meta property="og:description" content="Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge." />
+
+    
+
+    <meta property="og:title" content="Получение сертификатов в k3s (k8s) через cert-manager" />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="2048" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/kuber-cert-manager/" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;blog&#x2F;kuber-cert-manager&#x2F;" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script>
+            <script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    
+</head>
+
+
+<body>
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский<a role="menuitem" lang="en" aria-label="English" href="https:&#x2F;&#x2F;baldman.justsquad.su/en/blog/kuber-cert-manager/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный&#x2F;светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Получение сертификатов в k3s (k8s) через cert-manager
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/kuber-cert-manager/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https:&#x2F;&#x2F;baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-02-12">12 фев 2025</time></li><li title="1432 слова"><span class='separator' aria-hidden='true'>•</span>8 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/kubernetes/">kubernetes</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/k3s/">k3s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/k8s/">k8s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/certmanager/">certmanager</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/letsencrypt/">letsencrypt</a></li>
+        </ul>
+            <p class="p-summary" hidden>Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge.</p><section class="e-content body"><p>Наличие SSL-сертификатов в наше время является неотъемлемой частью безопасности разворачиваемых ресурсов. Когда я занялся организацией своего сервера и поднял k3s-кластер, то сразу задумался о том, как обеспечить веб-сервисы валидными сертификатами.</p>
+<p>Приведу небольшую историческую справку о том, что такое SSL-сертификаты, зачем они нужны и что такое доверенные центры сертификации. Это пригодится в дальнейшем.</p>
+<h2 id="ssl-sertifikaty-i-https-soedinenie"><a class="header-anchor no-hover-padding" href="#ssl-sertifikaty-i-https-soedinenie" aria-label="Anchor link for: ssl-sertifikaty-i-https-soedinenie"><span class="link-icon" aria-hidden="true"></span></a>
+SSL-сертификаты и HTTPS-соединение</h2>
+<p><strong>SSL-сертификат</strong> — это цифровой документ, который подтверждает подлинность веб-ресурса и шифрует данные, передаваемые между клиентом и сервером. Он подтверждает, что клиент общается именно с тем сайтом, который заявлен, а не с поддельным. Скомпрометировать сертификат достаточно сложно: в самом простом варианте необходимо пробраться на серверную часть ресурса и украсть секретную часть ключа.</p>
+<p><strong>SSL (Secure Sockets Layer)</strong> — технология, которая обеспечивает безопасное соединение. В последнее время чаще используется аббревиатура TLS (Transport Layer Security). Этот протокол защищает информацию, которую пользователь отправляет на сервер или получает от него. Например, логины, пароли, данные банковских карт. Если не использовать шифрование, то обычный HTTP-трафик очень легко перехватить и прочитать содержимое пакета.</p>
+<p><strong>HTTPS (HyperText Transfer Protocol Secure)</strong> — это защищенная версия протокола HTTP, использующая сертификаты и технологии SSL/TLS для шифрования данных.</p>
+<h2 id="doverennye-tsentry-sertifikatsii-ca"><a class="header-anchor no-hover-padding" href="#doverennye-tsentry-sertifikatsii-ca" aria-label="Anchor link for: doverennye-tsentry-sertifikatsii-ca"><span class="link-icon" aria-hidden="true"></span></a>
+Доверенные центры сертификации (CA)</h2>
+<p>Центры сертификации (Certificate Authorities, CA) — это организации, которые занимаются выдачей SSL-сертификатов. Их задача — проверить, что пользователь, запросивший сертификат, является владельцем домена, на который запрашивается сертификат, и подтвердить его подлинность. Другими словами, эти организации выступают своего рода гарантами взаимосвязи домена и владельца, а в подтверждение выдают подписанный документ — сертификат. Приведу список известных центров сертификации:</p>
+<ul>
+<li>Let’s Encrypt (который используется в статье)</li>
+<li>DigiCert</li>
+<li>Comodo</li>
+<li>GlobalSign</li>
+</ul>
+<p>Как происходит обмен данными:</p>
+<ol>
+<li><strong>Клиент (браузер)</strong> запрашивает соединение с сервером (например, при переходе на сайт).</li>
+<li><strong>Сервер</strong> отправляет клиенту свой SSL-сертификат.</li>
+<li><strong>Клиент</strong> проверяет сертификат (может проверить самостоятельно или обратиться к центру сертификации, который выдал документ):
+<ul>
+<li>Доверен ли центр сертификации?</li>
+<li>Не истек ли срок действия сертификата?</li>
+<li>Соответствует ли доменное имя сертификата запрашиваемому сайту?</li>
+</ul>
+</li>
+<li>Если проверка прошла успешно, <strong>клиент и сервер</strong> устанавливают безопасное соединение с использованием шифрования (например, с помощью алгоритмов RSA или ECDHE).</li>
+<li>После этого данные передаются в зашифрованном виде. Например, если вы вводите пароль на сайте, он будет зашифрован и расшифрован только на сервере.</li>
+</ol>
+<h2 id="kak-poluchit-ssl-sertifikat"><a class="header-anchor no-hover-padding" href="#kak-poluchit-ssl-sertifikat" aria-label="Anchor link for: kak-poluchit-ssl-sertifikat"><span class="link-icon" aria-hidden="true"></span></a>
+Как получить SSL-сертификат</h2>
+<p>Есть несколько способов получения сертификата. Кратко рассмотрим их.</p>
+<h3 id="sozdanie-samopodpisnykh-sertifikatov"><a class="header-anchor no-hover-padding" href="#sozdanie-samopodpisnykh-sertifikatov" aria-label="Anchor link for: sozdanie-samopodpisnykh-sertifikatov"><span class="link-icon" aria-hidden="true"></span></a>
+Создание самоподписных сертификатов</h3>
+<p>Это делается достаточно легко с помощью утилиты <code>openssl</code> (Linux). Используя всего несколько команд, мы получаем два файла: сам сертификат и ключ. Их уже можно привязывать к веб-серверу. Весь процесс выдачи описывать не вижу смысла, так как по этому поводу есть множество статей, например <a class="external" rel="noopener" target="_blank" href="https://habr.com/ru/articles/352722/">эта</a>.</p>
+<p>Какие минусы у этого подхода:</p>
+<ul>
+<li>Придется прописывать сертификат в каждом браузере на каждом устройстве. Потому что мы будем являться CA, а весь мир не знает о существовании Иванова Ивана, который считает себя доверенным центром сертификации. Поэтому при входе на такой сайт браузер будет ругаться из-за невозможности проверить центр сертификации.</li>
+<li>Следить за валидностью и временем жизни сертификата придется самостоятельно. Можно сделать заметку в календаре, но нередко встречал ситуации в больших компаниях, когда забывали выпустить новые сертификаты, и работа вставала на полдня.</li>
+</ul>
+<h3 id="ispol-zovanie-utility-certbot"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-utility-certbot" aria-label="Anchor link for: ispol-zovanie-utility-certbot"><span class="link-icon" aria-hidden="true"></span></a>
+Использование утилиты <code>certbot</code></h3>
+<p>Эта утилита позволяет в автоматическом режиме получить сертификат <strong>Let’s Encrypt</strong> для указанного домена. Можно получать сертификаты как на конкретные домены, так и по схеме wildcard (когда можно получить один сертификат на все возможные поддомены). Например, если запросить SSL для <code>example.com</code>, то он будет доступен только для него, а если запросить wildcard <code>*.example.com</code>, то его можно использовать как для <code>one.example.com</code>, так и для <code>two.example.com</code> и даже для <code>one.two.example.com</code>.</p>
+<p>Процесс получения сертификата достаточно прост. Необходимо установить утилиту, а затем использовать команду <code>certbot certonly {...params...}</code>. Для более подробной информации о процессе получения можно почитать <a class="external" rel="noopener" target="_blank" href="https://habr.com/ru/articles/270273/">эту статью</a>.</p>
+<p>Следует упомянуть о двух способах получения (ACME challenges):</p>
+<ul>
+<li><strong>HTTP01 challenge</strong> — процесс, при котором на хосте, где запускается утилита, создается endpoint <code>{requested_domain}/.well-known/acme-challenge/{ID}</code>, который ссылается на содержимое файла, созданного <code>certbot</code>, в котором хранится секретный ключ. <code>certbot</code> отправляет callback-запрос на сторону Let’s Encrypt. В свою очередь, Let’s Encrypt должен вызвать наш домен с указанным адресом, чтобы получить и проверить секретный ключ. Если проверка пройдет успешно, то в ответ отправляется созданный сертификат и ключ. В этом случае необходимо, чтобы сервис, для которого выдается сертификат, был виден из глобальной сети. Либо нужно создать “сервис-заглушку”, который не будет настоящим сервисом, а просто будет отдавать по указанному пути данные секретного ключа. Кстати, в статье, приведенной ранее, есть описание процесса, позволяющего сделать такой “сервис-заглушку”.</li>
+<li><strong>DNS01 challenge</strong> — в этой ситуации нет необходимости, чтобы сервис, для которого запрашивается сертификат, был доступен из глобальной сети. Но здесь нужен доступ к PublicAPI сервиса, где был куплен искомый домен. При таком запросе мы должны указать логин, пароль или API-ключ от PublicAPI, чтобы <code>certbot</code> смог создать TXT-запись для запрашиваемого домена. После этого сервис Let’s Encrypt обращается по указанному домену, чтобы прочитать ключ из созданной TXT-записи. После проверки мы также получаем сертификат и секретный ключ.</li>
+</ul>
+<p>Использование <code>certbot</code> может решить огромное количество проблем, но все же остаются минусы:</p>
+<ul>
+<li>Отслеживать время жизни сертификата все еще приходится самостоятельно. Начиная с января 2025 года, Let’s Encrypt закрыла проект оповещения об окончании действия сертификата через email-рассылку, так как для них это стало дорого.</li>
+<li>Каждый раз необходимо вручную запрашивать новые сертификаты. Конечно, можно автоматизировать этот процесс через другие утилиты, но наша цель — интегрироваться в k3s-кластер, чтобы все работало “из коробки”. Да, я ленивый.</li>
+</ul>
+<h3 id="ispol-zovanie-servisa-cert-manager"><a class="header-anchor no-hover-padding" href="#ispol-zovanie-servisa-cert-manager" aria-label="Anchor link for: ispol-zovanie-servisa-cert-manager"><span class="link-icon" aria-hidden="true"></span></a>
+Использование сервиса <code>cert-manager</code></h3>
+<p>И вот мы добрались до решения, которое сейчас используется в моем кластере. Сервис <code>cert-manager</code> берет на себя всю работу по выдаче, отслеживанию, обновлению и присвоению сертификатов. От пользователя требуется только настроить процесс выдачи и просто прописывать в Ingress новых сервисов указание использования TLS-соединения. И <code>cert-manager</code> увидит создание нового Ingress с TLS, сразу получит валидный сертификат и присвоит его сервису.</p>
+<p>Рассмотрим процесс установки и настройки. Для начала необходимо наличие кластера k3s или k8s (или другого Kubernetes). Установленная утилита <code>helm</code> для управления Helm-чартами.</p>
+<p>Для удобства я создал на машине с кластером папку <code>/home/ms/helms</code>, где хранятся все <code>values.yaml</code> и другие настройки Helm-чартов. Переходим в эту папку и начинаем выполнять команды:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">helm</span></span><span class="z-meta z-function-call z-arguments z-shell"> repo add jetstack https://charts.jetstack.io</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">helm</span></span><span class="z-meta z-function-call z-arguments z-shell"> repo update</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">helm</span></span><span class="z-meta z-function-call z-arguments z-shell"> pull jetstack/cert-manager</span>
+</span></code></pre>
+<p>Команды выше добавляют репозиторий <code>jetstack</code>, в котором расположен необходимый нам чарт. Далее загружаем чарт <code>cert-manager</code> с помощью команды <code>pull</code>.</p>
+<p>Проверяем, что архив был загружен, и разархивируем его. Необходимо обратить внимание на версию чарта: на момент написания статьи это версия <code>1.16.3</code>.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ls</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>la</span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">tar</span></span><span class="z-meta z-function-call z-arguments z-shell"> zxf cert-manager-v1.16.3.tgz</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">rm</span></span><span class="z-meta z-function-call z-arguments z-shell"> cert-manager-v1.16.3.tgz</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cp</span></span><span class="z-meta z-function-call z-arguments z-shell"> cert-manager/values.yaml cert-manager-values.yaml</span>
+</span></code></pre>
+<p>Я использовал DNS01 challenge для получения сертификатов, так как кластер Kubernetes находится в локальной сети, и сервисы не выходят в глобальную сеть. Заморачиваться с отдельным “сервисом-заглушкой”, который бы помог использовать HTTP01, не стал. Мне показалось, что через DNS будет проще. Но столкнулся с проблемой, когда при запросе сертификата <code>cert-manager</code> бесконечно висел с ошибкой:</p>
+<pre class="z-code"><code><span class="z-text z-plain">DNS record for xxx not yet propagated
+</span></code></pre>
+<p>Потратил на решение этой проблемы около трех дней, пока не нашел Issue на GitHub с решением. <a class="external" rel="noopener" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5042">Ссылка на Issue</a> и еще одна <a class="external" rel="noopener" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5515#issuecomment-1479054700">ссылка с решением</a>.</p>
+<p>Необходимо подправить файл <code>values.yaml</code>, найти следующие строки и исправить их следующим образом:</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">crds</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">enabled</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-constant z-language z-boolean z-yaml">true</span>
+</span><span class="z-source z-yaml">
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">extraArgs</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml">--enable-certificate-owner-ref=true</span>
+</span><span class="z-source z-yaml">  <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml">--dns01-recursive-nameservers-only</span>
+</span><span class="z-source z-yaml">  <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml">--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53</span>
+</span><span class="z-source z-yaml">
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">prometheus</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">enabled</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-constant z-language z-boolean z-yaml">true</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">servicemonitor</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">enabled</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-constant z-language z-boolean z-yaml">true</span>
+</span></code></pre>
+<p>Далее устанавливаем сам сервис <code>cert-manager</code> в кластер:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">helm</span></span><span class="z-meta z-function-call z-arguments z-shell"> upgrade<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>install</span> cert-manager<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>f</span> cert-manager-values.yaml cert-manager/</span>
+</span></code></pre>
+<p>Для того чтобы использовать DNS challenge, нам нужно получить API-ключ провайдера, где был приобретен домен. Настройка для многих зарубежных провайдеров схожа, но я использую reg.ru. Для него нет стандартной реализации webhook для <code>cert-manager</code>. Поэтому воспользуемся еще одним <a class="external" rel="noopener" target="_blank" href="https://github.com/flant/cert-manager-webhook-regru">сервисом</a>. В этом репозитории лежит реализация webhook для использования DNS challenge через reg.ru. В README репозитория есть инструкция по использованию, оттуда можно взять все, кроме процесса создания файла сертификата. Я предпочитаю использовать wildcard-сертификат, а не выдавать для каждого домена отдельно.</p>
+<p>Теперь нужно настроить объект <code>ClusterIssuer</code>, который отвечает за настройки процесса выдачи сертификатов. Для этого создадим отдельную папку <code>/home/ms/ci</code> и в этой папке создадим файл <code>cert-manager-issuer.yml</code>:</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-entity z-other z-document z-begin z-yaml">---</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">apiVersion</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">cert-manager.io/v1</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">kind</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">ClusterIssuer</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">metadata</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">letsencrypt-prod-issuer</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">spec</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">acme</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">email</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">&lt;YOUR_EMAIL&gt;</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">server</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">https://acme-v02.api.letsencrypt.org/directory</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">privateKeySecretRef</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">&lt;SUPER_SECRET_KEY&gt;</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">solvers</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">      <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">dns01</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">          <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">webhook</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">            <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">config</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">              <span class="z-comment z-line z-number-sign z-yaml"><span class="z-punctuation z-definition z-comment z-line z-number-sign z-yaml">#</span> здесь могут быть настройки для другого webhook-провайдера.
+</span></span><span class="z-source z-yaml">              <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">regruPasswordSecretRef</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">                <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">regru-password</span>
+</span><span class="z-source z-yaml">                <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">key</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">REGRU_PASSWORD</span>
+</span><span class="z-source z-yaml">            <span class="z-comment z-line z-number-sign z-yaml"><span class="z-punctuation z-definition z-comment z-line z-number-sign z-yaml">#</span> groupName должен совпадать с `groupName.name` в файле `values.yaml`.
+</span></span><span class="z-source z-yaml">            <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">groupName</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">acme.regru.ru</span>
+</span><span class="z-source z-yaml">            <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">solverName</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">regru-dns</span>
+</span><span class="z-source z-yaml"><span class="z-entity z-other z-document z-begin z-yaml">---</span>
+</span></code></pre>
+<p>Пример <code>solver</code> DNS01 для Cloudflare:</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">dns01</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">cloudflare</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">email</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">xxx</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">apiTokenSecretRef</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">cloudflare-token-secret</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">key</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">cloudflare-token</span>
+</span></code></pre>
+<p>Если не хочется заморачиваться с получением сертификата через DNS challenge, то можно использовать HTTP challenge. Для этого в секции <code>solvers</code> необходимо прописать следующее:</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">http01</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-comment z-line z-number-sign z-yaml"><span class="z-punctuation z-definition z-comment z-line z-number-sign z-yaml">#</span> The ingressClass used to create the necessary ingress routes
+</span></span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">ingress</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">serviceType</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">ClusterIP</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">ingressClassName</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">traefik</span>
+</span></code></pre>
+<p>Но следует учесть, что для работы этого способа домен должен быть доступен из внешней сети. Либо необходимо использовать отдельный сервис, который сможет подтвердить право на владение ресурсом.</p>
+<p>Применяем параметры через команду:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">kubectl</span></span><span class="z-meta z-function-call z-arguments z-shell"> apply<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>f</span> cert-manager-issuer.yml</span>
+</span></code></pre>
+<p>Теперь настраиваем файл Ingress на примере сервиса Portainer. YAML-файлы для Ingress удобно хранить в отдельной папке, например <code>/home/ms/ingress</code>. В качестве ReverseProxy используется Traefik, так как он был установлен по умолчанию при развертывании k3s.</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">apiVersion</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">networking.k8s.io/v1</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">kind</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">Ingress</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">metadata</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer-ingress</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">namespace</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">default</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">labels</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">app</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">annotations</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">traefik.ingress.kubernetes.io/router.entrypoints</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">websecure</span>
+</span><span class="z-source z-yaml">    <span class="z-comment z-line z-number-sign z-yaml"><span class="z-punctuation z-definition z-comment z-line z-number-sign z-yaml">#</span> указываем название созданного ранее ClusterIssuer
+</span></span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">cert-manager.io/cluster-issuer</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">letsencrypt-prod-issuer</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">spec</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">rules</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">host</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer.EXAMPLE.COM</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">http</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">        <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">paths</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">          <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">path</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">/</span>
+</span><span class="z-source z-yaml">            <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">pathType</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">Prefix</span>
+</span><span class="z-source z-yaml">            <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">backend</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">              <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">service</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">                <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer</span>
+</span><span class="z-source z-yaml">                <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">port</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">                  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">number</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-constant z-numeric z-integer z-decimal z-yaml">9000</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">ingressClassName</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">traefik</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">tls</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">hosts</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">        <span class="z-punctuation z-definition z-block z-sequence z-item z-yaml">-</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer.EXAMPLE.COM</span>
+</span><span class="z-source z-yaml">      <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">secretName</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">portainer-ssl</span>
+</span></code></pre>
+<p>Применяем параметры Ingress:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">kubectl</span></span><span class="z-meta z-function-call z-arguments z-shell"> apply<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>f</span> portainer-ingress.yml</span>
+</span></code></pre>
+<p>И вишенкой на торте будет файл, который будет перенаправлять все http запросы к ingress на https. Для этого создадим <code>middleware</code> файл в папке <code>home/ms/middlewares</code> и назовем его <code>traefik-https-redirect-middleware.yaml</code>. Теперь наполним содержимое файла следующими строками:</p>
+<pre data-lang="yaml" class="language-yaml z-code"><code class="language-yaml" data-lang="yaml"><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">apiVersion</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">traefik.containo.us/v1alpha1</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">kind</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">Middleware</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">metadata</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">name</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">redirect-https</span>
+</span><span class="z-source z-yaml"><span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">spec</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">  <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">redirectScheme</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">scheme</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-string z-unquoted z-plain z-out z-yaml">https</span>
+</span><span class="z-source z-yaml">    <span class="z-string z-unquoted z-plain z-out z-yaml"><span class="z-entity z-name z-tag z-yaml">permanent</span></span><span class="z-punctuation z-separator z-key-value z-mapping z-yaml">:</span> <span class="z-constant z-language z-boolean z-yaml">true</span>
+</span></code></pre>
+<p>И применяем конфигурацию</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">kubectl</span></span><span class="z-meta z-function-call z-arguments z-shell"> apply<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>f</span> traefik-https-redirect-middleware.yaml</span>
+</span></code></pre>
+<p>На этом все. После применения настроек Ingress <code>cert-manager</code> автоматически их найдет и начнет процесс выдачи сертификата для указанного домена в файле Ingress в секции <code>tls.hosts</code>.</p>
+
+        </section><form method="post" action="https://vhiweeypifbwacashxjz.supabase.co/rest/v1/rpc/increment_hits?apikey=sb_publishable_EoB7MFJhCmb6PiAk-GPJ4w_PGhQ44Ru" class="iine-form">
+  <input type="hidden" name="page_slug" value="&#x2F;blog&#x2F;kuber-cert-manager&#x2F;">
+  <button class="iine-button" type="submit" data-slug="&#x2F;blog&#x2F;kuber-cert-manager&#x2F;" data-icon="thumbs_up"
+    aria-label="Мне нравится эта статья" title="Мне нравится эта статья">👍</button>
+</form>
+
+                
+                
+                    
+                        
+                        
+                        
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            <nav class="full-width article-navigation">
+                <div><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/" aria-label="След." aria-describedby="left_title"><span class="arrow">←</span>&nbsp;След.</a>
+                <p aria-hidden="true" id="left_title">Ускоряем работу C# Dictionary в 2 раза.</p></div>
+                <div><a href="https://baldman.justsquad.su/blog/unlock-chatgpt-with-dns/" aria-label="Пред." aria-describedby="right_title">Пред.&nbsp;<span class="arrow">→</span></a>
+                <p aria-hidden="true" id="right_title">ChatGpt без регистрации и МЗТ.</p></div>
+            </nav>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev&#x2F;gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="kuber-cert-manager"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/gh/welpo/iine@main/iine.mini.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul><li class="js"><a class="nav-links no-hover-padding social" href="#" data-encoded-email="bmlrb2xhaWd1c2hhcmluQHlhLnJ1"><img loading="lazy" alt="email" title="email" src="https://baldman.justsquad.su/social_icons/email.svg">
+                            </a>
+                        </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;about&#x2F;">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;contact&#x2F;">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;sitemap.xml&#x2F;">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank
+
+ href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel="noopener" target=_blank
+
+ href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank
+
+ href="https:&#x2F;&#x2F;github.com&#x2F;gnikodev&#x2F;gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <script src="https://baldman.justsquad.su/js/decodeMail.min.js" async></script><div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https://* data:;media-src 'self' https://cdn.jsdelivr.net/;style-src 'self';frame-src player.vimeo.com https://www.youtube-nocookie.com giscus.app;connect-src 'self' vhiweeypifbwacashxjz.supabase.co;script-src 'self'  giscus.app  cdn.jsdelivr.net 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>
+bald_man • Базовая настройка VPS.</title>
+
+    
+    
+        <link rel="icon" type="image/png" href="https://baldman.justsquad.su/m1024.png"/>
+    
+    
+        <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50%" x="50%" dominant-baseline="central" text-anchor="middle" font-size="88">🌱</text></svg>'>
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/custom_subset.css?h=0b9535a28bc3d5bf2321">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=3716ab3457d2dd050b3c" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера." />
+        <meta property="og:description" content="Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера." />
+
+    
+
+    <meta property="og:title" content="Базовая настройка VPS." />
+    <meta property="og:type" content="article" />
+
+    
+    
+    
+    
+        
+    
+
+    
+
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="2048" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/index.jpg?h=bd444f38d45ad13a62c7" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/" />
+
+    <meta property="og:url" content="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;blog&#x2F;base-configuration-for-vps&#x2F;" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script>
+            <script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    
+</head>
+
+
+<body>
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский<a role="menuitem" lang="en" aria-label="English" href="https:&#x2F;&#x2F;baldman.justsquad.su/en/blog/base-configuration-for-vps/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный&#x2F;светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Базовая настройка VPS.
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https:&#x2F;&#x2F;baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-08-24">24 авг 2025</time></li><li title="2050 слов"><span class='separator' aria-hidden='true'>•</span>11 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/linux/">linux</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/vps/">vps</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/servers/">servers</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-08-24">Обновлено 24 авг 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog&#x2F;base-configuration-for-vps&#x2F;index.md" target=_blank
+
+ rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            <p class="p-summary" hidden>Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера.</p><section class="e-content body"><p>Представь, что ты только что создал новый <code>VPS</code>-сервер и готов использовать его в качестве надежного шлюза для своих домашних серверов? Первые несколько минут жизни сервера — самые критичные с точки зрения безопасности. Свежие серверы в облаке — любимая мишень для автоматических сканеров и ботов.</p>
+<p>В этом руководстве мы шаг за шагом разберем необходимый и достаточный минимум первоначальной настройки <strong>Ubuntu Server</strong>, который превратит “голую” систему в удобный и хорошо защищенный форпост для твоих сервисов. Наша цель — не только обезопасить его от атак, но и сделать работу с ним комфортной.</p>
+<h2 id="shag-0-predvaritel-nye-trebovaniia"><a class="header-anchor no-hover-padding" href="#shag-0-predvaritel-nye-trebovaniia" aria-label="Anchor link for: shag-0-predvaritel-nye-trebovaniia"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 0: Предварительные требования</h2>
+<ul>
+<li>VPS-сервер с установленной Ubuntu Server 22.04 LTS или 24.04 LTS.</li>
+<li>Root-доступ к серверу (логин и пароль, который тебе предоставил хостинг-провайдер, или SSH-ключ).</li>
+<li>SSH-клиент на твоем компьютере (обычно подходит стандартный терминал).</li>
+</ul>
+<hr />
+<h2 id="shag-1-pervoe-podkliuchenie-i-obnovlenie-sistemy"><a class="header-anchor no-hover-padding" href="#shag-1-pervoe-podkliuchenie-i-obnovlenie-sistemy" aria-label="Anchor link for: shag-1-pervoe-podkliuchenie-i-obnovlenie-sistemy"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 1: Первое подключение и обновление системы</h2>
+<p>Первым делом подключимся к серверу. Если провайдер предоставил пароль root, команда будет выглядеть так (нужно заменить your_server_ip на реальный IP-адрес):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ssh</span></span><span class="z-meta z-function-call z-arguments z-shell"> root@your_server_ip</span>
+</span></code></pre>
+<p>Появится запрос на подтверждение fingerprint. Нужно ответить «yes» на вопрос о доверии fingerprint и ввести пароль.</p>
+<p>Сразу после входа:</p>
+<ol>
+<li>
+<p>Обновляем индекс пакетов и устанавливаем обновления:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">apt</span></span><span class="z-meta z-function-call z-arguments z-shell"> update</span> <span class="z-keyword z-operator z-logical z-and z-shell">&amp;&amp;</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">apt</span></span><span class="z-meta z-function-call z-arguments z-shell"> upgrade<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>y</span></span>
+</span></code></pre>
+<p>Это гарантирует, что все системные компоненты и библиотеки имеют последние патчи безопасности.</p>
+</li>
+<li>
+<p>Устанавливаем базовые полезные утилиты:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">apt</span></span><span class="z-meta z-function-call z-arguments z-shell"> install<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>y</span> curl wget nano ufw fail2ban</span>
+</span></code></pre>
+<p>· <strong>curl</strong>, <strong>wget</strong> — для загрузки файлов из интернета.
+· <strong>nano</strong> — простой текстовый редактор для новичков (вы можете использовать vim, если знакомы с ним).
+· <strong>ufw</strong> — фаервол для простого управления сетевым трафиком.
+· <strong>fail2ban</strong> — система для блокировки bruteforce-атак (подбор паролей).</p>
+</li>
+<li>
+<p>Перезагружаем сервер (если обновление затрагивало ядро):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">reboot</span></span>
+</span></code></pre>
+<p>Подождем минуту и подключаемся снова.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-2-sozdaem-novogo-pol-zovatelia-i-zapreshchaem-root-login-po-ssh"><a class="header-anchor no-hover-padding" href="#shag-2-sozdaem-novogo-pol-zovatelia-i-zapreshchaem-root-login-po-ssh" aria-label="Anchor link for: shag-2-sozdaem-novogo-pol-zovatelia-i-zapreshchaem-root-login-po-ssh"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 2: Создаем нового пользователя и запрещаем root-логин по SSH</h2>
+<p>Работать под <code>root</code> — плохая практика. Создадим нового пользователя с привилегированными правами.</p>
+<ol>
+<li>
+<p>Создаем пользователя (вместо username подставьте ваше имя пользователя):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">adduser</span></span><span class="z-meta z-function-call z-arguments z-shell"> username</span>
+</span></code></pre>
+<p>Задай надежный пароль и заполни информацию (можно пропустить).</p>
+</li>
+<li>
+<p>Добавляем пользователя в группу sudo: Это даст ему право выполнять команды с правами root.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">usermod</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>aG</span> sudo username</span>
+</span></code></pre>
+</li>
+<li>
+<p>Настраиваем SSH-ключи для безопасного входа (рекомендуется):
+· На своем компьютере (не на сервере!) сгенерируй пару SSH-ключей, если у тебя её еще нет:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ssh-keygen</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>t</span> ed25519</span>
+</span></code></pre>
+<p>· Скопируй публичный ключ на сервер для твоего нового пользователя:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ssh-copy-id</span></span><span class="z-meta z-function-call z-arguments z-shell"> username@your_server_ip</span>
+</span></code></pre>
+<p>(На Windows без ssh-copy-id можно скопировать содержимое файла ~/.ssh/id_ed25519.pub и вручную добавить его на сервер в файл ~/.ssh/authorized_keys).</p>
+</li>
+<li>
+<p>Настраиваем SSH-демон для повышения безопасности: Откроем конфигурационный файл:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">nano</span></span><span class="z-meta z-function-call z-arguments z-shell"> /etc/ssh/sshd_config</span>
+</span></code></pre>
+<p>Найди и измени следующие директивы (если строки закомментированы #, раскомментируй их):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">PermitRootLogin</span></span><span class="z-meta z-function-call z-arguments z-shell"> no          <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Запрещаем вход под root</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">PasswordAuthentication</span></span><span class="z-meta z-function-call z-arguments z-shell"> no   <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Запрещаем вход по паролю, только по ключу</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">PubkeyAuthentication</span></span><span class="z-meta z-function-call z-arguments z-shell"> yes    <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Разрешаем аутентификацию по ключу</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+<p>Внимание! Убедись, что твой SSH-ключ скопирован и работает, прежде чем перезапускать SSH! Иначе ты потеряете доступ. И придется заходить через админ панель хост провайдера.</p>
+</li>
+<li>
+<p>Перезагружаем SSH-сервис для применения изменений:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">systemctl</span></span><span class="z-meta z-function-call z-arguments z-shell"> reload sshd</span>
+</span></code></pre>
+<p>Теперь открой новое окно терминала и попробуй подключиться как новый пользователь: ssh username@your_server_ip. Если все работает, можно закрывать сессию root.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-3-izmenenie-standartnogo-porta-dlia-ssh-podkliucheniia-optsional-no"><a class="header-anchor no-hover-padding" href="#shag-3-izmenenie-standartnogo-porta-dlia-ssh-podkliucheniia-optsional-no" aria-label="Anchor link for: shag-3-izmenenie-standartnogo-porta-dlia-ssh-podkliucheniia-optsional-no"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 3: Изменение стандартного порта для SSH подключения (опционально)</h2>
+<p>Изменение порта SSH по умолчанию — это не про настоящую безопасность. Безопасность в этом случае выражается через неясность (Security through obscurity). Изменение значения порта не отменяет необходимость использования <code>SSH-ключей</code> и <code>Fail2Ban</code>. Это дополнительный, очень легкий в реализации слой, который значительно снижает уровень шума от автоматических сканеров.</p>
+<p>Безопасно ли оставлять порт 22? Да, если и только если ты уже реализовал:</p>
+<ol>
+<li>Полный запрет на вход по паролю (PasswordAuthentication no).</li>
+<li>Использование только SSH-ключей (PubkeyAuthentication yes).</li>
+<li>Запрет входа под root (PermitRootLogin no).</li>
+<li>Защиту с помощью Fail2Ban.</li>
+</ol>
+<p>При этих условиях оставить порт 22 — абсолютно безопасное решение. Автоматические боты, сканирующие порт 22, просто будут получать отказ на попытку аутентификации и уходить ни с чем.</p>
+<p>Хотя это и не добавляет криптографической стойкости, я настоятельно рекомендую заменить стандартный порт. Это дает практические преимущества:</p>
+<ol>
+<li>Резкое снижение “шума” в логах. Твои логи <code>/var/log/auth.log</code> и таблица банов <code>Fail2Ban</code> не будут засоряться тысячами попыток от примитивных ботов, которые сканируют только порт <code>22</code>. Это упрощает анализ логов и снижает небольшую, но бесполезную нагрузку на систему.</li>
+<li>Затруднение для целевых атак. Злоумышленник, который целенаправленно ищет твою систему, все равно найдет <code>SSH-порт</code> сканером всего диапазона портов (Nmap). Но это уже не низкоуровневый скрипт-бот, а более продвинутая атака. Вы отсекаете <code>99.9%</code> автоматического мусора.</li>
+</ol>
+<p>Недостаток:</p>
+<p>· Удобство. Тебе всегда нужно указывать нестандартный порт при подключении: <code>ssh -p 12345 user@server.ip</code>. Однако это легко решается настройкой конфига <code>SSH</code> на твоей клиентском машине.</p>
+<p>Какой порт выбрать? Лучшие практики.</p>
+<p>Главное правило: не выбирай порт, который занят другим известным сервисом (например, 80 — HTTP, 443 — HTTPS, 21 — FTP), чтобы не создать конфликт в будущем.</p>
+<p>Хороший выбор:</p>
+<p>· Порты из диапазона <code>1024-49151</code> (зарегистрированные/пользовательские).
+· Избегай “модных” нестандартных портов для SSH, типа <code>2222</code>, <code>22222</code>, <code>22225</code>. Их тоже массово сканируют, потому что их популярность сделала их очевидными.
+· Выбери случайное, ничем не примечательное число.</p>
+<p>Примеры хороших портов: <code>53982</code>, <code>28465</code>, <code>49123</code>, <code>13574</code></p>
+<p>Примеры плохих портов: <code>22</code> (стандартный), <code>2222</code> (очевидный), <code>22222</code> (очевидный), <code>9022</code> (очевидная вариация), <code>21</code>, <code>80</code>, <code>443</code> (конфликтующие).</p>
+<p>Как сменить порт</p>
+<ol>
+<li>
+<p>Подключись к серверу и открой конфигурационный файл SSH:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> nano /etc/ssh/sshd_config</span>
+</span></code></pre>
+</li>
+<li>
+<p>Найди строку #Port 22. Раскомментируй ее (убери знак комментария #) и измени номер порта на выбранный ранее.</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">Port 53982   # Замени 53982 на свой порт
+</span></code></pre>
+</li>
+<li>
+<p>Сохрани файл и перезагрузи SSH-сервис.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> systemctl reload ssh</span>
+</span></code></pre>
+<p>ВНИМАНИЕ! Не закрывай текущую сессию SSH! Убедись, что новое подключение работает.</p>
+</li>
+<li>
+<p>Открой новое окно терминала и попробуй подключиться к серверу, указав новый порт.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ssh</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>p</span> 53982 username@your_server_ip</span>
+</span></code></pre>
+<p>Если подключение прошло успешно, можно закрыть старую сессию.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-4-nastraivaem-bazovyi-faervol-ufw"><a class="header-anchor no-hover-padding" href="#shag-4-nastraivaem-bazovyi-faervol-ufw" aria-label="Anchor link for: shag-4-nastraivaem-bazovyi-faervol-ufw"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 4: Настраиваем базовый фаервол (<code>UFW</code>)</h2>
+<p>Мы разрешим только самые необходимые порты: <code>SSH</code> для управления и позже — порт для нашей сети связывающий локальные машины и удаленный сервер.</p>
+<ol>
+<li>
+<p>Разрешаем <code>SSH</code>-соединения: Важно сделать это до включения фаервола.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ufw</span></span><span class="z-meta z-function-call z-arguments z-shell"> allow OpenSSH</span>
+</span></code></pre>
+<p>Если ты планируешь использовать нестандартный порт для <code>SSH</code>, укажи его явно: <code>ufw allow 2222/tcp</code> (пример для порта 2222).</p>
+<ul>
+<li>Если же уже был выставлен базовый порт для SSH, то обнови правила фаервола <code>UFW</code>. Сначала удали старое правило для <code>OpenSSH</code> (которое открывало порт <code>22</code>), затем добавь новое.</li>
+</ul>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> ufw delete allow OpenSSH  <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Или просто &#39;ufw delete allow 22/tcp&#39;</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> ufw allow 53982/tcp       <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Разрешаем новый порт</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> ufw status                <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Убедитесь, что порт 22 закрыт, а новый открыт</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+</li>
+<li>
+<p>Включаем фаервол:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ufw</span></span><span class="z-meta z-function-call z-arguments z-shell"> enable</span>
+</span></code></pre>
+<p>Ответь y. Фаервол активирован и уже блокирует все неразрешенные входящие соединения.</p>
+</li>
+<li>
+<p>Проверяем статус:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ufw</span></span><span class="z-meta z-function-call z-arguments z-shell"> status verbose</span>
+</span></code></pre>
+<p>Ты должен увидеть, что разрешен только <code>OpenSSH</code> или новый порт для <code>SSH</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-5-nastraivaem-fail2ban-dlia-zashchity-ot-atak"><a class="header-anchor no-hover-padding" href="#shag-5-nastraivaem-fail2ban-dlia-zashchity-ot-atak" aria-label="Anchor link for: shag-5-nastraivaem-fail2ban-dlia-zashchity-ot-atak"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 5: Настраиваем <code>Fail2Ban</code> для защиты от атак</h2>
+<p><code>Fail2Ban</code> будет мониторить логи <code>SSH</code> и автоматически блокировать <code>IP</code>-адреса, которые пытаются подобрать пароль.</p>
+<ol>
+<li>
+<p>Создаем простую конфигурацию для <code>SSH</code>: Скопируем стандартный файл настроек для <code>jail</code>:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cp</span></span><span class="z-meta z-function-call z-arguments z-shell"> /etc/fail2ban/jail.conf /etc/fail2ban/jail.local</span>
+</span></code></pre>
+<p>Отредактируем его:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">nano</span></span><span class="z-meta z-function-call z-arguments z-shell"> /etc/fail2ban/jail.local</span>
+</span></code></pre>
+<p>В секции [sshd] убедись, что настройки выглядят так:</p>
+<pre data-lang="ini" class="language-ini z-code"><code class="language-ini" data-lang="ini"><span class="z-source z-genconfig"><span class="z-storage z-type z-genconfig">[sshd]
+</span></span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">enabled</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-language z-genconfig">true</span>
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">port</span>    <span class="z-keyword z-operator z-genconfig">=</span></span> ssh
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">logpath</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-storage z-source z-genconfig">%(sshd_log)</span>s
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">backend</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-storage z-source z-genconfig">%(sshd_backend)</span>s
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">maxretry</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-numeric z-genconfig">3</span>
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">bantime</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-numeric z-genconfig">1h</span>
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">findtime</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-numeric z-genconfig">1h</span>
+</span></code></pre>
+<ul>
+<li><code>maxretry</code> = 3: количество неудачных попыток перед блокировкой.</li>
+<li><code>bantime</code> = 1h: время блокировки (1 час). Можно поставить -1 для перманентной блокировки.</li>
+<li><code>findtime</code> = 1h: окно времени, в котором считаются неудачные попытки.</li>
+</ul>
+</li>
+<li>
+<p>Запускаем и активируем <code>Fail2Ban</code>:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">systemctl</span></span><span class="z-meta z-function-call z-arguments z-shell"> enable fail2ban<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>now</span></span>
+</span></code></pre>
+</li>
+<li>
+<p>Проверяем статус:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">fail2ban-client</span></span><span class="z-meta z-function-call z-arguments z-shell"> status sshd</span>
+</span></code></pre>
+<p>Ты увидишь список забаненных <code>IP</code>-адресов, если атаки уже были.</p>
+</li>
+<li>
+<p>(Важно!) Обнови конфигурацию <code>Fail2Ban</code> если был изменен стандартный порт для <code>SSH</code>. <code>Fail2Ban</code> по умолчанию следит за портом <code>22</code>. Нужно сказать ему, чтобы он смотрел на новый порт.</p>
+<ul>
+<li>Отредактируй конфиг <code>Fail2Ban</code> для <code>SSH</code>:</li>
+</ul>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> nano /etc/fail2ban/jail.local</span>
+</span></code></pre>
+<ul>
+<li>В секции [sshd] найди параметр <code>port</code> и измени его:</li>
+</ul>
+<pre data-lang="ini" class="language-ini z-code"><code class="language-ini" data-lang="ini"><span class="z-source z-genconfig"><span class="z-storage z-type z-genconfig">[sshd]
+</span></span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">enabled</span> <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-language z-genconfig">true</span>
+</span><span class="z-source z-genconfig"><span class="z-meta z-param z-genconfig"><span class="z-variable z-parameter z-genconfig">port</span>    <span class="z-keyword z-operator z-genconfig">=</span></span> <span class="z-constant z-numeric z-genconfig">53982</span><span class="z-meta z-comment z-genconfig">    <span class="z-comment z-line z-number-sign z-genconfig"># Укажи свой новый порт здесь!
+</span></span></span><span class="z-source z-genconfig"><span class="z-meta z-comment z-genconfig"><span class="z-comment z-line z-number-sign z-genconfig"># ... остальные настройки (maxretry, bantime) ...
+</span></span></span></code></pre>
+<ul>
+<li>Перезапусти <code>Fail2Ban</code>:</li>
+</ul>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> systemctl restart fail2ban</span>
+</span></code></pre>
+</li>
+</ol>
+<hr />
+<h2 id="shag-6-nastroika-chasovogo-poiasa-lokalizatsii-i-monitoringa"><a class="header-anchor no-hover-padding" href="#shag-6-nastroika-chasovogo-poiasa-lokalizatsii-i-monitoringa" aria-label="Anchor link for: shag-6-nastroika-chasovogo-poiasa-lokalizatsii-i-monitoringa"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 6: Настройка часового пояса, локализации и мониторинга</h2>
+<ol>
+<li>
+<p>Установим правильный часовой пояс:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> timedatectl set-timezone Europe/Moscow  <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Замените на ваш пояс</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+</li>
+<li>
+<p>Установим нужную локаль (язык системы):</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dpkg-reconfigure locales</span>
+</span></code></pre>
+<p>Выбери en_US.UTF-8 UTF-8 (рекомендуется для серверов) или ru_RU.UTF-8 UTF-8.</p>
+</li>
+<li>
+<p>Установим утилиты для мониторинга ресурсов:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt install<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>y</span> htop</span>
+</span></code></pre>
+<p>htop — отличная замена стандартной top, позволяет интерактивно следить за нагрузкой на CPU, RAM и процессы.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-7-optsional-no-no-rekomenduetsia-nastroika-rezervnogo-kopirovaniia"><a class="header-anchor no-hover-padding" href="#shag-7-optsional-no-no-rekomenduetsia-nastroika-rezervnogo-kopirovaniia" aria-label="Anchor link for: shag-7-optsional-no-no-rekomenduetsia-nastroika-rezervnogo-kopirovaniia"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 7: (Опционально, но рекомендуется) Настройка резервного копирования</h2>
+<p>Твой VPS — это важная инфраструктура. Его поломка не должна стать катастрофой. Поэтому очень рекомендую организовать резервное копирование критически важный директорий (/etc, /home, /root). Можно использовать как встроенные утилиты, предоставляемые провайдером. Либо же создать свое хранилище, и отправлять информацию в тот же S3.</p>
+<hr />
+<h2 id="shag-8-mozhno-provesti-audit-bezopasnosti"><a class="header-anchor no-hover-padding" href="#shag-8-mozhno-provesti-audit-bezopasnosti" aria-label="Anchor link for: shag-8-mozhno-provesti-audit-bezopasnosti"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 8: Можно провести аудит безопасности</h2>
+<p>В сети есть утилиты, которые могут провести базовый аудит безопасности вашего сервера. Например есть bash script <a class="external" rel="noopener" target="_blank" href="https://github.com/vernu/vps-audit">VPS Audit</a>. Запустив который можно получить отчет по анализу системы. Отчет сохраняется в отдельный файлик, чтобы потом можно было еще раз его проанализировать.</p>
+<p>В рамках анализа проверяется не только те пункты, которые мы затронули, но и такие не обычные вещи, как автоматическое обновление критически важных пакетов, или установку правила для установки пароля пользователя. Список проводимых проверок</p>
+<ul>
+<li><code>System Restart</code> - Проверяется, нужен ли перезапуск сервера после обновления</li>
+<li><code>SSH Root Login</code> - Проверка, включен ли логин из под root пользователя через SSH</li>
+<li><code>SSH Password Auth</code> - Проверка, включен ли метод аутентификации SSH через пароль</li>
+<li><code>SSH Port</code> - Проверяет стандартный порт для SSH, если выставлен в 22 то рекомендуется изменить</li>
+<li><code>Firewall Status (UFW)</code> - Проверка статуса UFW firewall</li>
+<li><code>Unattended Upgrades</code> - Проверка на автоматическое обновление пакетов безопасности</li>
+<li><code>Intrusion Prevention</code> - Наличие Fail2ban или CrowdSec а так же статус их активности</li>
+<li><code>Failed Logins</code> - Проверка количества ошибочных попыток входа</li>
+<li><code>System Updates</code> - Проверяется все ли системные пакеты обновлены</li>
+<li><code>Running Services</code> - Проверка количества запущенных сервисов, если больше 16 то это уже не хорошо</li>
+<li><code>Port Security</code> - Проверяется открытые порты, если их много, то это тоже не хорошо</li>
+<li><code>Disk Usage</code> - Проверяем доступное место на диске</li>
+<li><code>Memory Usage</code> - Проверяем количество использованной оперативной памяти</li>
+<li><code>CPU Usage</code> - Проверяем нагрузку на CPU, если большая нагрузка, то это тоже повод задуматься</li>
+<li><code>Sudo Logging</code> - Проверяем включение/отключение логирование sudo команд</li>
+<li><code>Password Policy</code> - Проверяется настройка парольных политик</li>
+<li><code>SUID Files</code> - Поиск наличия SUID файлов</li>
+</ul>
+<hr />
+<h2 id="shag-9-vkliuchenie-logirovaniia-vsekh-sudo-komand"><a class="header-anchor no-hover-padding" href="#shag-9-vkliuchenie-logirovaniia-vsekh-sudo-komand" aria-label="Anchor link for: shag-9-vkliuchenie-logirovaniia-vsekh-sudo-komand"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 9: Включение логирования всех <code>sudo</code> команд</h2>
+<p>Для включения логирования необходимо отредактировать файл конфигурации <code>sudo</code>. Для этого, достаточно выполнить команду</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> visudo</span>
+</span></code></pre>
+<p>Которая откроет редактор с конфигурацией утилиты. По умолчанию открывается редактор <code>nano</code>. После этого необходимо прописать следующие строки, после блока со всеми настройками <code>Defaults</code></p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">Defaults logfile=/var/log/sudo.log
+</span><span class="z-text z-plain">Defaults log_input,log_output
+</span></code></pre>
+<hr />
+<h2 id="shag-10-nastroika-avtomaticheskogo-obnovleniia-paketov-bezopasnosti"><a class="header-anchor no-hover-padding" href="#shag-10-nastroika-avtomaticheskogo-obnovleniia-paketov-bezopasnosti" aria-label="Anchor link for: shag-10-nastroika-avtomaticheskogo-obnovleniia-paketov-bezopasnosti"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 10: Настройка автоматического обновления пакетов безопасности</h2>
+<p>Чтобы настроить автоматическое обновление пакетов безопасности на большинстве дистрибутивов Linux достаточно установить и сконфигурировать приложения <code>unattended-upgrades</code> (Для дистрибутивов Debian/Ubuntu) или <code>dnf-automatic</code> (для Fedora/RHEL), а так же включить их, настроив сами сервиса или таймеры. Ты можешь впоследствии кастомизировать утилиты, включив только обновление пакетов безопасности.</p>
+<p>Установка и настройка для Debian/Ubuntu</p>
+<ol>
+<li>
+<p>Нужно установить пакет <code>unattended-upgrades</code></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt update</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt install unattended-upgrades</span>
+</span></code></pre>
+</li>
+<li>
+<p>Теперь нужно сконфигурировать утилиту</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dpkg-reconfigure<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>priority</span><span class="z-keyword z-operator z-assignment z-option z-shell">=</span>low unattended-upgrades</span>
+</span></code></pre>
+<p>Появится окно подтверждения на котором нужно будет ответить <code>yes</code> для включения автоматического обновления.</p>
+</li>
+<li>
+<p>Проверяем конфигурацию. Для этого можно запустить обновление в режиме <code>--dry-run</code></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> unattended-upgrades<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>dry-run</span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>debug</span></span>
+</span></code></pre>
+</li>
+</ol>
+<p>Установка и настройка для Fedora и RHEL</p>
+<ol>
+<li>
+<p>Устанавливаем пакет <code>dnf-automatic</code></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> dnf install dnf-automatic</span>
+</span></code></pre>
+</li>
+<li>
+<p>Настраиваем файл конфигурации <code>dnf-automatic.conf</code></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> nano /etc/dnf/automatic.conf</span>
+</span></code></pre>
+<p>там нужно будет прописать строки</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">apply_updates = yes
+</span><span class="z-text z-plain">upgrade_type = security
+</span></code></pre>
+</li>
+<li>
+<p>Нужно включить и запустить таймер</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> systemctl enable<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>now</span> dnf-automatic.timer</span>
+</span></code></pre>
+</li>
+<li>
+<p>И проверить статус работы</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">systemctl</span></span><span class="z-meta z-function-call z-arguments z-shell"> status dnf-automatic.timer</span>
+</span></code></pre>
+</li>
+</ol>
+<p>Помимо этого можно сконфигурировать</p>
+<ul>
+<li>Оповещения по Email. Для обоих систем можно активировать алерты по факту действий. Для этого необходимо отредактировать файл <code>/etc/apt/apt.conf.d/50unattended-upgrades</code> и установить адрес для отправки сообщений системному администратору</li>
+<li>Автоматическая перезагрузка. Так же можно настроить и ее, но тут нужно быть осторожным, и не желательно включать эту функцию в продакшн среде.</li>
+<li>А так же нужно контролировать файл логирования после обновлений. Например для <code>unattended-upgrades</code> этот файл располагается тут <code>/var/log/unattended-upgrades</code></li>
+</ul>
+<hr />
+<h2 id="shag-11-nastroika-politiki-ispol-zovaniia-sil-nykh-parolei"><a class="header-anchor no-hover-padding" href="#shag-11-nastroika-politiki-ispol-zovaniia-sil-nykh-parolei" aria-label="Anchor link for: shag-11-nastroika-politiki-ispol-zovaniia-sil-nykh-parolei"><span class="link-icon" aria-hidden="true"></span></a>
+Шаг 11: Настройка политики использования сильных паролей</h2>
+<p>Подключаемые модули аутентификации (PAM) установлены по умолчанию в системах на базе DEB (Ubuntu/Debian). Однако тебе необходимо установить дополнительный модуль <code>libpam-cracklib</code>.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt install libpam-cracklib</span>
+</span></code></pre>
+<p>В системах на базе Debian политики паролей определяются в файле <code>/etc/pam.d/common-password</code>. Прежде чем вносить в него какие-либо изменения, лучше всего сделать резервную копию файла.</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> cp /etc/pam.d/common-password /etc/pam.d/common-password.bak</span>
+</span></code></pre>
+<p>Теперь отредактируй файл <code>/etc/pam.d/common-password</code>:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> nano /etc/pam.d/common-password</span>
+</span></code></pre>
+<p>Нужно найти следующую строку и отредактировать ее, если такой строки нет, то нужно будет ее создать.</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">password required pam_cracklib.so try_first_pass retry=3 minlen=12 lcredit=1 ucredit=1 dcredit=2 ocredit=1 difok=2 reject_username
+</span></code></pre>
+<p>Что каждая опция обозначает</p>
+<ul>
+<li><strong>try_first_pass retry=N</strong> – Максимальное количество повторных попыток смены пароля. N указывает на число. По умолчанию этот параметр равен 1.</li>
+<li><strong>minlen=N</strong> – Минимально допустимый размер нового пароля (плюс один, если кредиты не отключены, что является значением по умолчанию). В дополнение к количеству символов в новом пароле, за каждый символ (другой, верхний, нижний и цифру) дается кредит (+1 в длину). Значение по умолчанию равно 9.</li>
+<li><strong>lcredit=N</strong> – Определить максимальный кредит за содержание строчных букв в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ucredit=N</strong> – Определить максимальное количество заглавных букв в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>dcredit=N</strong> – Определить максимальный кредит для содержания цифр в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ocredit=N</strong> – Определить максимальный кредит для содержания других символов в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ifok=N</strong> – Определить количество символов, которые должны отличаться от предыдущего пароля.</li>
+<li><strong>reject_username</strong> – Запретить пользователям использовать свое имя в качестве пароля.</li>
+</ul>
+<p>Пользователи теперь должны использовать пароль с показателем сложности пароля, равным 12. Один “кредит” будет даваться за 1 строчную букву, 1 кредит за 1 заглавную букву, 1 кредит за минимум 2 цифры и 1 кредит за 1 другой символ.</p>
+<p>Можно так же отключить кредиты, присвоив им отрицательные значения, и заставить пользователя использовать комбинацию различных символов минимальной длины.</p>
+<p>Разберем работу на примере:</p>
+<pre data-lang="txt" class="language-txt z-code"><code class="language-txt" data-lang="txt"><span class="z-text z-plain">password required pam_cracklib.so minlen=8 lcredit=-1 ucredit=-1 dcredit=-2 ocredit=-1 difok=2 reject_username
+</span></code></pre>
+<p>Как определено выше, пользователи должны использовать пароль сложности 8 символов, включая 1 строчную букву, 1 заглавную букву, 2 цифры и 1 другой символ. Обратим внимание, эти ограничения будут применяться только для обычных пользователей, но не для пользователя root. Пользователь root может использовать любой тип пароля.</p>
+<h3 id="proverka-slozhnosti-parolia"><a class="header-anchor no-hover-padding" href="#proverka-slozhnosti-parolia" aria-label="Anchor link for: proverka-slozhnosti-parolia"><span class="link-icon" aria-hidden="true"></span></a>
+Проверка сложности пароля</h3>
+<p>После определения самой политики, нужно проверить работает ли она вообще. Назначим простой пароль, который не соответствует политике паролей, и посмотрим, что произойдет. Чтобы изменить или назначить пароль текущему пользователю, выполните команду:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">$</span></span><span class="z-meta z-function-call z-arguments z-shell"> passwd</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Пример</span></span><span class="z-meta z-function-call z-arguments z-shell"> вывода:</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Changing</span></span><span class="z-meta z-function-call z-arguments z-shell"> password for myuser.</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Current</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">New</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">BAD</span></span><span class="z-meta z-function-call z-arguments z-shell"> PASSWORD: it does not contain enough DIFFERENT characters</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">New</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">BAD</span></span><span class="z-meta z-function-call z-arguments z-shell"> PASSWORD: it is based on a dictionary word</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">New</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Retype</span></span><span class="z-meta z-function-call z-arguments z-shell"> new password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">BAD</span></span><span class="z-meta z-function-call z-arguments z-shell"> PASSWORD: is too simple</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">New</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">BAD</span></span><span class="z-meta z-function-call z-arguments z-shell"> PASSWORD: is too simple</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">New</span></span><span class="z-meta z-function-call z-arguments z-shell"> password:</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">BAD</span></span><span class="z-meta z-function-call z-arguments z-shell"> PASSWORD: is too simple</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">passwd:</span></span><span class="z-meta z-function-call z-arguments z-shell"> Have exhausted maximum number of retries for service</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">passwd:</span></span><span class="z-meta z-function-call z-arguments z-shell"> password unchanged</span>
+</span></code></pre>
+<p>Получается пользователь не может установить пароль, поскольку заданный пароль не соответствует требованиям.</p>
+
+        </section><form method="post" action="https://vhiweeypifbwacashxjz.supabase.co/rest/v1/rpc/increment_hits?apikey=sb_publishable_EoB7MFJhCmb6PiAk-GPJ4w_PGhQ44Ru" class="iine-form">
+  <input type="hidden" name="page_slug" value="&#x2F;blog&#x2F;base-configuration-for-vps&#x2F;">
+  <button class="iine-button" type="submit" data-slug="&#x2F;blog&#x2F;base-configuration-for-vps&#x2F;" data-icon="thumbs_up"
+    aria-label="Мне нравится эта статья" title="Мне нравится эта статья">👍</button>
+</form>
+
+                
+                
+                    
+                        
+                        
+                        
+                    
+                    
+                        
+                        
+                        
+                    
+                
+                
+            <nav class="full-width article-navigation">
+                <div><a href="https://baldman.justsquad.su/blog/zsh-setup/" aria-label="След." aria-describedby="left_title"><span class="arrow">←</span>&nbsp;След.</a>
+                <p aria-hidden="true" id="left_title">Моя настройка оболочки ZSH.</p></div>
+                <div><a href="https://baldman.justsquad.su/blog/rust-work-with-configs/" aria-label="Пред." aria-describedby="right_title">Пред.&nbsp;<span class="arrow">→</span></a>
+                <p aria-hidden="true" id="right_title">Rust. Работа с конфигурациями</p></div>
+            </nav>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev&#x2F;gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="base-configuration-for-vps"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/gh/welpo/iine@main/iine.mini.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul><li class="js"><a class="nav-links no-hover-padding social" href="#" data-encoded-email="bmlrb2xhaWd1c2hhcmluQHlhLnJ1"><img loading="lazy" alt="email" title="email" src="https://baldman.justsquad.su/social_icons/email.svg">
+                            </a>
+                        </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank
+
+ href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;about&#x2F;">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;contact&#x2F;">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https:&#x2F;&#x2F;baldman.justsquad.su&#x2F;sitemap.xml&#x2F;">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank
+
+ href="https://www.getzola.org">Zola</a>
+                &amp;
+                <a rel="noopener" target=_blank
+
+ href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank
+
+ href="https:&#x2F;&#x2F;github.com&#x2F;gnikodev&#x2F;gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <script src="https://baldman.justsquad.su/js/decodeMail.min.js" async></script><div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>
