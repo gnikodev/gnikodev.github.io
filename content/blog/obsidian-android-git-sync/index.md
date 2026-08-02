@@ -6,12 +6,12 @@ updated = 2025-02-23
 draft = false
 in_search_index = true
 
-[taxonomies]
-tags = ["obsidian","git",]
-[extra]
-keywords = "Obsidian, Obsidian Git, Obsidian Sync"
-giscus = true
-series = "obsidian"
+# [taxonomies]
+# tags = ["obsidian","git",]
+# [extra]
+# keywords = "Obsidian, Obsidian Git, Obsidian Sync"
+# giscus = true
+# series = "obsidian"
 +++
 
 **Obsidian** — очень удобный инструмент для работы с заметками разного рода. Можно составлять просто список дел на день, а некоторые люди пишут сценарии или наброски книг.

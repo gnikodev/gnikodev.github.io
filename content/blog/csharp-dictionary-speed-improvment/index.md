@@ -6,12 +6,12 @@ updated = 2025-04-18
 draft = false
 in_search_index = true
 
-[taxonomies]
-tags = ["dotnet","csharp","dictionary", "cs"]
-[extra]
-keywords = "DotNET, C#, Dictionary"
-giscus = true
-series = "dotnet"
+# [taxonomies]
+# tags = ["dotnet","csharp","dictionary", "cs"]
+# [extra]
+# keywords = "DotNET, C#, Dictionary"
+# giscus = true
+# series = "dotnet"
 +++
 
 Давайте поговорим о том, как оптимизировать производительность типа `Dictionary` в C#.

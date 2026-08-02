@@ -8,7 +8,7 @@ title = "bald_man"
 #for SEO aim for 140-180 Characters
 description = "Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки."
 author = "gnikodev"
-theme = "tabi"
+theme = "devlab-theme"
 
 default_language = "ru"
 compile_sass = true
@@ -29,21 +29,27 @@ taxonomies = [
 # index format can be: elasticlunr_json or elasticlunr_javascript or fuse_json
 index_format = "elasticlunr_json"
 include_title = true        # include title of page/section in index
-include_description = true # include description of page/section in index
-include_path = true
+include_description = false # include description of page/section in index
+include_path = false
 include_content = true      # include rendered content of page/section in index
 # truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
 
 [markdown]
-highlight_code = true
 bottom_footnotes = true
-highlight_theme = "css"
 render_emoji = false
 external_links_class = "external"
 external_links_target_blank = true # rel="noopener"
 external_links_no_follow = false   # rel="nofollow"
 external_links_no_referrer = false # rel="noreferrer"
 smart_punctuation = true          # `...` to `…`, `"quote"` to `“curly”` etc
+[markdown.highlighting]
+error_on_missing_language = false
+theme="github-dark"
+style = "class"
+# light_theme = "abridge"
+# dark_theme = "abridge"
+extra_grammars = []
+extra_themes = []
 
 [languages.en]
 title = "BaldMan"
@@ -358,6 +364,46 @@ enable_subset = true
 # If true, tabi will load the `static/custom_subset.css` file.
 # If false, tabi will use the default language-specific subset (English or Spanish).
 custom_subset = true
+
+[extra.devlab.brand]
+logo_text = "DevLab"
+footer_text = "DevLab"
+show_logo_mark = false
+logo_mark_path = ""
+
+[extra.devlab.footer]
+note = ""
+links = []
+
+[extra.devlab.navigation]
+links = [
+  # { name = "Home", path = "/" },
+  { name = "Blog", path = "/blog/", kind = "blog" },
+  { name = "Projects", path = "/projects/", kind = "projects" },
+  # { name = "Docs", path = "/docs/", kind = "docs" },
+
+]
+
+# [extra.devlab.docs]
+# section = "docs/_index.md"
+# path = "/docs/"
+# get_started_path = "/docs/getting-started/"
+
+[extra.devlab.blog]
+# section = "blog/_index.md"
+path = "/blog/"
+# zsh-setup-path = "blog/zsh-setup/index.md"
+
+
+[extra.devlab.appearance]
+default_mode = "system"
+show_toggle = true
+
+[extra.devlab.search]
+index = "search_index.en.js"
+
+[extra.devlab.seo]
+og_image = ""
 
 # giscus support for comments. https://giscus.app
 # Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup

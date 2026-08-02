@@ -6,12 +6,12 @@ updated = 2025-08-24
 draft = false
 in_search_index = true
 
-[taxonomies]
-tags = ["linux", "vps", "servers"]
-[extra]
-keywords = "Linux, VPS"
-giscus = true
-series = "linux"
+# [taxonomies]
+# tags = ["linux", "vps", "servers"]
+# [extra]
+# keywords = "Linux, VPS"
+# giscus = true
+# series = "linux"
 +++
 
 Представь, что ты только что создал новый `VPS`-сервер и готов использовать его в качестве надежного шлюза для своих домашних серверов? Первые несколько минут жизни сервера — самые критичные с точки зрения безопасности. Свежие серверы в облаке — любимая мишень для автоматических сканеров и ботов.

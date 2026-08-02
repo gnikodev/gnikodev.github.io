@@ -12,3 +12,9 @@
 Основной движок [Zola](https://github.com/getzola/zola)
 
 Используется тема [Abridge](https://github.com/jieiku/abridge)
+
+Обновление темы
+
+```bash
+git submodule update --remote themes/goyo
+```

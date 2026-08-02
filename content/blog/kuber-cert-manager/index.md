@@ -5,12 +5,12 @@ date = 2025-02-12
 draft = false
 in_search_index = true
 
-[taxonomies]
-tags = ["kubernetes", "k3s", "k8s", "certmanager", "letsencrypt"]
-[extra]
-keywords = "kubernetes, k3s, k8s, cert-manager, letsencrypt"
-giscus = true
-series = "kubernetes"
+# [taxonomies]
+# tags = ["kubernetes", "k3s", "k8s", "certmanager", "letsencrypt"]
+# [extra]
+# keywords = "kubernetes, k3s, k8s, cert-manager, letsencrypt"
+# giscus = true
+# series = "kubernetes"
 +++
 
 Наличие SSL-сертификатов в наше время является неотъемлемой частью безопасности разворачиваемых ресурсов. Когда я занялся организацией своего сервера и поднял k3s-кластер, то сразу задумался о том, как обеспечить веб-сервисы валидными сертификатами.

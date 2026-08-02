@@ -6,12 +6,12 @@ updated = 2025-08-17
 draft = false
 in_search_index = true
 
-[taxonomies]
-tags = ["rust","config","config-rs","dotenvy"]
-[extra]
-keywords = "Rust, config-rs"
-series = "rust"
-giscus = true
+# [taxonomies]
+# tags = ["rust","config","config-rs","dotenvy"]
+# [extra]
+# keywords = "Rust, config-rs"
+# series = "rust"
+# giscus = true
 +++
 
 Как в любом приложении, хоть Web, хоть Desktop, необходимо использовать конфигурации. Они могут быть записаны в переменных окружения среды выполнения, либо же в отдельных файлах, таких как `json`, `xml`, `env` или `toml`.

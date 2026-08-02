@@ -1,7 +1,6 @@
 +++
 title = "Проекты"
-sort_by = "weight"
-template = "cards.html"
+sort_by = "date"
 insert_anchor_links = "left"
 
 [extra]
