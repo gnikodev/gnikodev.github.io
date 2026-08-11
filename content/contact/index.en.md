@@ -1,8 +1,5 @@
 +++
 title = "Contacts"
-path = "/en/contact"
-template = "page.html"
-draft = false
 +++
 
 The best way to get in touch is via **Telegram** — I respond personally and usually within 24 hours.

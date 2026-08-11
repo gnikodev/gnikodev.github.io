@@ -2,15 +2,14 @@
 title = "ChatGpt без регистрации и МЗТ."
 description = "Способ работы с ИИ без \"дополнительных\" приложений."
 date = 2025-02-04
+updated = 2025-02-04
+taxonomies = { tags = ["networks", "chatgpt","dns"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["networks", "chatgpt","dns",]
-# [extra]
-# keywords = "YouTube"
-# giscus = true
-# series = "networks"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 В эпоху бурного развития технологий расстраиваешься, когда у тебя нет возможности получить доступ к новым программам или сервисам, которые так сильно хотелось испытать.

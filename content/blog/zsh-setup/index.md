@@ -2,16 +2,14 @@
 title = "Моя настройка оболочки ZSH."
 description = "Если вам не нравится стандартная оболочка командной строки типа bash и sh, то нужно ставить ZSH, расскажу как его установить и настроить."
 date = 2025-09-02
+updated = 2025-09-02
+taxonomies = { tags = ["linux", "zsh","oh-my-zsh"], categories = [] }
 
 # draft = false
 # in_search_index = true
 
-# # [taxonomies]
-# # tags = ["linux", "zsh","oh-my-zsh",]
-# [extra]
-# keywords = "zsh, oh-my-zsh, powerlevel10k"
-# giscus = true
-# series = "linux"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 Если тебе надоел стандартный вид оболочки командной строки, и хочется увеличить свою продуктивность при работе в консоли, то эта статья для тебя! Мы рассмотрим как установить и настроить продвинутую оболочку zsh, а так же поставим несколько удобных плагинов.

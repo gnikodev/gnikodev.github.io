@@ -1,7 +1,5 @@
 +++
 title = "Архив"
-# template = "archive.html"
-
-[extra]
-social_media_card = "archive.jpg"
+sort_by = "date"
+template = "posts_section.html"
 +++

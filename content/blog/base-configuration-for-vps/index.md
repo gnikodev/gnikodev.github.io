@@ -3,15 +3,13 @@ title = "Базовая настройка VPS."
 description = "Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера."
 date = 2025-08-24
 updated = 2025-08-24
+taxonomies = { tags = ["linux", "vps", "servers"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["linux", "vps", "servers"]
-# [extra]
-# keywords = "Linux, VPS"
-# giscus = true
-# series = "linux"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 Представь, что ты только что создал новый `VPS`-сервер и готов использовать его в качестве надежного шлюза для своих домашних серверов? Первые несколько минут жизни сервера — самые критичные с точки зрения безопасности. Свежие серверы в облаке — любимая мишень для автоматических сканеров и ботов.

@@ -1,8 +1,5 @@
 +++
 title = "Контакты"
-path = "contact"
-template = "page.html"
-draft = false
 +++
 
 Лучший способ связаться со мной — через **Telegram**. Отвечаю лично и почти всегда в течение дня.

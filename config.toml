@@ -1,424 +1,130 @@
-# do NOT include a trailing slash on the base URL
 base_url = "https://baldman.justsquad.su"
-# Usable site directly from disk, Including Search: "/home/jieiku/.dev/abridge/public"
-# Also set index format = "elasticlunr_javascript", and in [extra] uglyurls = true, integrity = false
-# If you use the npm/node script then all you have to do is set offline = true, and everything else is automatic.
-
 title = "bald_man"
-#for SEO aim for 140-180 Characters
 description = "Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки."
 author = "gnikodev"
-theme = "devlab-theme"
+theme = "goyo"
 
 default_language = "ru"
-compile_sass = true
+compile_sass = false
 minify_html = false
 build_search_index = true
 generate_feeds = false
+
 taxonomies = [
-#    {name = "categories", feed = true},
-    {name = "tags", feed = true},
+    { name = "tags", feed = false },
+    { name = "categories", paginate_by = 10, feed = true },
 ]
 
-#feed_filename = "atom.xml"
-#output_dir = "public"
-#ignored_content = ["*.{graphml,xlsx}", "temp.*"]
-#hard_link_static = false # set to true to hard link instead of copying, useful for very large files.
-
-[search]                # Options specific to elasticlunr search.
-# index format can be: elasticlunr_json or elasticlunr_javascript or fuse_json
-index_format = "elasticlunr_json"
-include_title = true        # include title of page/section in index
-include_description = false # include description of page/section in index
+[search]
+# Goyo's search UI loads this as a <script> tag and reads `window.searchIndex`,
+# so the index has to be emitted as JS, not JSON.
+index_format = "elasticlunr_javascript"
+include_title = true
+include_description = false
 include_path = false
-include_content = true      # include rendered content of page/section in index
-# truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
+include_content = true
 
 [markdown]
 bottom_footnotes = true
 render_emoji = false
 external_links_class = "external"
-external_links_target_blank = true # rel="noopener"
-external_links_no_follow = false   # rel="nofollow"
-external_links_no_referrer = false # rel="noreferrer"
-smart_punctuation = true          # `...` to `…`, `"quote"` to `“curly”` etc
+external_links_target_blank = true
+external_links_no_follow = false
+external_links_no_referrer = false
+smart_punctuation = true
+
 [markdown.highlighting]
 error_on_missing_language = false
-theme="github-dark"
+# `theme` is required by Zola even in class mode (Zola >=0.22, Giallo highlighter),
+# but its colors are unused: goyo ships its own syntax-highlighting CSS keyed off
+# `data-theme`, which is what actually styles the `style = "class"` output below.
+theme = "github-dark"
 style = "class"
-# light_theme = "abridge"
-# dark_theme = "abridge"
-extra_grammars = []
-extra_themes = []
 
 [languages.en]
 title = "BaldMan"
 description = "Nikolay Gushcharin's blog. Here you can find articles on .NET, building a smart home system, as well as about interesting development tools."
-generate_feeds = true
+generate_feeds = false
 build_search_index = true
-search.include_title = true # include title of page/section in index
-search.include_description = true # include description of page/section in index
-search.include_content = true # include rendered content of page/section in index
-search.truncate_content_length = 100 # Truncate at nth character. May be useful if index is getting too large.
+search.include_title = true
+search.include_description = true
+search.include_content = true
+search.truncate_content_length = 100
 taxonomies = [
-    {name = "tags", feed = true},
+    { name = "tags", feed = false },
+    { name = "categories", paginate_by = 10, feed = true },
 ]
 
 [extra]
-# Check out the documentation (or the comments below) to learn how to customise tabi:
-# https://welpo.github.io/tabi/blog/mastering-tabi-settings/
+gtag = "G-8T5L2SDRTX"
+default_thumbnail = "m1024.png"
 
-# Search index format.
-# For Zola 0.17.X users only.
-# This MUST MATCH the setting in [search].index_format.
-# Example: If [search].index_format is "elasticlunr_javascript", set:
-# index_format = "elasticlunr_javascript"
-# index_format = ""
+edit_url = "https://github.com/gnikodev/gnikodev.github.io/edit/main"
+issue_url = "https://github.com/gnikodev/gnikodev.github.io/issues"
 
-# Enable JavaScript theme toggler to allow users to switch between dark/light mode.
-# If disabled, your site will use the theme specified in the `default_theme` variable.
-theme_switcher = true
-
-# Use sans-serif font everywhere.
-# By default, the serif font is only used in articles.
-override_serif_with_sans = false
-
-# This setting determines the default theme on load ("light" or "dark").
-# To follow the user's OS theme, leave it empty or unset.
-default_theme = ""
-
-# Choose the colourscheme (skin) for the theme. Default is "teal".
-# Skin available: blue, lavender, mint, red, sakura, teal, monochrome, lowcontrast_orange, lowcontrast_peach, lowcontrast_pink, indigo_ingot, evangelion
-# See them live and learn how to create your own: https://welpo.github.io/tabi/blog/customise-tabi/#skins
-# WARNING! "lowcontrast" skins, while aesthetically pleasing, may not provide optimal
-# contrast (in light theme) for readability and might not be suitable for all users.
-# Furthermore, low contrasting elements will affect your Google Lighthouse rating.
-# All other skins have optimal contrast.
-skin = "monochrome"
-
-# Set browser theme colour. Can be a single colour or [light, dark].
-# Note: Bright colors may be ignored in dark mode.
-# More details: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
-# browser_theme_color = "#968a08ff"
-browser_theme_color = ["#ffffff", "#000000"]  # Example of light/dark colours.
-
-# For multilingual sites: show current language code on the language switcher.
-show_selected_language_code_in_language_switcher = false
-
-# List additional stylesheets to load site-wide.
-# These stylesheets should be located in your site's `static` directory.
-# Example: stylesheets = ["extra1.css", "path/extra2.css"]
-# You can load a stylesheet for a single post by adding it to the [extra] section of the post's front matter, following this same format.
-stylesheets = []
-
-# Sets the default canonical URL for all pages.
-# Individual pages can override this in the [extra] section using canonical_url.
-# Example: "$base_url/blog/post1" will get the canonical URL "https://example.com/blog/post1".
-# Note: To ensure accuracy in terms of matching content, consider setting 'canonical_url' individually per page.
-# base_canonical_url = "https://example.com"
-
-# Remote repository for your Zola site.
-# Used for `show_remote_changes` and `show_remote_source` (see below).
-# Supports GitHub, GitLab, Gitea, and Codeberg.
-remote_repository_url = "https://github.com/gnikodev/gnikodev.github.io"
-# Set this to "auto" to try and auto-detect the platform based on the repository URL.
-# Accepted values are "github", "gitlab", "gitea", and "codeberg".
-remote_repository_git_platform = "auto"  # Defaults to "auto".
-# Branch in the repo hosting the Zola site.
-remote_repository_branch = "main"  # Defaults to "main".
-# Show a link to the commit history of updated posts, right next to the last updated date.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-show_remote_changes = true  # Defaults to true.
-# Show a link to the repository of the site, right next to the "Powered by Zola & tabi" text.
-show_remote_source = true  # Defaults to true.
-
-# Add a "copy" button to code blocks (loads ~700 bytes of JavaScript).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-copy_button = true
-
-# Make code block names clickable if they are URLs (loads ~400 bytes of JavaScript).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-code_block_name_links = false
-
-# Force left-to-right (LTR) direction for code blocks.
-# Set to false to allow code to follow the document's natural direction.
-# Can be set at page or section levels. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-force_codeblock_ltr = true
-
-# Show the author(s) of a page.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-show_author = false
-
-# Show the reading time of a page.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-show_reading_time = true
-
-# Show the date of a page below its title.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-show_date = true
-
-# Determines how dates are displayed in the post listing (e.g. front page or /blog). Options:
-# "date" - Show only the original date of the post (default if unset).
-# "updated" - Show only the last updated date of the post. If there is no last updated date, it shows the original date.
-# "both" - Show both the original date and the last updated date.
-post_listing_date = "date"
-
-# Enable iine like buttons on all posts: https://iine.to/
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-iine = true
-iine_icon = "thumbs_up"  # See https://iine.to/#customise
-# Unify like counts across all language versions of the same page.
-# When enabled, likes on /es/blog/hello/ will count towards /blog/hello/ (default language).
-iine_unified_languages = true
-
-# Show "Jump to posts" link next to series' title.
-# By default, the link appears automatically when a series description exceeds 2000 characters.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-# show_jump_to_posts = true
-
-# Determines if indexes should be increasing (false) or decreasing (true) in series' posts list.
-# It has only effect if the section uses indexes metadata (which is only the case for series as of now).
-# Can be set at section levels, following the hierarchy: section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-post_listing_index_reversed = false  # Defaults to false.
-
-# DEPRECATED!
-# Use Zola's built-in `bottom_footnotes = true` in the [markdown] section instead. (Available since v0.19.0)
-# Adds backlinks to footnotes (loads ~500 bytes of JavaScripts).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-footnote_backlinks = false
-
-# Enable KaTeX for all posts.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-katex = false
-
-# Enable Mermaid diagrams for all posts.
-# Loads ~2.5MB of JavaScript.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-mermaid = false
-
-# Serve Mermaid JavaScript locally. Version bundled with tabi.
-# If set to false, it will load the latest version from JSDelivr.
-# Only relevant when `mermaid = true`.
-serve_local_mermaid = true
-
-# Show links to previous and next articles at the bottom of posts.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-show_previous_next_article_links = false
-
-# Invert order of the links to previous and next articles at the bottom of posts.
-# By default, next articles are on the left side of the page and previous articles are on the right side.
-# To reverse the order (next articles on the right and previous articles on the left), set it to true.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-invert_previous_next_article_links = false
-
-# Whether the navigation for previous/next article should match the full width of the site (same as the navigation bar at the top) or the article width.
-# To match the navigation bar at the top, set it to true.
-previous_next_article_links_full_width = true
-
-# Quick navigation buttons.
-# Adds "go up" and "go to comments" buttons on the bottom right (hidden for mobile).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-quick_navigation_buttons = false
-
-# Add a Table of Contents to posts, right below the title and metadata.
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-toc = false
-
-# Date format used when listing posts (main page, /blog section, tag posts list…)
-# Default is "6th July 2049" in English and "%d %B %Y" in other languages.
-long_date_format = "%d %B %Y"
-
-# Date format used for blog posts.
-# Default is "6th July 2049" in English and "%-d %B %Y" in other languages.
-short_date_format = ""
-
-# Date format used for the archive page.
-# Default is "06 July" in English and "%d %b" in other languages.
-archive_date_format = ""
-
-# Per-language date format overrides.
-# Examples: Spanish uses "3 de febrero de 2024", German uses "3. Februar 2024"
-date_formats = [
-    { lang = "es", long = "%d de %B de %Y", short = "%-d %b %Y" },
-    { lang = "de", long = "%d. %B %Y", short = "%d.%m.%Y", archive = "%d. %b" },
+nav = [
+    { name = "Соцсети", type = "dropdown", members = [
+        { name = "Telegram", url = "https://t.me/bald_man_g" },
+        { name = "YouTube", url = "https://youtube.com/@baldman_g" },
+        { name = "Instagram", url = "https://instagram.com/gnikodev" },
+        { name = "GitHub", url = "https://github.com/gnikodev/", icon = "github" },
+    ] },
+    { name = "Tags", url = "/tags", type = "url" },
 ]
 
-# Custom separator used in title tag and posts metadata (between date, time to read, and tags).
-separator = "•"
-
-# Use a shorter layout for All tags listing.
-# Default: tag_name – n post[s]
-# Compact: tag_name^n (superscript number)
-compact_tags = false
-
-# How tags are sorted in a Tags listing based on templates/tags/list.html.
-# "name" for alphabetical, "frequency" for descending count of posts.
-# Default: "name".
-tag_sorting = "name"
-
-# Show clickable tags above cards.html template (e.g. projects/) to filter the displayed items.
-# Loads JS to filter. If JS is disabled, the buttons are links to the tag's page.
-# Can be set at the section or config.toml level, following the hierarchy: section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-# Default: true
-enable_cards_tag_filtering = true
-
-# Invert the order of the site title and page title in the browser tab.
-# Example: true => "Blog • ~/tabi", false => "~/tabi • Blog"
-invert_title_order = false
-
-# Full path after the base URL required. So if you were to place it in "static" it would be "/favicon.png"
-favicon = "m1024.png"
-
-# Add an emoji here to use it as favicon.
-# Compatibility: https://caniuse.com/link-icon-svg
-favicon_emoji = "🌱"
-
-# Path to the fallback image for social media cards (the preview image shown when sharing a link on WhatsApp, LinkedIn…).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-# Learn how to create these images in batch and automatically:
-# https://osc.garden/blog/automating-social-media-cards-zola/
-social_media_card = "index.jpg"
-
-menu = [
-    { name = "blog", url = "blog", trailing_slash = true },
-    { name = "archive", url = "archive", trailing_slash = true },
-    { name = "tags", url = "tags", trailing_slash = true },
-    { name = "projects", url = "projects", trailing_slash = true },
-    #    {url = "about", name = "About", slash = true, blank = false, size="s110"},
-]
-footer_menu = [
-    { name = "about", url = "about", trailing_slash = true},
-    { name = "contact", url = "contact", trailing_slash = true},
-    { name = "sitemap", url = "sitemap.xml", trailing_slash = true},
+nav_en = [
+    { name = "Socials", type = "dropdown", members = [
+        { name = "Telegram", url = "https://t.me/bald_man_g" },
+        { name = "YouTube", url = "https://youtube.com/@baldman_g" },
+        { name = "Instagram", url = "https://instagram.com/gnikodev" },
+        { name = "GitHub", url = "https://github.com/gnikodev/", icon = "github" },
+    ] },
+    { name = "Tags", url = "/en/tags", type = "url" },
 ]
 
-### Uncomment one of the below lines, or neither, depending on which type of logo you want to use:
-logo = { file="logo.svg", width="128", height="128", alt="BaldManLogo", text="BaldMan", vertical-align="middle" }
-#textlogo = '<font color="#f90">A</font>bridge'
-#textlogo = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f90" viewBox="0 0 96 96" width="28" height="28"><path stroke-width="14" d="M14 99 46 7h4l32 92"/><path stroke-width="9" d="M-3 82c43-26 59-26 102 0"/><path stroke-linecap="round" stroke-width="1.5" d="M94 72v7m-5-9.8v7m-5-9.8v7.1M79 64v7M63 57.7v7m-5-8.2v7m-5-7.8v7m-5-7.2v7m-5-6.7v7m-5-6.3v7m-5-5.8v7M17 64v7m-5-4.6v7m-5-4.2v7M2 72v7"/></svg>BaldMan'
+[extra.lang]
+aliases = { en = "English", ru = "Русский" }
 
-head_extra = "<meta name=\"analytics\" content=\"my-analytics-id\" /><meta name=\"advertising\" content=\"my-advertising-id\" /> <!-- Google tag (gtag.js) --> <script async src=\"https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX\"></script> <script>  window.dataLayer = window.dataLayer || [];  function gtag(){dataLayer.push(arguments);}  gtag('js\\', new Date());  gtag('config', 'G-8T5L2SDRTX'); </script> <meta name=\"yandex-verification\" content=\"b387010222fc81c7\" />"
+[extra.logo]
+text = "BaldMan"
+image_path = "logo.svg"
 
-###############################################################################
-### Footer social links; these are used in macros/social.html
-###   https://github.com/Jieiku/abridge/blob/master/templates/macros/social.html
-###############################################################################
+[extra.theme]
+colorset = "dark"
+brightness = "normal"
+disable_toggle = false
+default_theme_dark = "goyo-dark"
+default_theme_light = "goyo-light"
 
-# Email address for footer's social section.
-# Protect against spambots:
-# 1. Use base64 for email (convert at https://www.base64encode.org/ or `printf 'your@email.com' | base64`).
-# 2. Or, set 'encode_plaintext_email' to true for auto-encoding (only protects on site, not in public repos).
-email = "bmlrb2xhaWd1c2hhcmluQHlhLnJ1"
-# Decoding requires ~400 bytes of JavaScript. If JS is disabled, the email won't be displayed.
-encode_plaintext_email = true  # Setting is ignored if email is already encoded.
+[extra.sidebar]
+expand_depth = 1
+enable_desktop_menu = true
+# Goyo hides the sidebar on the root page by default (it expects a dedicated
+# `landing.html` hero page there instead). We use a plain content page for
+# "/", so keep the sidebar so the homepage doesn't look like a different site.
+disable_root_hide = true
 
-# Social media links for the footer.
-# Built-in icons: https://github.com/welpo/tabi/tree/main/static/social_icons
-# To use a custom icon, add it to your site's `static/social_icons` directory.
-socials = [
-    { name = "github", url = "https://github.com/gnikodev/", icon = "github" },
-    { name = "telegram", url = "https://t.me/bald_man_g", icon = "telegram" },
-    { name = "instagram", url = "https://instagram.com/gnikodev", icon = "instagram" },
-    { name = "youtube", url = "https://youtube.com/@baldman_g", icon = "youtube" },
-]
+[extra.share]
+copy_url = true
+x = true
 
-# Enable a copyright notice for the footer, shown between socials and the "Powered by" text.
-# $TITLE will be replaced by the website's title.
-# $CURRENT_YEAR will be replaced by the current year.
-# $AUTHOR will be replaced by the `author` variable.
-# $SEPARATOR will be replaced by the `separator` variable.
-# Markdown is supported (links, emphasis, etc).
-# copyright = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR Unless otherwise noted, the content in this website is available under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license."
+[extra.favicon]
+favicon_96x96 = "/m96.png"
+favicon_ico = "/favicon.ico"
+favicon_svg = "/favicon.svg"
+apple_touch_icon = "/apple-touch-icon.png"
+site_webmanifest = "/manifest.json"
 
-# For multi-language sites, you can set a different copyright for each language.
-# The old way of setting `translated_copyright = true` and using i18n files is deprecated.
-# If a translation is missing for language, the `copyright` value will be used.
-# copyright_translations.es = "$TITLE © $CURRENT_YEAR $AUTHOR $SEPARATOR A menos que se indique lo contrario, el contenido de esta web está disponible bajo la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es)."
-
-# Custom security headers. What urls should your website be able to connect to?
-# You need to specify the CSP and the URLs associated with the directive.
-# Useful if you want to load remote content safely (embed YouTube videos, which needs frame-src, for example).
-# Default directive is self.
-# Default config, allows for https remote images and embedding YouTube and Vimeo content.
-# This configuration (along with the right webserver settings) gets an A+ in Mozilla's Observatory: https://observatory.mozilla.org
-# Note: to use a Zola built-in syntax highlighting theme, allow unsafe-inline for style-src.
-allowed_domains = [
-    { directive = "font-src", domains = ["'self'", "data:"] },
-    { directive = "img-src", domains = ["'self'", "https://*", "data:"] },
-    { directive = "media-src", domains = ["'self'", "https://cdn.jsdelivr.net/"] },
-    { directive = "script-src", domains = ["'self'"] },
-    { directive = "style-src", domains = ["'self'"] },
-    { directive = "frame-src", domains = ["player.vimeo.com", "https://www.youtube-nocookie.com"] },
-]
-
-# Enable the CSP directives configured (or default).
-# Can be set at page or section levels, following the hierarchy: page > section > config. See: https://welpo.github.io/tabi/blog/mastering-tabi-settings/#settings-hierarchy
-enable_csp = true
-
-# Font subsetting configuration.
-# This feature helps prevent text flashing in Firefox when using custom fonts.
-# See: https://welpo.github.io/tabi/blog/custom-font-subset/
-# Enable or disable font subsetting completely, both built-in and custom subsets.
-enable_subset = true
-# Use a custom subset of characters for the header.
-# If true, tabi will load the `static/custom_subset.css` file.
-# If false, tabi will use the default language-specific subset (English or Spanish).
-custom_subset = true
-
-[extra.devlab.brand]
-logo_text = "DevLab"
-footer_text = "DevLab"
-show_logo_mark = false
-logo_mark_path = ""
-
-[extra.devlab.footer]
-note = ""
-links = []
-
-[extra.devlab.navigation]
-links = [
-  # { name = "Home", path = "/" },
-  { name = "Blog", path = "/blog/", kind = "blog" },
-  { name = "Projects", path = "/projects/", kind = "projects" },
-  # { name = "Docs", path = "/docs/", kind = "docs" },
-
-]
-
-# [extra.devlab.docs]
-# section = "docs/_index.md"
-# path = "/docs/"
-# get_started_path = "/docs/getting-started/"
-
-[extra.devlab.blog]
-# section = "blog/_index.md"
-path = "/blog/"
-# zsh-setup-path = "blog/zsh-setup/index.md"
-
-
-[extra.devlab.appearance]
-default_mode = "system"
-show_toggle = true
-
-[extra.devlab.search]
-index = "search_index.en.js"
-
-[extra.devlab.seo]
-og_image = ""
-
-# giscus support for comments. https://giscus.app
-# Setup instructions: https://welpo.github.io/tabi/blog/comments/#setup
-[extra.giscus]
-enabled_for_all_posts = false  # Enables giscus on all posts. It can be enabled on individual posts by setting `giscus = true` in the [extra] section of a post's front matter.
-automatic_loading = true  # If set to false, a "Load comments" button will be shown.
+[extra.comments]
+# Off by default: goyo has no per-post opt-in like the old theme did, only
+# this single site-wide switch. Flip to true to turn giscus on everywhere.
+enabled = false
+system = "giscus"
 repo = "gnikodev/gnikodev.github.io"
-repo_id = "R_kgDOMkqe1A"  # Find this value in https://giscus.app/
+repo_id = "R_kgDOMkqe1A"
 category = "Q&A"
-category_id = "DIC_kwDOMkqe1M4C0Y8a"  # Find this value in https://giscus.app/
-mapping = "slug"  # Available: pathname; url; title; slug. "slug" will use the post's filename (slug); this is the only way to share comments between languages.
-strict_title_matching = 1  # 1 to enable, 0 to disable. https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#data-strict
-enable_reactions = 1  # 1 to enable, 0 to disable.
-comment_box_above_comments = false
-light_theme = "noborder_light"
-dark_theme = "noborder_dark"
-lang = ""  # Leave blank to match the page's language.
-lazy_loading = true
+category_id = "DIC_kwDOMkqe1M4C0Y8a"
+mapping = "slug"
+strict = "1"
+reactions_enabled = "1"
+theme = "preferred_color_scheme"

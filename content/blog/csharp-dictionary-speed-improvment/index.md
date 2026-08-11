@@ -3,15 +3,13 @@ title = "Ускоряем работу C# Dictionary в 2 раза."
 description = "Способ оптимизации работы типа Dictionary в языке программирования C#."
 date = 2025-04-18
 updated = 2025-04-18
+taxonomies = { tags = ["dotnet","csharp","dictionary", "cs"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["dotnet","csharp","dictionary", "cs"]
-# [extra]
-# keywords = "DotNET, C#, Dictionary"
-# giscus = true
-# series = "dotnet"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 Давайте поговорим о том, как оптимизировать производительность типа `Dictionary` в C#.

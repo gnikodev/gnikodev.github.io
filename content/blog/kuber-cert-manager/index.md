@@ -2,15 +2,14 @@
 title = "Получение сертификатов в k3s (k8s) через cert-manager"
 description = "Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge."
 date = 2025-02-12
+updated = 2025-02-12
+taxonomies = { tags = ["kubernetes", "k3s", "k8s", "certmanager", "letsencrypt"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["kubernetes", "k3s", "k8s", "certmanager", "letsencrypt"]
-# [extra]
-# keywords = "kubernetes, k3s, k8s, cert-manager, letsencrypt"
-# giscus = true
-# series = "kubernetes"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 Наличие SSL-сертификатов в наше время является неотъемлемой частью безопасности разворачиваемых ресурсов. Когда я занялся организацией своего сервера и поднял k3s-кластер, то сразу задумался о том, как обеспечить веб-сервисы валидными сертификатами.

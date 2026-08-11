@@ -3,15 +3,13 @@ title = "Rust. Работа с конфигурациями"
 description = "Способ подключения и использования конфигураций в Rust проектах."
 date = 2025-08-17
 updated = 2025-08-17
+taxonomies = { tags = ["rust","config","config-rs","dotenvy"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["rust","config","config-rs","dotenvy"]
-# [extra]
-# keywords = "Rust, config-rs"
-# series = "rust"
-# giscus = true
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 Как в любом приложении, хоть Web, хоть Desktop, необходимо использовать конфигурации. Они могут быть записаны в переменных окружения среды выполнения, либо же в отдельных файлах, таких как `json`, `xml`, `env` или `toml`.

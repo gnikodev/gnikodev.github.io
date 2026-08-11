@@ -1,0 +1,30 @@
+{% macro list(pages) %}
+<div class="flex flex-col gap-6 mt-6">
+    {% for page in pages %}
+    <article class="pb-6 border-b border-gray-500/15 last:border-0">
+        <a href="{{ page.permalink | safe }}" class="no-underline">
+            <h2 class="text-xl font-semibold mb-1 flex items-center gap-2">
+                {{ page.title }}
+                {% if page.extra.badge %}
+                <span class="text-xs font-normal px-2 py-0.5 border border-gray-500/30 rounded">{{ page.extra.badge }}</span>
+                {% endif %}
+            </h2>
+        </a>
+        <div class="text-sm text-gray-500 mb-2">
+            {{ page.date | date(format="%d.%m.%Y") }}
+            {% if page.reading_time %} · {{ page.reading_time }} min{% endif %}
+        </div>
+        {% if page.description %}
+        <p class="text-base-content/80">{{ page.description }}</p>
+        {% endif %}
+        {% if page.taxonomies.tags %}
+        <div class="flex flex-wrap gap-2 mt-2">
+            {% for tag in page.taxonomies.tags %}
+            <span class="badge badge-dash text-xs border-gray-500/30">{{ tag }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </article>
+    {% endfor %}
+</div>
+{% endmacro list %}

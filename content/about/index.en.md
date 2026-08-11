@@ -1,8 +1,5 @@
 +++
 title = "About me"
-path = "/en/about"
-template = "page.html"
-draft = false
 +++
 
 Hi! I’m **Nikolai Gushcharin** — a senior backend engineer and engineering lead focused on building systems that are **reliable, maintainable, and scalable**.

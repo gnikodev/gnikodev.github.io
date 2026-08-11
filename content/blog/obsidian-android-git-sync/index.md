@@ -3,15 +3,13 @@ title = "Obsidian. Git синхронизация на Android."
 description = "Способы синхронизации хранилищ Obsidian на Android устройствах через Git."
 date = 2024-08-18
 updated = 2025-02-23
+taxonomies = { tags = ["obsidian","git"], categories = [] }
+
 draft = false
 in_search_index = true
 
-# [taxonomies]
-# tags = ["obsidian","git",]
-# [extra]
-# keywords = "Obsidian, Obsidian Git, Obsidian Sync"
-# giscus = true
-# series = "obsidian"
+[extra]
+# badge = "NEW"  # Options: NEW, BETA, UPDATED, WIP
 +++
 
 **Obsidian** — очень удобный инструмент для работы с заметками разного рода. Можно составлять просто список дел на день, а некоторые люди пишут сценарии или наброски книг.
