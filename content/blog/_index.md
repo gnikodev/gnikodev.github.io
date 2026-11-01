@@ -1,10 +1,6 @@
 +++
-paginate_by = 5
 title = "Блог"
+description = "Технические статьи."
 sort_by = "date"
-insert_anchor_links = "left"
-
-[extra]
-# social_media_card = "blog.jpg"
-show_previous_next_article_links = true
+paginate_by = 10
 +++

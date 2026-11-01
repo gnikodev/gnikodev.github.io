@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<main>
+    {% include "partials/home_banner.html" %}
+    <h2 class="section-title bottom-divider">{{ section.title }}</h2>
+    {# tabi 5.0.0's section_path lookup omits lang; keep translated posts here. #}
+    {% set blog = get_section(path="blog/_index.md", lang=lang) %}
+    {{< list_posts posts={blog.pages} max={section.extra.max_posts} section_path="blog" />}}
+</main>
+{% endblock main_content %}

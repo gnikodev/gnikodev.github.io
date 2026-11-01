@@ -1,14 +1,55 @@
-# [baldman.github.io](https://baldman.justsquad.su/)
+# [bald_man](https://baldman.justsquad.su/)
 
-[![Build and deploy GH Pages](https://github.com/ni-gushch/ni-gushch.github.io/actions/workflows/gh_pages.yml/badge.svg)](https://github.com/ni-gushch/ni-gushch.github.io/actions/workflows/gh_pages.yml)
-[![pages-build-deployment](https://github.com/ni-gushch/ni-gushch.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/ni-gushch/ni-gushch.github.io/actions/workflows/pages/pages-build-deployment)
+Личный технический блог на Zola: русский язык основной, английские переводы находятся в соседних `.en.md`.
 
-![logo](./img/img_1.png)
+## Локальная работа
 
-Сайт для больших статей, которые не помещаются в формат Telegram.
+Используются **Zola 0.23.6** и **tabi v5.0.0**. Тема закреплена как Git-подмодуль; Node.js и Tailwind для сборки не нужны.
 
-## На чем строится
+```sh
+git submodule update --init --recursive
+zola --version
+zola serve
+```
 
-Основной движок [Zola](https://github.com/getzola/zola)
+Сайт доступен по адресу `http://127.0.0.1:1111`. Для просмотра черновиков: `zola serve --drafts`.
 
-Используется тема [Abridge](https://github.com/jieiku/abridge)
+## Проверка перед публикацией
+
+Для проверки результата нужен Python 3.11 или новее, без дополнительных пакетов.
+
+```sh
+zola check --skip-external-links
+zola build
+python3 scripts/check_site.py
+```
+
+Проверка охватывает локальные ссылки и ресурсы, canonical и Open Graph URL, последние статьи, архивы и языковые индексы поиска. Готовый сайт создаётся в `public/`.
+
+CI также проверяет поиск, переключение языка, подсветку кода и мобильную ширину в Chromium. Для локального запуска этих проверок:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r scripts/requirements-browser.txt
+.venv/bin/python -m playwright install chromium
+.venv/bin/python scripts/check_browser.py
+```
+
+## Обновления и публикация
+
+- GitHub Actions проверяет pull request и публикует успешную сборку `main` в `gh-pages`. Для публикации используется существующий секрет `TOKEN`.
+- Netlify использует ту же версию Zola из `netlify.toml`; предварительные сборки включают черновики.
+- Еженедельный workflow предлагает обновление tabi до стабильного релиза через PR. Новую тему нужно проверять вместе с совместимой версией Zola, а не обновлять генератор отдельно.
+- Версии Zola должны совпадать локально, в `.github/workflows/gh_pages.yml` и `netlify.toml`.
+
+Архив, проекты, статьи, поиск и переключатели используют штатные шаблоны tabi. `templates/home.html` использует компоненты темы, но явно выбирает язык блога: в tabi 5.0.0 штатный lookup главной не передаёт `lang`. `templates/tabi/extend_head.html` добавляет canonical, значки, Google Analytics и проверку Яндекса через штатную точку расширения.
+
+Два небольших скрипта исправляют ограничения tabi 5.0.0: `static/js/search-ru.js` сохраняет латинские технические термины в русском поиске, а `static/js/highlighting.js` выбирает палитру кода при смене светлой и тёмной темы. При обновлении tabi сначала проверьте, нужны ли ещё эти исправления.
+
+Аватар канала рядом с названием добавляется через `static/css/branding.css`. Значки вкладки подключаются в `templates/tabi/extend_head.html` с хешем содержимого в URL; параметры `favicon` и `favicon_emoji` оставлены пустыми, чтобы не дублировать их эмодзи темы. Для кода используются палитры Catppuccin Latte и Frappé.
+
+Giscus включён для статей. Сохранены прежние репозиторий, категория Q&A и привязка по slug: русская и английская версии статьи используют одно обсуждение. CSP разрешает скрипт, фрейм и внешний CSS Giscus. Новое обсуждение создаётся сервисом при первом комментарии или реакции, а не при сборке сайта.
+
+Приветствие на главной использует штатный баннер tabi: заголовок и аватар задаются в `[extra].header` файлов `content/_index*.md`, текст и ссылка «Обо мне» — в их Markdown-теле. Сама страница `/about/` уже содержит биографию и выступления и использует `info-page.html`.
+
+`static/js/comments-theme.js` синхронизирует комментарии с темой сайта при переключении и после асинхронной загрузки фрейма Giscus. Проверки также контролируют отсутствие сдвига шапки при наведении на логотип.

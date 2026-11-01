@@ -1,15 +1,13 @@
 +++
-title = "Latest posts"
-sort_by = "date"
+title = "Последние статьи"
+description = "Технический блог Николая Гущарина о .NET, Rust, архитектуре систем и инструментах разработки."
+template = "home.html"
 
 [extra]
-header = {title = "Привет! Я Николай Гущарин", img = "img/main.png", img_alt = "крутая иконка" }
-section_path = "blog/_index.md"
-max_posts = 3
-projects_path = "projects/_index.md"
-max_projects = 4
-show_projects_first = false
-social_media_card = "index.jpg"
+max_posts = 5
+header = { title = "Привет! Я Николай Гущарин", img = "m384.png", img_alt = "Аватар Николая Гущарина" }
 +++
 
-Привет друг! Меня зовут Николай Гущарин и это мой минималистичный сайт с полноценными статями, которые не влезают в формат других социальных сетей.
+Я backend-инженер и техлид. Здесь пишу о .NET, Rust, архитектуре систем и инструментах, которые помогают в работе. Делюсь подробными разборами и заметками из практики — всем, чему тесно в коротких постах.
+
+[Больше обо мне](@/about/index.md)

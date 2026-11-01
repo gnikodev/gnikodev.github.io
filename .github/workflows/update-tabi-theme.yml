@@ -1,0 +1,75 @@
+name: Update tabi theme
+
+on:
+  schedule:
+    # Run every Monday at 9:00 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  GIT_USER_NAME: "github-actions[bot]"
+  GIT_USER_EMAIL: "github-actions[bot]@users.noreply.github.com"
+  THEME_PATH: "themes/tabi"
+
+jobs:
+  update-theme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+          token: ${{ secrets.TOKEN }}
+
+      - name: Update tabi to the latest stable release
+        id: update
+        run: |
+          git config user.name "${{ env.GIT_USER_NAME }}"
+          git config user.email "${{ env.GIT_USER_EMAIL }}"
+
+          # Get current commit hash
+          OLD_COMMIT=$(git rev-parse HEAD:${{ env.THEME_PATH }})
+
+          # Follow stable releases, not potentially incompatible development commits.
+          git -C "${{ env.THEME_PATH }}" fetch --tags
+          LATEST_TAG=$(git -C "${{ env.THEME_PATH }}" tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          test -n "$LATEST_TAG"
+          git -C "${{ env.THEME_PATH }}" checkout --detach "$LATEST_TAG"
+          git add ${{ env.THEME_PATH }}
+
+          # Get new commit hash
+          NEW_COMMIT=$(git -C "${{ env.THEME_PATH }}" rev-parse HEAD)
+
+          # Check if there are changes
+          if [ "$OLD_COMMIT" != "$NEW_COMMIT" ]; then
+            echo "updated=true" >> $GITHUB_OUTPUT
+            echo "old_commit=$OLD_COMMIT" >> $GITHUB_OUTPUT
+            echo "new_commit=$NEW_COMMIT" >> $GITHUB_OUTPUT
+          else
+            echo "updated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.update.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          # A PAT is needed so this PR triggers the site-check workflow.
+          token: ${{ secrets.TOKEN }}
+          commit-message: "Update tabi theme to latest stable release"
+          title: "Update tabi theme"
+          body: |
+            This PR updates tabi to the latest stable release. Site checks must pass before merging.
+
+            **Changes:** ${{ steps.update.outputs.old_commit }} → ${{ steps.update.outputs.new_commit }}
+
+            Please review the [tabi changelog](https://github.com/welpo/tabi/releases) for compatibility requirements.
+
+            ---
+            *This PR was automatically created by the Update tabi theme workflow.*
+          branch: update-tabi-theme
+          delete-branch: true
+          labels: dependencies, documentation

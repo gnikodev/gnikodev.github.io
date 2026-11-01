@@ -1,13 +1,20 @@
-# On every push this script is executed
+name: Check, build and deploy
+
 on:
   workflow_dispatch:
+  pull_request:
   push:
-    branches: ["main"]
-name: Build and deploy GH Pages
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  ZOLA_VERSION: "0.23.6"
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: checkout
         uses: actions/checkout@v6
