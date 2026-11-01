@@ -1,4 +1,5 @@
 +++
+template = "info-page.html"
 title = "Contacts"
 +++
 

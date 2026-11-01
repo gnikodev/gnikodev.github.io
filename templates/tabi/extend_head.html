@@ -1,0 +1,21 @@
+<meta name="yandex-verification" content="b387010222fc81c7" />
+{% if current_url is defined %}
+<link rel="canonical" href="{{ current_url }}" />
+{% endif %}
+<link rel="icon" type="image/png" sizes="96x96" href="{{ get_url(path='m96.png', cachebust=true) }}" />
+<link rel="icon" type="image/png" sizes="32x32" href="{{ get_url(path='favicon-32x32.png', cachebust=true) }}" />
+<link rel="icon" type="image/svg+xml" href="{{ get_url(path='favicon.svg', cachebust=true) }}" />
+<link rel="shortcut icon" href="{{ get_url(path='favicon.ico', cachebust=true) }}" />
+<link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png', cachebust=true) }}" />
+<link rel="manifest" href="{{ get_url(path='manifest.json', cachebust=true) }}" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="{{ get_url(path='js/analytics.js') }}"></script>
+<script defer src="{{ get_url(path='js/highlighting.js', cachebust=true) }}"></script>
+<script defer src="{{ get_url(path='js/comments-theme.js', cachebust=true) }}"></script>
+<noscript>
+    <link rel="stylesheet" href="{{ get_url(path='giallo-light.css') }}" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="{{ get_url(path='giallo-dark.css') }}" media="(prefers-color-scheme: dark)" />
+</noscript>
+{% if lang == "ru" and config.build_search_index %}
+<script defer src="{{ get_url(path='js/search-ru.js', cachebust=true) }}"></script>
+{% endif %}
