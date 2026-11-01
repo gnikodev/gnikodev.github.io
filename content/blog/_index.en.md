@@ -2,5 +2,5 @@
 title = "Blog"
 description = "Technical articles."
 sort_by = "date"
-template = "posts_section.html"
+paginate_by = 10
 +++
