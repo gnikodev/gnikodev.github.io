@@ -1,4 +1,6 @@
 .env
+.venv/
+__pycache__/
 public
 #themes
 build
@@ -16,3 +18,7 @@ static/js/pagefind-*.css
 static/js/pagefind.*.pf_meta
 static/js/index
 static/js/fragment
+
+CLAUDE.md
+.claude
+AGENTS.md

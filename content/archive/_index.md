@@ -1,7 +1,5 @@
 +++
 title = "Архив"
+sort_by = "date"
 template = "archive.html"
-
-[extra]
-social_media_card = "archive.jpg"
 +++
