@@ -2,26 +2,22 @@ base_url = "https://baldman.justsquad.su"
 title = "bald_man"
 description = "Блог Николая Гущарина. Здесь можно найти статьи по .NET, создание системы умного дома, а так же про интересные инструменты для разработки."
 author = "gnikodev"
-theme = "goyo"
-
+theme = "tabi"
 default_language = "ru"
-compile_sass = false
+compile_sass = true
 minify_html = false
 build_search_index = true
 generate_feeds = false
-
 taxonomies = [
     { name = "tags", feed = false },
-    { name = "categories", paginate_by = 10, feed = true },
+    { name = "categories", paginate_by = 10, feed = false },
 ]
 
 [search]
-# Goyo's search UI loads this as a <script> tag and reads `window.searchIndex`,
-# so the index has to be emitted as JS, not JSON.
-index_format = "elasticlunr_javascript"
+index_format = "elasticlunr_json"
 include_title = true
-include_description = false
-include_path = false
+include_description = true
+include_path = true
 include_content = true
 
 [markdown]
@@ -34,97 +30,90 @@ external_links_no_referrer = false
 smart_punctuation = true
 
 [markdown.highlighting]
-error_on_missing_language = false
-# `theme` is required by Zola even in class mode (Zola >=0.22, Giallo highlighter),
-# but its colors are unused: goyo ships its own syntax-highlighting CSS keyed off
-# `data-theme`, which is what actually styles the `style = "class"` output below.
-theme = "github-dark"
+light_theme = "catppuccin-latte"
+dark_theme = "catppuccin-frappe"
 style = "class"
+error_on_missing_language = true
 
 [languages.en]
 title = "BaldMan"
 description = "Nikolay Gushcharin's blog. Here you can find articles on .NET, building a smart home system, as well as about interesting development tools."
 generate_feeds = false
 build_search_index = true
-search.include_title = true
-search.include_description = true
-search.include_content = true
-search.truncate_content_length = 100
 taxonomies = [
     { name = "tags", feed = false },
-    { name = "categories", paginate_by = 10, feed = true },
+    { name = "categories", paginate_by = 10, feed = false },
 ]
+
+[languages.en.search]
+index_format = "elasticlunr_json"
+include_title = true
+include_description = true
+include_path = true
+include_content = true
 
 [extra]
-gtag = "G-8T5L2SDRTX"
-default_thumbnail = "m1024.png"
-
-edit_url = "https://github.com/gnikodev/gnikodev.github.io/edit/main"
-issue_url = "https://github.com/gnikodev/gnikodev.github.io/issues"
-
-nav = [
-    { name = "Соцсети", type = "dropdown", members = [
-        { name = "Telegram", url = "https://t.me/bald_man_g" },
-        { name = "YouTube", url = "https://youtube.com/@baldman_g" },
-        { name = "Instagram", url = "https://instagram.com/gnikodev" },
-        { name = "GitHub", url = "https://github.com/gnikodev/", icon = "github" },
-    ] },
-    { name = "Tags", url = "/tags", type = "url" },
+skin = "monochrome"
+theme_switcher = true
+default_theme = ""
+browser_theme_color = ["#ffffff", "#000000"]
+# Icons are declared with cache-busting URLs in tabi/extend_head.html.
+favicon = ""
+favicon_emoji = ""
+stylesheets = ["css/branding.css"]
+social_media_card = "m1024.png"
+remote_repository_url = "https://github.com/gnikodev/gnikodev.github.io"
+remote_repository_branch = "main"
+show_remote_changes = true
+show_remote_source = true
+show_reading_time = true
+show_date = true
+copy_button = true
+toc = true
+# The theme's custom subset default requires a site-specific CSS file.
+custom_subset = false
+menu = [
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "archive", url = "archive", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "projects", url = "projects", trailing_slash = true },
+]
+footer_menu = [
+    { name = "about", url = "about", trailing_slash = true },
+    { name = "contact", url = "contact", trailing_slash = true },
+    { name = "sitemap", url = "sitemap.xml", trailing_slash = false },
+]
+socials = [
+    { name = "github", url = "https://github.com/gnikodev/", icon = "github" },
+    { name = "telegram", url = "https://t.me/bald_man_g", icon = "telegram" },
+    { name = "instagram", url = "https://instagram.com/gnikodev", icon = "instagram" },
+    { name = "youtube", url = "https://youtube.com/@baldman_g", icon = "youtube" },
+]
+# CSP is emitted by tabi for both hosts; Netlify only adds frame-ancestors.
+# Google Analytics initialization lives in a local script, not inline HTML.
+allowed_domains = [
+    { directive = "font-src", domains = ["'self'", "data:"] },
+    { directive = "img-src", domains = ["'self'", "https:", "data:"] },
+    { directive = "media-src", domains = ["'self'"] },
+    { directive = "script-src", domains = ["'self'", "https://www.googletagmanager.com"] },
+    { directive = "connect-src", domains = ["'self'", "https://*.google-analytics.com", "https://*.analytics.google.com", "https://www.googletagmanager.com"] },
+    { directive = "style-src", domains = ["'self'", "https://giscus.app"] },
+    { directive = "frame-src", domains = ["https://www.youtube-nocookie.com", "https://player.vimeo.com"] },
+    { directive = "object-src", domains = ["'none'"] },
+    { directive = "base-uri", domains = ["'self'"] },
 ]
 
-nav_en = [
-    { name = "Socials", type = "dropdown", members = [
-        { name = "Telegram", url = "https://t.me/bald_man_g" },
-        { name = "YouTube", url = "https://youtube.com/@baldman_g" },
-        { name = "Instagram", url = "https://instagram.com/gnikodev" },
-        { name = "GitHub", url = "https://github.com/gnikodev/", icon = "github" },
-    ] },
-    { name = "Tags", url = "/en/tags", type = "url" },
-]
-
-[extra.lang]
-aliases = { en = "English", ru = "Русский" }
-
-[extra.logo]
-text = "BaldMan"
-image_path = "logo.svg"
-
-[extra.theme]
-colorset = "dark"
-brightness = "normal"
-disable_toggle = false
-default_theme_dark = "goyo-dark"
-default_theme_light = "goyo-light"
-
-[extra.sidebar]
-expand_depth = 1
-enable_desktop_menu = true
-# Goyo hides the sidebar on the root page by default (it expects a dedicated
-# `landing.html` hero page there instead). We use a plain content page for
-# "/", so keep the sidebar so the homepage doesn't look like a different site.
-disable_root_hide = true
-
-[extra.share]
-copy_url = true
-x = true
-
-[extra.favicon]
-favicon_96x96 = "/m96.png"
-favicon_ico = "/favicon.ico"
-favicon_svg = "/favicon.svg"
-apple_touch_icon = "/apple-touch-icon.png"
-site_webmanifest = "/manifest.json"
-
-[extra.comments]
-# Off by default: goyo has no per-post opt-in like the old theme did, only
-# this single site-wide switch. Flip to true to turn giscus on everywhere.
-enabled = false
-system = "giscus"
+[extra.giscus]
+enabled_for_all_posts = true
+automatic_loading = true
 repo = "gnikodev/gnikodev.github.io"
 repo_id = "R_kgDOMkqe1A"
 category = "Q&A"
 category_id = "DIC_kwDOMkqe1M4C0Y8a"
 mapping = "slug"
-strict = "1"
-reactions_enabled = "1"
-theme = "preferred_color_scheme"
+strict_title_matching = 1
+enable_reactions = 1
+light_theme = "noborder_light"
+dark_theme = "noborder_dark"
+lang = ""
+lazy_loading = true

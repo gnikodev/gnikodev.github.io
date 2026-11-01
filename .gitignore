@@ -1,4 +1,6 @@
 .env
+.venv/
+__pycache__/
 public
 #themes
 build
@@ -19,3 +21,4 @@ static/js/fragment
 
 CLAUDE.md
 .claude
+AGENTS.md
