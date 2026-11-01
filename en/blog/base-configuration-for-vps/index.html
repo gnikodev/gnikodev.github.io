@@ -1,0 +1,834 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>BaldMan • Basic VPS Configuration</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="A checklist of basic settings you should apply right after spinning up a new server." />
+        <meta property="og:description" content="A checklist of basic settings you should apply right after spinning up a new server." />
+
+    
+
+    <meta property="og:title" content="Basic VPS Configuration" />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/" /><meta property="og:site_name" content="BaldMan">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Skip to content</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/en/">BaldMan</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/blog/">blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/archive/">archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/tags/">tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/projects/">projects
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Language selection" aria-label="Language selection"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">English
+                
+                    
+                <a role="menuitem" lang="ru" aria-label="Русский" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/">Русский</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark/light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Basic VPS Configuration
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-08-24">24th Aug 2025</time></li><li title="2374 words"><span class='separator' aria-hidden='true'>•</span>10 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/linux/">linux</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/vps/">vps</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/servers/">servers</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-08-24">Updated on 24th Aug 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/base-configuration-for-vps/index.en.md" target=_blank rel="noopener">See changes</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Table of Contents</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-0-prerequisites">Step 0: Prerequisites</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-1-first-connection-and-system-update">Step 1: First Connection and System Update</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-2-create-a-new-user-and-disable-root-ssh-login">Step 2: Create a New User and Disable Root SSH Login</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-3-changing-the-default-ssh-port-optional">Step 3: Changing the Default SSH Port (Optional)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-4-setting-up-a-basic-firewall-ufw">Step 4: Setting Up a Basic Firewall (UFW)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-5-setting-up-fail2ban-for-attack-protection">Step 5: Setting Up Fail2Ban for Attack Protection</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-6-timezone-locale-and-monitoring-setup">Step 6: Timezone, Locale, and Monitoring Setup</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-7-optional-but-recommended-setting-up-backups">Step 7: (Optional, but Recommended) Setting Up Backups</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-8-running-a-security-audit">Step 8: Running a Security Audit</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-9-enabling-logging-for-all-sudo-commands">Step 9: Enabling Logging for All sudo Commands</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-10-setting-up-automatic-security-updates">Step 10: Setting Up Automatic Security Updates</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#step-11-setting-up-a-strong-password-policy">Step 11: Setting Up a Strong Password Policy</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/#checking-password-complexity">Checking Password Complexity</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>A checklist of basic settings you should apply right after spinning up a new server.</p><section class="e-content body"><p>Imagine you’ve just spun up a new <code>VPS</code> server. Ready to use it as a reliable gateway for your home servers? The first few minutes of a server’s life are the most critical from a security standpoint. Freshly created cloud servers are a favorite target for automated scanners and bots.</p>
+<p>In this guide we’ll walk step by step through the necessary and sufficient minimum of initial <strong>Ubuntu Server</strong> setup that will turn a “bare” system into a convenient, well-protected outpost for your services. Our goal isn’t just to protect it from attacks, but also to make working with it comfortable.</p>
+<h2 id="step-0-prerequisites">Step 0: Prerequisites</h2>
+<ul>
+<li>A VPS server running Ubuntu Server 22.04 LTS or 24.04 LTS.</li>
+<li>Root access to the server (the login and password your hosting provider gave you, or an SSH key).</li>
+<li>An SSH client on your computer (the standard terminal usually works fine).</li>
+</ul>
+<hr />
+<h2 id="step-1-first-connection-and-system-update">Step 1: First Connection and System Update</h2>
+<p>First, let’s connect to the server. If the provider gave you a root password, the command looks like this (replace your_server_ip with the actual IP address):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh</span><span class="z-l-5 z-d-7"> root@your_server_ip</span></span></code></pre>
+<p>You’ll get a prompt to confirm the fingerprint. Answer “yes” to trust it, then enter the password.</p>
+<p>Right after logging in:</p>
+<ol>
+<li>
+<p>Update the package index and install updates:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">apt</span><span class="z-l-5 z-d-7"> update</span><span class="z-l-8 z-d-4"> &amp;&amp;</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> apt</span><span class="z-l-5 z-d-7"> upgrade</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span></span></code></pre>
+<p>This makes sure all system components and libraries have the latest security patches.</p>
+</li>
+<li>
+<p>Install some basic useful utilities:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7"> curl</span><span class="z-l-5 z-d-7"> wget</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> fail2ban</span></span></code></pre>
+<p>· <strong>curl</strong>, <strong>wget</strong> — for downloading files from the internet.
+· <strong>nano</strong> — a simple text editor for beginners (you can use vim instead if you’re familiar with it).
+· <strong>ufw</strong> — a firewall for easily managing network traffic.
+· <strong>fail2ban</strong> — a system for blocking brute-force attacks (password guessing).</p>
+</li>
+<li>
+<p>Reboot the server (if the update touched the kernel):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">reboot</span></span></code></pre>
+<p>Wait a minute, then reconnect.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-2-create-a-new-user-and-disable-root-ssh-login">Step 2: Create a New User and Disable Root SSH Login</h2>
+<p>Working as <code>root</code> is bad practice. Let’s create a new user with elevated privileges.</p>
+<ol>
+<li>
+<p>Create a user (replace username with your actual username):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">adduser</span><span class="z-l-5 z-d-7"> username</span></span></code></pre>
+<p>Set a strong password and fill in the information (you can skip this part).</p>
+</li>
+<li>
+<p>Add the user to the sudo group: this gives them permission to run commands with root privileges.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">usermod</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">aG</span><span class="z-l-5 z-d-7"> sudo</span><span class="z-l-5 z-d-7"> username</span></span></code></pre></li>
+<li>
+<p>Set up SSH keys for secure login (recommended):
+· On your computer (not on the server!), generate an SSH key pair if you don’t already have one:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh-keygen</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7"> ed25519</span></span></code></pre>
+<p>· Copy the public key to the server for your new user:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh-copy-id</span><span class="z-l-5 z-d-7"> username@your_server_ip</span></span></code></pre>
+<p>(On Windows, without ssh-copy-id, you can copy the contents of ~/.ssh/id_ed25519.pub and manually add it to the ~/.ssh/authorized_keys file on the server.)</p>
+</li>
+<li>
+<p>Configure the SSH daemon for better security: open the config file:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">nano</span><span class="z-l-5 z-d-7"> /etc/ssh/sshd_config</span></span></code></pre>
+<p>Find and change the following directives (if the lines are commented out with #, uncomment them):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PermitRootLogin</span><span class="z-l-5 z-d-7"> no</span><span class="z-l-8 z-l-i z-d-4 z-d-i">          #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Disable root login</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PasswordAuthentication</span><span class="z-l-5 z-d-7"> no</span><span class="z-l-8 z-l-i z-d-4 z-d-i">   #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Disable password login, key-based only</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PubkeyAuthentication</span><span class="z-l-5 z-d-7"> yes</span><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Allow key-based authentication</span></span></code></pre>
+<p>Warning! Make sure your SSH key is copied over and working before restarting SSH! Otherwise you’ll lock yourself out, and you’ll have to get back in through your hosting provider’s admin panel.</p>
+</li>
+<li>
+<p>Reload the SSH service to apply the changes:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> reload</span><span class="z-l-5 z-d-7"> sshd</span></span></code></pre>
+<p>Now open a new terminal window and try connecting as the new user: ssh username@your_server_ip. If it works, you can close the root session.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-3-changing-the-default-ssh-port-optional">Step 3: Changing the Default SSH Port (Optional)</h2>
+<p>Changing the default SSH port isn’t about real security. In this case, security comes from obscurity (security through obscurity). Changing the port doesn’t remove the need for <code>SSH keys</code> and <code>Fail2Ban</code>. It’s an extra, very easy-to-implement layer that significantly cuts down the noise from automated scanners.</p>
+<p>Is it safe to leave port 22 as-is? Yes, if and only if you’ve already implemented:</p>
+<ol>
+<li>A full ban on password login (PasswordAuthentication no).</li>
+<li>SSH-keys-only authentication (PubkeyAuthentication yes).</li>
+<li>A ban on root login (PermitRootLogin no).</li>
+<li>Protection via Fail2Ban.</li>
+</ol>
+<p>Under these conditions, leaving port 22 open is a perfectly safe choice. Automated bots scanning port 22 will just get their authentication attempts rejected and walk away empty-handed.</p>
+<p>Even though it doesn’t add any cryptographic strength, I still strongly recommend changing the default port. It brings some practical benefits:</p>
+<ol>
+<li>A sharp drop in log “noise.” Your <code>/var/log/auth.log</code> logs and the <code>Fail2Ban</code> ban table won’t get cluttered with thousands of attempts from primitive bots that only scan port <code>22</code>. That makes log analysis easier and cuts a small but pointless load on the system.</li>
+<li>It makes targeted attacks harder. An attacker deliberately going after your system will still find the <code>SSH port</code> by scanning the full port range (Nmap). But that’s no longer a low-level script bot — it’s a more advanced attack. You cut off <code>99.9%</code> of automated junk.</li>
+</ol>
+<p>Downside:</p>
+<p>· Convenience. You always have to specify the non-standard port when connecting: <code>ssh -p 12345 user@server.ip</code>. That said, it’s easily solved by configuring the <code>SSH</code> config on your client machine.</p>
+<p>Which port should you pick? Best practices.</p>
+<p>The main rule: don’t pick a port that’s already used by another well-known service (for example, 80 — HTTP, 443 — HTTPS, 21 — FTP), to avoid future conflicts.</p>
+<p>A good choice:</p>
+<p>· Ports in the <code>1024-49151</code> range (registered/user ports).
+· Avoid “trendy” non-standard SSH ports like <code>2222</code>, <code>22222</code>, <code>22225</code>. Those get scanned en masse too, because their popularity has made them just as obvious.
+· Pick a random, unremarkable number.</p>
+<p>Examples of good ports: <code>53982</code>, <code>28465</code>, <code>49123</code>, <code>13574</code></p>
+<p>Examples of bad ports: <code>22</code> (default), <code>2222</code> (obvious), <code>22222</code> (obvious), <code>9022</code> (obvious variation), <code>21</code>, <code>80</code>, <code>443</code> (conflicting).</p>
+<p>How to change the port</p>
+<ol>
+<li>
+<p>Connect to the server and open the SSH config file:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/ssh/sshd_config</span></span></code></pre></li>
+<li>
+<p>Find the line #Port 22. Uncomment it (remove the # comment mark) and change the port number to the one you picked earlier.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>Port 53982   # Replace 53982 with your own port</span></span></code></pre></li>
+<li>
+<p>Save the file and reload the SSH service.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> reload</span><span class="z-l-5 z-d-7"> ssh</span></span></code></pre>
+<p>WARNING! Don’t close your current SSH session! Make sure the new connection works first.</p>
+</li>
+<li>
+<p>Open a new terminal window and try connecting to the server using the new port.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">p</span><span class="z-l-16 z-d-14"> 53982</span><span class="z-l-5 z-d-7"> username@your_server_ip</span></span></code></pre>
+<p>If the connection succeeds, you can close the old session.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-4-setting-up-a-basic-firewall-ufw">Step 4: Setting Up a Basic Firewall (<code>UFW</code>)</h2>
+<p>We’ll only allow the most essential ports: <code>SSH</code> for management, and later on, a port for the network linking our local machines with the remote server.</p>
+<ol>
+<li>
+<p>Allow <code>SSH</code> connections: it’s important to do this before enabling the firewall.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> OpenSSH</span></span></code></pre>
+<p>If you’re planning to use a non-standard port for <code>SSH</code>, specify it explicitly: <code>ufw allow 2222/tcp</code> (example for port 2222).</p>
+<ul>
+<li>If you’ve already changed the default SSH port, update the <code>UFW</code> firewall rules. First remove the old <code>OpenSSH</code> rule (which opened port <code>22</code>), then add the new one.</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> delete</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> OpenSSH</span><span class="z-l-8 z-l-i z-d-4 z-d-i">  #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Or just &#39;ufw delete allow 22/tcp&#39;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> 53982/tcp</span><span class="z-l-8 z-l-i z-d-4 z-d-i">       #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Allow the new port</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-8 z-l-i z-d-4 z-d-i">                #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Make sure port 22 is closed and the new one is open</span></span></code></pre></li>
+<li>
+<p>Enable the firewall:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> enable</span></span></code></pre>
+<p>Answer y. The firewall is now active and already blocking all disallowed incoming connections.</p>
+</li>
+<li>
+<p>Check the status:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> verbose</span></span></code></pre>
+<p>You should see that only <code>OpenSSH</code> or the new <code>SSH</code> port is allowed.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-5-setting-up-fail2ban-for-attack-protection">Step 5: Setting Up <code>Fail2Ban</code> for Attack Protection</h2>
+<p><code>Fail2Ban</code> will monitor <code>SSH</code> logs and automatically block <code>IP</code> addresses that try to brute-force the password.</p>
+<ol>
+<li>
+<p>Create a simple config for <code>SSH</code>: copy the default <code>jail</code> settings file:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cp</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.conf</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<p>Edit it:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">nano</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<p>In the [sshd] section, make sure the settings look like this:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="ini"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-d-10">sshd</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">enabled</span><span class="z-l-2 z-d-1"> =</span><span> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">port</span><span class="z-l-2 z-d-1">    =</span><span> ssh</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">logpath</span><span class="z-l-2 z-d-1"> =</span><span> %(sshd_log)s</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">backend</span><span class="z-l-2 z-d-1"> =</span><span> %(sshd_backend)s</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">maxretry</span><span class="z-l-2 z-d-1"> =</span><span> 3</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">bantime</span><span class="z-l-2 z-d-1"> =</span><span> 1h</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">findtime</span><span class="z-l-2 z-d-1"> =</span><span> 1h</span></span></code></pre>
+<ul>
+<li><code>maxretry</code> = 3: the number of failed attempts before a ban.</li>
+<li><code>bantime</code> = 1h: the ban duration (1 hour). You can set -1 for a permanent ban.</li>
+<li><code>findtime</code> = 1h: the time window in which failed attempts are counted.</li>
+</ul>
+</li>
+<li>
+<p>Start and enable <code>Fail2Ban</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> enable</span><span class="z-l-5 z-d-7"> fail2ban</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-now</span></span></code></pre></li>
+<li>
+<p>Check the status:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">fail2ban-client</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> sshd</span></span></code></pre>
+<p>You’ll see a list of banned <code>IP</code> addresses, if there have already been attacks.</p>
+</li>
+<li>
+<p>(Important!) Update the <code>Fail2Ban</code> config if you’ve changed the default <code>SSH</code> port. <code>Fail2Ban</code> watches port <code>22</code> by default. You need to tell it to watch the new port instead.</p>
+<ul>
+<li>Edit the <code>Fail2Ban</code> config for <code>SSH</code>:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<ul>
+<li>In the [sshd] section, find the <code>port</code> parameter and change it:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="ini"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-d-10">sshd</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">enabled</span><span class="z-l-2 z-d-1"> =</span><span> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">port</span><span class="z-l-2 z-d-1">    =</span><span> 53982    </span><span class="z-l-8 z-l-i z-d-4 z-d-i">#</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Put your new port here!</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">#</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> ... rest of the settings (maxretry, bantime) ...</span></span></code></pre>
+<ul>
+<li>Restart <code>Fail2Ban</code>:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> restart</span><span class="z-l-5 z-d-7"> fail2ban</span></span></code></pre></li>
+</ol>
+<hr />
+<h2 id="step-6-timezone-locale-and-monitoring-setup">Step 6: Timezone, Locale, and Monitoring Setup</h2>
+<ol>
+<li>
+<p>Set the correct timezone:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> timedatectl</span><span class="z-l-5 z-d-7"> set-timezone</span><span class="z-l-5 z-d-7"> Europe/Moscow</span><span class="z-l-8 z-l-i z-d-4 z-d-i">  #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Replace with your own timezone</span></span></code></pre></li>
+<li>
+<p>Set the locale you need (system language):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dpkg-reconfigure</span><span class="z-l-5 z-d-7"> locales</span></span></code></pre>
+<p>Choose en_US.UTF-8 UTF-8 (recommended for servers) or ru_RU.UTF-8 UTF-8.</p>
+</li>
+<li>
+<p>Install resource monitoring utilities:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7"> htop</span></span></code></pre>
+<p>htop is a great replacement for the standard top, letting you interactively watch CPU load, RAM usage, and processes.</p>
+</li>
+</ol>
+<hr />
+<h2 id="step-7-optional-but-recommended-setting-up-backups">Step 7: (Optional, but Recommended) Setting Up Backups</h2>
+<p>Your VPS is important infrastructure. Its failure shouldn’t turn into a catastrophe. That’s why I strongly recommend setting up backups for critical directories (/etc, /home, /root). You can use the built-in backup utilities your provider offers, or set up your own storage and ship the data to, say, S3.</p>
+<hr />
+<h2 id="step-8-running-a-security-audit">Step 8: Running a Security Audit</h2>
+<p>There are tools out there that can run a basic security audit of your server. For example, there’s a bash script called <a class="external" rel="noopener external" target="_blank" href="https://github.com/vernu/vps-audit">VPS Audit</a>. Running it gives you a report analyzing the system. The report is saved to a separate file so you can go back and review it later.</p>
+<p>The analysis covers not only the points we’ve touched on here, but also less obvious things, like whether critical packages get updated automatically, or whether a password policy rule is set up for users. Here’s the list of checks it runs:</p>
+<ul>
+<li><code>System Restart</code> — checks whether the server needs a reboot after an update</li>
+<li><code>SSH Root Login</code> — checks whether root login via SSH is enabled</li>
+<li><code>SSH Password Auth</code> — checks whether password-based SSH authentication is enabled</li>
+<li><code>SSH Port</code> — checks the SSH port; if it’s set to 22, changing it is recommended</li>
+<li><code>Firewall Status (UFW)</code> — checks the status of the UFW firewall</li>
+<li><code>Unattended Upgrades</code> — checks whether security packages are updated automatically</li>
+<li><code>Intrusion Prevention</code> — checks for the presence of Fail2ban or CrowdSec, plus their activity status</li>
+<li><code>Failed Logins</code> — checks the number of failed login attempts</li>
+<li><code>System Updates</code> — checks whether all system packages are up to date</li>
+<li><code>Running Services</code> — checks the number of running services; more than 16 isn’t great</li>
+<li><code>Port Security</code> — checks open ports; having too many isn’t great either</li>
+<li><code>Disk Usage</code> — checks available disk space</li>
+<li><code>Memory Usage</code> — checks how much RAM is used</li>
+<li><code>CPU Usage</code> — checks CPU load; high load is also worth a second look</li>
+<li><code>Sudo Logging</code> — checks whether logging of sudo commands is enabled or disabled</li>
+<li><code>Password Policy</code> — checks the password policy configuration</li>
+<li><code>SUID Files</code> — searches for the presence of SUID files</li>
+</ul>
+<hr />
+<h2 id="step-9-enabling-logging-for-all-sudo-commands">Step 9: Enabling Logging for All <code>sudo</code> Commands</h2>
+<p>To enable logging, you need to edit the <code>sudo</code> config file. To do that, just run the command</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> visudo</span></span></code></pre>
+<p>This opens an editor with the utility’s config. By default it opens in <code>nano</code>. After that, you need to add the following lines, right after the block with all the <code>Defaults</code> settings</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>Defaults logfile=/var/log/sudo.log</span></span>
+<span class="giallo-l"><span>Defaults log_input,log_output</span></span></code></pre>
+<hr />
+<h2 id="step-10-setting-up-automatic-security-updates">Step 10: Setting Up Automatic Security Updates</h2>
+<p>To set up automatic security updates on most Linux distros, it’s enough to install and configure <code>unattended-upgrades</code> (for Debian/Ubuntu distros) or <code>dnf-automatic</code> (for Fedora/RHEL), and enable them by configuring the services or timers themselves. You can later customize these utilities to update only security packages.</p>
+<p>Installing and configuring for Debian/Ubuntu</p>
+<ol>
+<li>
+<p>Install the <code>unattended-upgrades</code> package</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> update</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> unattended-upgrades</span></span></code></pre></li>
+<li>
+<p>Now configure the utility</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dpkg-reconfigure</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-priority=low</span><span class="z-l-5 z-d-7"> unattended-upgrades</span></span></code></pre>
+<p>A confirmation dialog will pop up where you’ll need to answer <code>yes</code> to enable automatic updates.</p>
+</li>
+<li>
+<p>Check the configuration. You can do this by running an update in <code>--dry-run</code> mode</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> unattended-upgrades</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-dry-run</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-debug</span></span></code></pre></li>
+</ol>
+<p>Installing and configuring for Fedora and RHEL</p>
+<ol>
+<li>
+<p>Install the <code>dnf-automatic</code> package</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dnf</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> dnf-automatic</span></span></code></pre></li>
+<li>
+<p>Configure the <code>dnf-automatic.conf</code> config file</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/dnf/automatic.conf</span></span></code></pre>
+<p>there you need to add the following lines</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>apply_updates = yes</span></span>
+<span class="giallo-l"><span>upgrade_type = security</span></span></code></pre></li>
+<li>
+<p>Enable and start the timer</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> enable</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-now</span><span class="z-l-5 z-d-7"> dnf-automatic.timer</span></span></code></pre></li>
+<li>
+<p>And check its status</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> dnf-automatic.timer</span></span></code></pre></li>
+</ol>
+<p>Beyond that, you can also configure:</p>
+<ul>
+<li>Email alerts. On both systems you can enable alerts about what happened. To do that, edit the <code>/etc/apt/apt.conf.d/50unattended-upgrades</code> file and set an address to send messages to the sysadmin.</li>
+<li>Automatic reboot. You can also set this up, but be careful here — it’s not a good idea to enable this in a production environment.</li>
+<li>You should also keep an eye on the log file after updates. For example, for <code>unattended-upgrades</code> it’s located at <code>/var/log/unattended-upgrades</code>.</li>
+</ul>
+<hr />
+<h2 id="step-11-setting-up-a-strong-password-policy">Step 11: Setting Up a Strong Password Policy</h2>
+<p>Pluggable Authentication Modules (PAM) are installed by default on DEB-based systems (Ubuntu/Debian). However, you’ll need to install an extra module, <code>libpam-cracklib</code>.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> libpam-cracklib</span></span></code></pre>
+<p>On Debian-based systems, password policies are defined in the <code>/etc/pam.d/common-password</code> file. Before making any changes to it, it’s best to back the file up.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> cp</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password.bak</span></span></code></pre>
+<p>Now edit the <code>/etc/pam.d/common-password</code> file:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password</span></span></code></pre>
+<p>Find the following line and edit it; if it doesn’t exist, you’ll need to create it.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>password required pam_cracklib.so try_first_pass retry=3 minlen=12 lcredit=1 ucredit=1 dcredit=2 ocredit=1 difok=2 reject_username</span></span></code></pre>
+<p>What each option means</p>
+<ul>
+<li><strong>try_first_pass retry=N</strong> – the maximum number of retries when changing a password. N is a number. The default value is 1.</li>
+<li><strong>minlen=N</strong> – the minimum allowed length for a new password (plus one, if credits aren’t disabled, which is the default). In addition to the character count of the new password, each character type (other, uppercase, lowercase, and digit) earns a credit (+1 to length). The default value is 9.</li>
+<li><strong>lcredit=N</strong> – sets the maximum credit for having lowercase letters in the password. The default value is 1.</li>
+<li><strong>ucredit=N</strong> – sets the maximum credit for uppercase letters in the password. The default value is 1.</li>
+<li><strong>dcredit=N</strong> – sets the maximum credit for digits in the password. The default value is 1.</li>
+<li><strong>ocredit=N</strong> – sets the maximum credit for other characters in the password. The default value is 1.</li>
+<li><strong>ifok=N</strong> – sets the number of characters that must differ from the previous password.</li>
+<li><strong>reject_username</strong> – forbids users from using their username as their password.</li>
+</ul>
+<p>Users will now need to use a password with a complexity score of 12. One “credit” is given for 1 lowercase letter, 1 credit for 1 uppercase letter, 1 credit for at least 2 digits, and 1 credit for 1 other character.</p>
+<p>You can also disable credits by assigning them negative values, forcing the user to use a combination of different character types of a minimum length.</p>
+<p>Let’s look at an example:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>password required pam_cracklib.so minlen=8 lcredit=-1 ucredit=-1 dcredit=-2 ocredit=-1 difok=2 reject_username</span></span></code></pre>
+<p>As defined above, users must use an 8-character password that includes 1 lowercase letter, 1 uppercase letter, 2 digits, and 1 other character. Note that these restrictions only apply to regular users, not to root. The root user can use any type of password.</p>
+<h3 id="checking-password-complexity">Checking Password Complexity</h3>
+<p>After setting the policy itself, you need to check whether it actually works. Let’s assign a simple password that doesn’t meet the policy and see what happens. To change or set the password for the current user, run:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">$</span><span class="z-l-5 z-d-7"> passwd</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Example</span><span class="z-l-5 z-d-7"> output:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Changing</span><span class="z-l-5 z-d-7"> password</span><span class="z-l-5 z-d-7"> for</span><span class="z-l-5 z-d-7"> myuser.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Current</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> it</span><span class="z-l-5 z-d-7"> does</span><span class="z-l-5 z-d-7"> not</span><span class="z-l-5 z-d-7"> contain</span><span class="z-l-5 z-d-7"> enough</span><span class="z-l-5 z-d-7"> DIFFERENT</span><span class="z-l-5 z-d-7"> characters</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> it</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> based</span><span class="z-l-5 z-d-7"> on</span><span class="z-l-5 z-d-7"> a</span><span class="z-l-5 z-d-7"> dictionary</span><span class="z-l-5 z-d-7"> word</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Retype</span><span class="z-l-5 z-d-7"> new</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">passwd:</span><span class="z-l-5 z-d-7"> Have</span><span class="z-l-5 z-d-7"> exhausted</span><span class="z-l-5 z-d-7"> maximum</span><span class="z-l-5 z-d-7"> number</span><span class="z-l-5 z-d-7"> of</span><span class="z-l-5 z-d-7"> retries</span><span class="z-l-5 z-d-7"> for</span><span class="z-l-5 z-d-7"> service</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">passwd:</span><span class="z-l-5 z-d-7"> password</span><span class="z-l-5 z-d-7"> unchanged</span></span></code></pre>
+<p>So the user can’t set the password because it doesn’t meet the requirements.</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="base-configuration-for-vps"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="en"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/about/">
+                                about
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/contact/">
+                                contact
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                sitemap
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Site source
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

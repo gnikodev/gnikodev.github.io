@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>bald_man • Моя настройка оболочки ZSH.</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Если вам не нравится стандартная оболочка командной строки типа bash и sh, то нужно ставить ZSH, расскажу как его установить и настроить." />
+        <meta property="og:description" content="Если вам не нравится стандартная оболочка командной строки типа bash и sh, то нужно ставить ZSH, расскажу как его установить и настроить." />
+
+    
+
+    <meta property="og:title" content="Моя настройка оболочки ZSH." />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/zsh-setup/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/zsh-setup/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/blog/zsh-setup/" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script><script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/blog/zsh-setup/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+<script defer src="https://baldman.justsquad.su/js/search-ru.js?h=7fc47aa3d3667cfc8ef2"></script>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский
+                
+                    
+                <a role="menuitem" lang="en" aria-label="English" href="https://baldman.justsquad.su/en/blog/zsh-setup/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный/светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Моя настройка оболочки ZSH.
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/zsh-setup/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-09-02">2 сент. 2025</time></li><li title="695 слов"><span class='separator' aria-hidden='true'>•</span>4 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/linux/">linux</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/zsh/">zsh</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/oh-my-zsh/">oh-my-zsh</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-09-02">Обновлено 2 сент. 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/zsh-setup/index.md" target=_blank rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Содержание</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-1-ustanovka-zsh-esli-on-eshche-ne-ustanovlen">Этап 1: Установка Zsh (если он еще не установлен)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-2-ustanovka-oh-my-zsh">Этап 2: Установка Oh My Zsh</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-3-vybor-i-nastroika-temy-samaia-luchshaia-i-interesnaia">Этап 3: Выбор и настройка темы (Самая лучшая и интересная)</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-4-ustanovka-samykh-nuzhnykh-plaginov-dlia-produktivnosti">Этап 4: Установка самых нужных плагинов для продуктивности</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-5-dopolnitel-nye-prokachki-optsional-no-no-ochen-kruto">Этап 5: Дополнительные “прокачки” (Опционально, но очень круто)</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#1-ustanovka-nerdfonts">1. Установка Nerdfonts</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#2-nastroika-aliasov-v-zshrc">2. Настройка алиасов в ~/.zshrc</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#3-ustanovka-tsvetnoi-komandy-ls">3. Установка цветной команды ls</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#etap-6-esli-ne-khochetsia-delat-eto-vse-rukami">Этап 6. Если не хочется делать это все руками</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/zsh-setup/#itog">Итог</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>Если вам не нравится стандартная оболочка командной строки типа bash и sh, то нужно ставить ZSH, расскажу как его установить и настроить.</p><section class="e-content body"><p>Если тебе надоел стандартный вид оболочки командной строки, и хочется увеличить свою продуктивность при работе в консоли, то эта статья для тебя! Мы рассмотрим как установить и настроить продвинутую оболочку zsh, а так же поставим несколько удобных плагинов.</p>
+<h2 id="etap-1-ustanovka-zsh-esli-on-eshche-ne-ustanovlen">Этап 1: Установка Zsh (если он еще не установлен)</h2>
+<p><strong>На macOS:</strong>
+Начиная с Catalina, Zsh является оболочкой по умолчанию. Проверь текущую версию:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">zsh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-version</span></span></code></pre>
+<p>Если нужно обновить или установить: <code>brew install zsh</code></p>
+<p><strong>На Ubuntu/Debian:</strong></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> update</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-8 z-d-4"> &amp;&amp;</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> zsh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span></span></code></pre>
+<p>После установки сделай Zsh оболочкой по умолчанию:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">chsh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">s</span><span class="z-l-8 z-d-4"> $(</span><span class="z-l-10 z-l-i z-d-11 z-d-i">which</span><span class="z-l-5 z-d-7"> zsh</span><span class="z-l-8 z-d-4">)</span></span></code></pre>
+<p>(Нужно перезапустить терминал, чтобы изменения вступили в силу).</p>
+<hr />
+<h2 id="etap-2-ustanovka-oh-my-zsh">Этап 2: Установка Oh My Zsh</h2>
+<p>Oh My Zsh — это фреймворк для управления конфигурацией Zsh. Установка очень проста:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">c</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-8 z-d-4">$(</span><span class="z-l-3 z-l-i z-d-3 z-d-i">curl</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">fsSL</span><span class="z-l-5 z-d-7"> https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh</span><span class="z-l-8 z-d-4">)</span><span class="z-l-5 z-d-7">&quot;</span></span></code></pre>
+<p>Или через wget:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">c</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-8 z-d-4">$(</span><span class="z-l-3 z-l-i z-d-3 z-d-i">wget</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">O-</span><span class="z-l-5 z-d-7"> https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh</span><span class="z-l-8 z-d-4">)</span><span class="z-l-5 z-d-7">&quot;</span></span></code></pre>
+<hr />
+<h3 id="etap-3-vybor-i-nastroika-temy-samaia-luchshaia-i-interesnaia">Этап 3: Выбор и настройка темы (Самая лучшая и интересная)</h3>
+<p>Здесь субъективный выбор, но хит среди сообщества и мой личный фаворит — <strong>Powerlevel10k</strong>.</p>
+<p><strong>Почему мне нравится Powerlevel10k (p10k)?</strong></p>
+<ul>
+<li>Невероятно быстрая (самая быстрая из “powerline”-тем).</li>
+<li>Неограниченная кастомизация через встроенный мастер настройки.</li>
+<li>Показывает кучу полезной информации: статус Git, версия Python/Node.js, время выполнения команды, уровень заряда батареи и многое другое.</li>
+<li>Имеет встроенные “пресеты” для красивого вида.</li>
+</ul>
+<p><strong>Установка Powerlevel10k:</strong></p>
+<ol>
+<li>
+<p>Клонируем репозиторий темы в каталог Oh My Zsh:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-depth=1</span><span class="z-l-5 z-d-7"> https://github.com/romkatv/powerlevel10k.git</span><span> $</span><span>{</span><span>ZSH_CUSTOM</span><span class="z-l-2 z-d-1">:-</span><span>$</span><span>HOME</span><span class="z-l-2 z-d-1">/</span><span>.</span><span>oh-my-zsh</span><span class="z-l-2 z-d-1">/</span><span>custom</span><span>}</span><span class="z-l-5 z-d-7">/themes/powerlevel10k</span></span></code></pre></li>
+<li>
+<p>Открой файл конфигурации <code>~/.zshrc</code> в текстовом редакторе (например, <code>nano ~/.zshrc</code>).</p>
+</li>
+<li>
+<p>Находим строчку <code>ZSH_THEME="robbyrussell"</code> и меняем её на:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span>ZSH_THEME</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">powerlevel10k/powerlevel10k</span><span class="z-l-5 z-d-7">&quot;</span></span></code></pre></li>
+<li>
+<p>Сохрани файл и перезагружаем Zsh:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">source</span><span class="z-l-5 z-d-7"> ~/.zshrc</span></span></code></pre></li>
+<li>
+<p><strong>После перезагрузки запустится автоматический мастер настройки (wizard) Powerlevel10k.</strong> Он задаст тебе несколько вопросов о предпочтениях в стиле и покажет предпросмотр. Следуй его инструкциям — это самый простой способ получить идеальную тему! Если wizard не запустился, вызовите его вручную: <code>p10k configure</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="etap-4-ustanovka-samykh-nuzhnykh-plaginov-dlia-produktivnosti">Этап 4: Установка самых нужных плагинов для продуктивности</h2>
+<p>Плагины — это суперсила Oh My Zsh. Вот ТОП-5 Must-Have плагинов:</p>
+<ol>
+<li>
+<p><strong>zsh-autosuggestions</strong>: Подсказывает команды по истории. Просто жмите <code>→</code> или <code>Ctrl+F</code> чтобы принять подсказку.</p>
+<ul>
+<li>
+<p>Установка:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> https://github.com/zsh-users/zsh-autosuggestions</span><span> $</span><span>{</span><span>ZSH_CUSTOM</span><span class="z-l-2 z-d-1">:-</span><span>~</span><span class="z-l-2 z-d-1">/</span><span>.</span><span>oh-my-zsh</span><span class="z-l-2 z-d-1">/</span><span>custom</span><span>}</span><span class="z-l-5 z-d-7">/plugins/zsh-autosuggestions</span></span></code></pre></li>
+</ul>
+</li>
+<li>
+<p><strong>zsh-syntax-highlighting</strong>: Подсвечивает команды: корректные — зеленым, неверные — красным. Невероятно удобно.</p>
+<ul>
+<li>
+<p>Установка:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> https://github.com/zsh-users/zsh-syntax-highlighting.git</span><span> $</span><span>{</span><span>ZSH_CUSTOM</span><span class="z-l-2 z-d-1">:-</span><span>~</span><span class="z-l-2 z-d-1">/</span><span>.</span><span>oh-my-zsh</span><span class="z-l-2 z-d-1">/</span><span>custom</span><span>}</span><span class="z-l-5 z-d-7">/plugins/zsh-syntax-highlighting</span></span></code></pre></li>
+</ul>
+</li>
+<li>
+<p><strong>web-search</strong>: Позволяет искать прямо из консоли. Примеры:</p>
+<ul>
+<li><code>google как настроить zsh</code></li>
+<li><code>ddg что такое docker</code></li>
+<li><code>github ohmyzsh</code></li>
+<li>(Уже входит в стандартный набор Oh My Zsh, его просто добавить в список плагинов).</li>
+</ul>
+</li>
+<li>
+<p><strong>git</strong>: Огромная коллекция алиасов для Git. Например:</p>
+<ul>
+<li><code>gst</code> вместо <code>git status</code></li>
+<li><code>gaa</code> вместо <code>git add --all</code></li>
+<li><code>gcmsg "commit"</code> вместо <code>git commit -m "commit"</code></li>
+<li><code>gl</code> / <code>gp</code> вместо <code>git pull</code> / <code>git push</code></li>
+<li>(Уже входит в стандартный набор, точно так же достаточно добавить в список плагинов).</li>
+</ul>
+</li>
+<li>
+<p><strong>sudo</strong>: Дважды нажмите <code>ESC</code>, чтобы автоматически добавить <code>sudo</code> в начало текущей команды. Очень экономит время.</p>
+</li>
+</ol>
+<p><strong>Как подключить плагины:</strong>
+Снова открой <code>~/.zshrc</code>. Найди строку:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span>plugins</span><span class="z-l-2 z-d-1">=</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">g</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">t</span><span class="z-l-8 z-d-4">)</span></span></code></pre>
+<p>И замени её на список всех нужных плагинов (<strong>важно:</strong> <code>zsh-syntax-highlighting</code> должен быть последним!).</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span>plugins</span><span class="z-l-2 z-d-1">=</span><span class="z-l-8 z-d-4">(</span></span>
+<span class="giallo-l"><span class="z-l-5 z-d-7">    g</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">t</span></span>
+<span class="giallo-l"><span class="z-l-5 z-d-7">    w</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">b</span><span class="z-l-5 z-d-7">-</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">a</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">c</span><span class="z-l-5 z-d-7">h</span></span>
+<span class="giallo-l"><span class="z-l-5 z-d-7">    s</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">d</span><span class="z-l-5 z-d-7">o</span></span>
+<span class="giallo-l"><span class="z-l-5 z-d-7">    z</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">-</span><span class="z-l-5 z-d-7">a</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">g</span><span class="z-l-5 z-d-7">g</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">s</span></span>
+<span class="giallo-l"><span class="z-l-5 z-d-7">    z</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">-</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">a</span><span class="z-l-5 z-d-7">x</span><span class="z-l-5 z-d-7">-</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">g</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">l</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">g</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">g</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">)</span></span></code></pre>
+<p>Сохрани файл и примени изменения:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">source</span><span class="z-l-5 z-d-7"> ~/.zshrc</span></span></code></pre>
+<hr />
+<h2 id="etap-5-dopolnitel-nye-prokachki-optsional-no-no-ochen-kruto">Этап 5: Дополнительные “прокачки” (Опционально, но очень круто)</h2>
+<h3 id="1-ustanovka-nerdfonts">1. Установка Nerdfonts</h3>
+<p>Для корректного отображения иконок и спецсимволов в Powerlevel10k <strong>обязательно</strong> нужен Nerd Font.</p>
+<ul>
+<li>Скачай любой понравившийся шрифт (например, <strong>Meslo Nerd Font</strong>, <strong>FiraCode Nerd Font</strong>, <strong>Hack Nerd Font</strong>) с <a class="external" rel="noopener external" target="_blank" href="https://www.nerdfonts.com/font-downloads">сайта</a>.</li>
+<li>Установи его в систему.</li>
+<li><strong>В настройках твоего терминала (iTerm2, Windows Terminal, GNOME Terminal и т.д.) смени шрифт на установленный Nerd Font.</strong> Это критически важный шаг!</li>
+</ul>
+<h3 id="2-nastroika-aliasov-v-zshrc">2. Настройка алиасов в <code>~/.zshrc</code></h3>
+<p>Добавь в конец файла <code>~/.zshrc</code> свои собственные алиасы для частоиспользуемых команд:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">#</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> My Custom Aliases</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> update</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">sudo apt update &amp;&amp; sudo apt upgrade -y</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Для Ubuntu/Debian</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> cls</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">clear</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> zshconfig</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">nano ~/.zshrc</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> ohmyzsh</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">nano ~/.oh-my-zsh</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">alias</span><span class="z-l-5 z-d-7"> ..=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">cd ..</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">alias</span><span class="z-l-5 z-d-7"> ...=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">cd ../..</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> ll</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">ls -alF</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> la</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">ls -A</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">alias</span><span> l</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">&#39;</span><span class="z-l-5 z-d-7">ls -CF</span><span class="z-l-5 z-d-7">&#39;</span></span></code></pre>
+<p>Я еще дополнительно добавлял алиасы для работы с kubectl, но далеко не все пользуются этой утилитой, поэтому пример приведу в другой статье.</p>
+<h3 id="3-ustanovka-tsvetnoi-komandy-ls">3. Установка цветной команды <code>ls</code></h3>
+<ul>
+<li><strong>На macOS:</strong> <code>brew install coreutils</code> и добавь алиас <code>alias ls='gls --color=auto'</code>.</li>
+<li><strong>На Linux:</strong> обычно уже установлено. Убедитесь, что в <code>~/.zshrc</code> есть строка: <code>export LS_COLORS="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"</code> (или похожая).</li>
+</ul>
+<hr />
+<h2 id="etap-6-esli-ne-khochetsia-delat-eto-vse-rukami">Этап 6. Если не хочется делать это все руками</h2>
+<p>Если не хочется выполнять все действия руками, то есть возможность просто запустить 1 скрипт, и все настройки будут применены.</p>
+<p>Для этого можно посетить <a class="external" rel="noopener external" target="_blank" href="https://github.com/ni-gushch/zsh-setup">этот репозиторий</a>, стянуть скрипт, и начать установку. Для этого можно сделать.</p>
+<ul>
+<li>
+<p>Скачай скрипт из источника</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">curl</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">O</span><span class="z-l-5 z-d-7"> https://raw.githubusercontent.com/ni-gushch/zsh-setup/master/zsh_setup.sh</span></span></code></pre></li>
+<li>
+<p>Сделай его исполняемым:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">chmod</span><span class="z-l-5 z-d-7"> +x</span><span class="z-l-5 z-d-7"> zsh_setup.sh</span></span></code></pre></li>
+<li>
+<p>Запусти:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ./zsh_setup.sh</span></span></code></pre></li>
+</ul>
+<hr />
+<h3 id="itog">Итог</h3>
+<p>После всех этих шагов ты получаешь:</p>
+<ol>
+<li><strong>Невероятно красивую и информативную тему</strong> (Powerlevel10k).</li>
+<li><strong>Умные подсказки команд</strong> на лету (autosuggestions).</li>
+<li><strong>Подсветку синтаксиса</strong> для избежания ошибок (syntax-highlighting).</li>
+<li><strong>Множество удобных сокращений</strong> для Git и не только.</li>
+<li><strong>Возможность быстрого поиска</strong> из консоли.</li>
+</ol>
+<p>Финальный шаг — перезагрузи терминал или выполни <code>source ~/.zshrc</code> и наслаждайся своей новой, невероятно продуктивной консолью.</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="zsh-setup"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/about/">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/contact/">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>BaldMan • Getting certificates in k3s (k8s) via cert-manager</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="A way to automate certificate issuance for a local network using cert-manager and the DNS01 challenge." />
+        <meta property="og:description" content="A way to automate certificate issuance for a local network using cert-manager and the DNS01 challenge." />
+
+    
+
+    <meta property="og:title" content="Getting certificates in k3s (k8s) via cert-manager" />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/kuber-cert-manager/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/en/blog/kuber-cert-manager/" /><meta property="og:site_name" content="BaldMan">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Skip to content</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/en/">BaldMan</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/blog/">blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/archive/">archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/tags/">tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/projects/">projects
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Language selection" aria-label="Language selection"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">English
+                
+                    
+                <a role="menuitem" lang="ru" aria-label="Русский" href="https://baldman.justsquad.su/blog/kuber-cert-manager/">Русский</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark/light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Getting certificates in k3s (k8s) via cert-manager
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-02-12">12th Feb 2025</time></li><li title="1722 words"><span class='separator' aria-hidden='true'>•</span>8 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/kubernetes/">kubernetes</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/k3s/">k3s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/k8s/">k8s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/certmanager/">certmanager</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/letsencrypt/">letsencrypt</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-02-12">Updated on 12th Feb 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/kuber-cert-manager/index.en.md" target=_blank rel="noopener">See changes</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Table of Contents</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#ssl-certificates-and-https-connections">SSL certificates and HTTPS connections</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#trusted-certificate-authorities-ca">Trusted certificate authorities (CA)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#how-to-get-an-ssl-certificate">How to get an SSL certificate</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#creating-self-signed-certificates">Creating self-signed certificates</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#using-the-certbot-utility">Using the certbot utility</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/#using-the-cert-manager-service">Using the cert-manager service</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>A way to automate certificate issuance for a local network using cert-manager and the DNS01 challenge.</p><section class="e-content body"><p>Having SSL certificates these days is an essential part of securing any deployed resource. When I started organizing my server and spun up a k3s cluster, I immediately started thinking about how to provide my web services with valid certificates.</p>
+<p>Let me give a brief historical overview of what SSL certificates are, why they’re needed, and what trusted certificate authorities are. It’ll come in handy later.</p>
+<h2 id="ssl-certificates-and-https-connections">SSL certificates and HTTPS connections</h2>
+<p><strong>An SSL certificate</strong> is a digital document that confirms the authenticity of a web resource and encrypts data transmitted between client and server. It confirms that the client is talking to the site it claims to be, and not to a fake one. Compromising a certificate is fairly hard: in the simplest case, you’d need to break into the server side of the resource and steal the private part of the key.</p>
+<p><strong>SSL (Secure Sockets Layer)</strong> is a technology that provides a secure connection. These days the abbreviation TLS (Transport Layer Security) is used more often. This protocol protects the information a user sends to or receives from a server — for example, logins, passwords, bank card data. Without encryption, plain HTTP traffic is very easy to intercept and read the contents of.</p>
+<p><strong>HTTPS (HyperText Transfer Protocol Secure)</strong> is the secured version of the HTTP protocol, using certificates and SSL/TLS technologies to encrypt data.</p>
+<h2 id="trusted-certificate-authorities-ca">Trusted certificate authorities (CA)</h2>
+<p>Certificate authorities (CAs) are organizations that issue SSL certificates. Their job is to verify that whoever requested the certificate actually owns the domain it’s being requested for, and to confirm their identity. In other words, these organizations act as a kind of guarantor of the link between a domain and its owner, and issue a signed document — the certificate — to confirm it. Here’s a list of well-known certificate authorities:</p>
+<ul>
+<li>Let’s Encrypt (the one used in this article)</li>
+<li>DigiCert</li>
+<li>Comodo</li>
+<li>GlobalSign</li>
+</ul>
+<p>How the data exchange works:</p>
+<ol>
+<li><strong>The client (browser)</strong> requests a connection to the server (for example, when navigating to a site).</li>
+<li><strong>The server</strong> sends the client its SSL certificate.</li>
+<li><strong>The client</strong> verifies the certificate (it can check it itself or contact the CA that issued it):
+<ul>
+<li>Is the certificate authority trusted?</li>
+<li>Has the certificate expired?</li>
+<li>Does the certificate’s domain name match the requested site?</li>
+</ul>
+</li>
+<li>If the check passes, <strong>the client and server</strong> establish a secure connection using encryption (for example, via RSA or ECDHE algorithms).</li>
+<li>After that, data is transmitted encrypted. For example, if you enter a password on a site, it will be encrypted and only decrypted on the server.</li>
+</ol>
+<h2 id="how-to-get-an-ssl-certificate">How to get an SSL certificate</h2>
+<p>There are several ways to get a certificate. Let’s briefly go over them.</p>
+<h3 id="creating-self-signed-certificates">Creating self-signed certificates</h3>
+<p>This is fairly easy to do with the <code>openssl</code> utility (Linux). Using just a few commands, we get two files: the certificate itself and the key. These can already be attached to a web server. I don’t see much point in describing the whole issuance process here, since there are plenty of articles about it, for example <a class="external" rel="noopener external" target="_blank" href="https://habr.com/ru/articles/352722/">this one</a>.</p>
+<p>The downsides of this approach:</p>
+<ul>
+<li>You’ll have to add the certificate to every browser on every device, because you’ll be the CA, and the rest of the world has no idea that some random person calling themselves a trusted certificate authority exists. So when visiting such a site, the browser will complain that it can’t verify the certificate authority.</li>
+<li>You have to track the certificate’s validity and lifetime yourself. You can set a calendar reminder, but I’ve often seen situations in large companies where they forgot to reissue certificates in time and work ground to a halt for half a day.</li>
+</ul>
+<h3 id="using-the-certbot-utility">Using the <code>certbot</code> utility</h3>
+<p>This utility lets you automatically obtain a <strong>Let’s Encrypt</strong> certificate for a given domain. You can get certificates either for specific domains or via the wildcard scheme (where a single certificate covers all possible subdomains). For example, if you request an SSL certificate for <code>example.com</code>, it’ll only be valid for that domain, but if you request a wildcard <code>*.example.com</code>, it can be used for <code>one.example.com</code>, <code>two.example.com</code>, and even <code>one.two.example.com</code>.</p>
+<p>The process of getting a certificate is fairly simple. You need to install the utility, then run the <code>certbot certonly {...params...}</code> command. For more details on the process, you can read <a class="external" rel="noopener external" target="_blank" href="https://habr.com/ru/articles/270273/">this article</a>.</p>
+<p>Worth mentioning are the two ways of obtaining a certificate (ACME challenges):</p>
+<ul>
+<li><strong>HTTP01 challenge</strong> — a process where, on the host running the utility, an endpoint <code>{requested_domain}/.well-known/acme-challenge/{ID}</code> is created, which points to the contents of a file created by <code>certbot</code> that holds the secret key. <code>certbot</code> sends a callback request to Let’s Encrypt. In turn, Let’s Encrypt has to call our domain at the given address to fetch and verify the secret key. If the check succeeds, the issued certificate and key are sent back. This requires the service the certificate is being issued for to be reachable from the public internet. Alternatively, you can create a “stub service” that isn’t a real service but simply serves the secret key data at the given path. By the way, the article mentioned above describes how to set up such a “stub service.”</li>
+<li><strong>DNS01 challenge</strong> — in this case, the service the certificate is being requested for doesn’t need to be reachable from the public internet. But you do need access to the PublicAPI of the registrar where the domain was purchased. For this request, you have to provide a login, password, or API key for the PublicAPI so that <code>certbot</code> can create a TXT record for the requested domain. After that, Let’s Encrypt looks up that domain to read the key from the created TXT record. Once verified, we again get a certificate and a secret key.</li>
+</ul>
+<p>Using <code>certbot</code> can solve a huge number of problems, but there are still downsides:</p>
+<ul>
+<li>You still have to track the certificate’s lifetime yourself. Starting in January 2025, Let’s Encrypt shut down its expiration-notification email service, since it had become too expensive for them to run.</li>
+<li>You still need to manually request new certificates every time. Sure, you could automate this with other tools, but our goal is to integrate this into the k3s cluster so that everything works “out of the box.” Yes, I’m lazy.</li>
+</ul>
+<h3 id="using-the-cert-manager-service">Using the <code>cert-manager</code> service</h3>
+<p>And now we’ve arrived at the solution I actually use in my cluster. The <code>cert-manager</code> service takes care of the whole job of issuing, tracking, renewing, and attaching certificates. All you need to do is configure the issuance process and simply mark new services’ Ingress resources to use a TLS connection. <code>cert-manager</code> will notice the creation of a new Ingress with TLS, immediately obtain a valid certificate, and attach it to the service.</p>
+<p>Let’s walk through the installation and setup process. First you need a k3s or k8s cluster (or any other Kubernetes). You also need the <code>helm</code> utility installed to manage Helm charts.</p>
+<p>For convenience, I created a folder <code>/home/ms/helms</code> on the cluster machine, where I keep all the <code>values.yaml</code> files and other Helm chart settings. Let’s go into that folder and start running commands:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> add</span><span class="z-l-5 z-d-7"> jetstack</span><span class="z-l-5 z-d-7"> https://charts.jetstack.io</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> update</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> pull</span><span class="z-l-5 z-d-7"> jetstack/cert-manager</span></span></code></pre>
+<p>The commands above add the <code>jetstack</code> repository, which contains the chart we need. Then we download the <code>cert-manager</code> chart with the <code>pull</code> command.</p>
+<p>Let’s check that the archive was downloaded and unpack it. Pay attention to the chart version — at the time of writing this article, it’s version <code>1.16.3</code>.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ls</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">la</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">tar</span><span class="z-l-5 z-d-7"> zxf</span><span class="z-l-5 z-d-7"> cert-manager-v1.16.3.tgz</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">rm</span><span class="z-l-5 z-d-7"> cert-manager-v1.16.3.tgz</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cp</span><span class="z-l-5 z-d-7"> cert-manager/values.yaml</span><span class="z-l-5 z-d-7"> cert-manager-values.yaml</span></span></code></pre>
+<p>I used the DNS01 challenge to get certificates, since the Kubernetes cluster sits on my local network and the services aren’t exposed to the public internet. I didn’t want to bother with a separate “stub service” to make HTTP01 work. Going through DNS seemed simpler to me. But I ran into a problem where, when requesting a certificate, <code>cert-manager</code> would hang forever with the error:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>DNS record for xxx not yet propagated</span></span></code></pre>
+<p>I spent about three days trying to solve this problem, until I found a GitHub Issue with the fix. <a class="external" rel="noopener external" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5042">Link to the Issue</a> and another <a class="external" rel="noopener external" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5515#issuecomment-1479054700">link with the solution</a>.</p>
+<p>You need to edit the <code>values.yaml</code> file, find the following lines, and change them like this:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">c</span><span class="z-l-3 z-d-3">rds</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">e</span><span class="z-l-3 z-d-3">xtraArgs</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">enable-certificate-owner-ref=true</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">dns01-recursive-nameservers-only</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">p</span><span class="z-l-3 z-d-3">rometheus</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  s</span><span class="z-l-3 z-d-3">ervicemonitor</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span></code></pre>
+<p>Now let’s install the <code>cert-manager</code> service itself into the cluster:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> upgrade</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-install</span><span class="z-l-5 z-d-7"> cert-manager</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> cert-manager-values.yaml</span><span class="z-l-5 z-d-7"> cert-manager/</span></span></code></pre>
+<p>To use the DNS challenge, we need to obtain an API key from the provider where the domain was purchased. The setup is similar across many foreign providers, but I use reg.ru. There’s no built-in webhook implementation for <code>cert-manager</code> for it. So we’ll use another <a class="external" rel="noopener external" target="_blank" href="https://github.com/flant/cert-manager-webhook-regru">service</a>. This repository contains a webhook implementation for using the DNS challenge via reg.ru. The repo’s README has usage instructions — you can follow all of it except for the part about creating the certificate file. I prefer to use a wildcard certificate rather than issuing a separate one for every domain.</p>
+<p>Now we need to configure the <code>ClusterIssuer</code> object, which controls the certificate issuance settings. For this, let’s create a separate folder <code>/home/ms/ci</code> and, inside it, a file <code>cert-manager-issuer.yml</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-15 z-d-16">---</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">ert-manager.io/v1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> C</span><span class="z-l-5 z-d-7">lusterIssuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> l</span><span class="z-l-5 z-d-7">etsencrypt-prod-issuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  a</span><span class="z-l-3 z-d-3">cme</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">mail</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> &lt;</span><span class="z-l-5 z-d-7">YOUR_EMAIL&gt;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">erver</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> h</span><span class="z-l-5 z-d-7">ttps://acme-v02.api.letsencrypt.org/directory</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    p</span><span class="z-l-3 z-d-3">rivateKeySecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> &lt;</span><span class="z-l-5 z-d-7">SUPER_SECRET_KEY&gt;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">olvers</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">      -</span><span class="z-l-3 z-d-3"> d</span><span class="z-l-3 z-d-3">ns01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">          w</span><span class="z-l-3 z-d-3">ebhook</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            c</span><span class="z-l-3 z-d-3">onfig</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">              #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> here you can put settings for a different webhook provider.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">              r</span><span class="z-l-3 z-d-3">egruPasswordSecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">egru-password</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                k</span><span class="z-l-3 z-d-3">ey</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> R</span><span class="z-l-5 z-d-7">EGRU_PASSWORD</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">            #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> groupName must match `groupName.name` in the `values.yaml` file.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            g</span><span class="z-l-3 z-d-3">roupName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> a</span><span class="z-l-5 z-d-7">cme.regru.ru</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            s</span><span class="z-l-3 z-d-3">olverName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">egru-dns</span></span>
+<span class="giallo-l"><span class="z-l-15 z-d-16">---</span></span></code></pre>
+<p>An example DNS01 <code>solver</code> for Cloudflare:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-8 z-d-4">-</span><span class="z-l-3 z-d-3"> d</span><span class="z-l-3 z-d-3">ns01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  c</span><span class="z-l-3 z-d-3">loudflare</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">mail</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> x</span><span class="z-l-5 z-d-7">xx</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    a</span><span class="z-l-3 z-d-3">piTokenSecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">loudflare-token-secret</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      k</span><span class="z-l-3 z-d-3">ey</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">loudflare-token</span></span></code></pre>
+<p>If you don’t want to bother with getting a certificate via the DNS challenge, you can use the HTTP challenge instead. For that, add the following to the <code>solvers</code> section:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-8 z-d-4">-</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">ttp01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> The ingressClass used to create the necessary ingress routes</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    i</span><span class="z-l-3 z-d-3">ngress</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      s</span><span class="z-l-3 z-d-3">erviceType</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> C</span><span class="z-l-5 z-d-7">lusterIP</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      i</span><span class="z-l-3 z-d-3">ngressClassName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik</span></span></code></pre>
+<p>But keep in mind that for this method to work, the domain needs to be reachable from the outside network. Or you’ll need a separate service that can prove ownership of the resource.</p>
+<p>Apply the settings with:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> cert-manager-issuer.yml</span></span></code></pre>
+<p>Now let’s configure the Ingress file, using the Portainer service as an example. It’s convenient to keep the Ingress YAML files in a separate folder, for example <code>/home/ms/ingress</code>. Traefik is used as the reverse proxy here, since it’s installed by default when deploying k3s.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> n</span><span class="z-l-5 z-d-7">etworking.k8s.io/v1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> I</span><span class="z-l-5 z-d-7">ngress</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer-ingress</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">amespace</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> d</span><span class="z-l-5 z-d-7">efault</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  l</span><span class="z-l-3 z-d-3">abels</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    a</span><span class="z-l-3 z-d-3">pp</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  a</span><span class="z-l-3 z-d-3">nnotations</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    t</span><span class="z-l-3 z-d-3">raefik.ingress.kubernetes.io/router.entrypoints</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> w</span><span class="z-l-5 z-d-7">ebsecure</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> specify the name of the ClusterIssuer created earlier</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    c</span><span class="z-l-3 z-d-3">ert-manager.io/cluster-issuer</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> l</span><span class="z-l-5 z-d-7">etsencrypt-prod-issuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  r</span><span class="z-l-3 z-d-3">ules</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">ost</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer.EXAMPLE.COM</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      h</span><span class="z-l-3 z-d-3">ttp</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">        p</span><span class="z-l-3 z-d-3">aths</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">          -</span><span class="z-l-3 z-d-3"> p</span><span class="z-l-3 z-d-3">ath</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> /</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            p</span><span class="z-l-3 z-d-3">athType</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> P</span><span class="z-l-5 z-d-7">refix</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            b</span><span class="z-l-3 z-d-3">ackend</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">              s</span><span class="z-l-3 z-d-3">ervice</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                p</span><span class="z-l-3 z-d-3">ort</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                  n</span><span class="z-l-3 z-d-3">umber</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> 9000</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  i</span><span class="z-l-3 z-d-3">ngressClassName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  t</span><span class="z-l-3 z-d-3">ls</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">osts</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        -</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer.EXAMPLE.COM</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      s</span><span class="z-l-3 z-d-3">ecretName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer-ssl</span></span></code></pre>
+<p>Apply the Ingress settings:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> portainer-ingress.yml</span></span></code></pre>
+<p>And the cherry on top: a file that redirects all HTTP requests hitting the ingress to HTTPS. For this, let’s create a <code>middleware</code> file in the <code>home/ms/middlewares</code> folder named <code>traefik-https-redirect-middleware.yaml</code>. Fill it in with the following:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik.containo.us/v1alpha1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> M</span><span class="z-l-5 z-d-7">iddleware</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">edirect-https</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  r</span><span class="z-l-3 z-d-3">edirectScheme</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">cheme</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> h</span><span class="z-l-5 z-d-7">ttps</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    p</span><span class="z-l-3 z-d-3">ermanent</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span></code></pre>
+<p>And apply the configuration:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> traefik-https-redirect-middleware.yaml</span></span></code></pre>
+<p>That’s it. Once the Ingress settings are applied, <code>cert-manager</code> will automatically detect them and start the process of issuing a certificate for the domain listed in the Ingress file’s <code>tls.hosts</code> section.</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="kuber-cert-manager"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="en"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/about/">
+                                about
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/contact/">
+                                contact
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                sitemap
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Site source
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

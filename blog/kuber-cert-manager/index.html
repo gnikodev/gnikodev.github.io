@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>bald_man • Получение сертификатов в k3s (k8s) через cert-manager</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge." />
+        <meta property="og:description" content="Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge." />
+
+    
+
+    <meta property="og:title" content="Получение сертификатов в k3s (k8s) через cert-manager" />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/kuber-cert-manager/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/blog/kuber-cert-manager/" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script><script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/blog/kuber-cert-manager/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+<script defer src="https://baldman.justsquad.su/js/search-ru.js?h=7fc47aa3d3667cfc8ef2"></script>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский
+                
+                    
+                <a role="menuitem" lang="en" aria-label="English" href="https://baldman.justsquad.su/en/blog/kuber-cert-manager/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный/светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Получение сертификатов в k3s (k8s) через cert-manager
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/kuber-cert-manager/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-02-12">12 февр. 2025</time></li><li title="1432 слова"><span class='separator' aria-hidden='true'>•</span>8 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/kubernetes/">kubernetes</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/k3s/">k3s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/k8s/">k8s</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/certmanager/">certmanager</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/letsencrypt/">letsencrypt</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-02-12">Обновлено 12 февр. 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/kuber-cert-manager/index.md" target=_blank rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Содержание</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#ssl-sertifikaty-i-https-soedinenie">SSL-сертификаты и HTTPS-соединение</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#doverennye-tsentry-sertifikatsii-ca">Доверенные центры сертификации (CA)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#kak-poluchit-ssl-sertifikat">Как получить SSL-сертификат</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#sozdanie-samopodpisnykh-sertifikatov">Создание самоподписных сертификатов</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#ispol-zovanie-utility-certbot">Использование утилиты certbot</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/kuber-cert-manager/#ispol-zovanie-servisa-cert-manager">Использование сервиса cert-manager</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>Способ автоматизировать процесс получения сертификатов для локального контура с использованием cert-manager и DNS01 challenge.</p><section class="e-content body"><p>Наличие SSL-сертификатов в наше время является неотъемлемой частью безопасности разворачиваемых ресурсов. Когда я занялся организацией своего сервера и поднял k3s-кластер, то сразу задумался о том, как обеспечить веб-сервисы валидными сертификатами.</p>
+<p>Приведу небольшую историческую справку о том, что такое SSL-сертификаты, зачем они нужны и что такое доверенные центры сертификации. Это пригодится в дальнейшем.</p>
+<h2 id="ssl-sertifikaty-i-https-soedinenie">SSL-сертификаты и HTTPS-соединение</h2>
+<p><strong>SSL-сертификат</strong> — это цифровой документ, который подтверждает подлинность веб-ресурса и шифрует данные, передаваемые между клиентом и сервером. Он подтверждает, что клиент общается именно с тем сайтом, который заявлен, а не с поддельным. Скомпрометировать сертификат достаточно сложно: в самом простом варианте необходимо пробраться на серверную часть ресурса и украсть секретную часть ключа.</p>
+<p><strong>SSL (Secure Sockets Layer)</strong> — технология, которая обеспечивает безопасное соединение. В последнее время чаще используется аббревиатура TLS (Transport Layer Security). Этот протокол защищает информацию, которую пользователь отправляет на сервер или получает от него. Например, логины, пароли, данные банковских карт. Если не использовать шифрование, то обычный HTTP-трафик очень легко перехватить и прочитать содержимое пакета.</p>
+<p><strong>HTTPS (HyperText Transfer Protocol Secure)</strong> — это защищенная версия протокола HTTP, использующая сертификаты и технологии SSL/TLS для шифрования данных.</p>
+<h2 id="doverennye-tsentry-sertifikatsii-ca">Доверенные центры сертификации (CA)</h2>
+<p>Центры сертификации (Certificate Authorities, CA) — это организации, которые занимаются выдачей SSL-сертификатов. Их задача — проверить, что пользователь, запросивший сертификат, является владельцем домена, на который запрашивается сертификат, и подтвердить его подлинность. Другими словами, эти организации выступают своего рода гарантами взаимосвязи домена и владельца, а в подтверждение выдают подписанный документ — сертификат. Приведу список известных центров сертификации:</p>
+<ul>
+<li>Let’s Encrypt (который используется в статье)</li>
+<li>DigiCert</li>
+<li>Comodo</li>
+<li>GlobalSign</li>
+</ul>
+<p>Как происходит обмен данными:</p>
+<ol>
+<li><strong>Клиент (браузер)</strong> запрашивает соединение с сервером (например, при переходе на сайт).</li>
+<li><strong>Сервер</strong> отправляет клиенту свой SSL-сертификат.</li>
+<li><strong>Клиент</strong> проверяет сертификат (может проверить самостоятельно или обратиться к центру сертификации, который выдал документ):
+<ul>
+<li>Доверен ли центр сертификации?</li>
+<li>Не истек ли срок действия сертификата?</li>
+<li>Соответствует ли доменное имя сертификата запрашиваемому сайту?</li>
+</ul>
+</li>
+<li>Если проверка прошла успешно, <strong>клиент и сервер</strong> устанавливают безопасное соединение с использованием шифрования (например, с помощью алгоритмов RSA или ECDHE).</li>
+<li>После этого данные передаются в зашифрованном виде. Например, если вы вводите пароль на сайте, он будет зашифрован и расшифрован только на сервере.</li>
+</ol>
+<h2 id="kak-poluchit-ssl-sertifikat">Как получить SSL-сертификат</h2>
+<p>Есть несколько способов получения сертификата. Кратко рассмотрим их.</p>
+<h3 id="sozdanie-samopodpisnykh-sertifikatov">Создание самоподписных сертификатов</h3>
+<p>Это делается достаточно легко с помощью утилиты <code>openssl</code> (Linux). Используя всего несколько команд, мы получаем два файла: сам сертификат и ключ. Их уже можно привязывать к веб-серверу. Весь процесс выдачи описывать не вижу смысла, так как по этому поводу есть множество статей, например <a class="external" rel="noopener external" target="_blank" href="https://habr.com/ru/articles/352722/">эта</a>.</p>
+<p>Какие минусы у этого подхода:</p>
+<ul>
+<li>Придется прописывать сертификат в каждом браузере на каждом устройстве. Потому что мы будем являться CA, а весь мир не знает о существовании Иванова Ивана, который считает себя доверенным центром сертификации. Поэтому при входе на такой сайт браузер будет ругаться из-за невозможности проверить центр сертификации.</li>
+<li>Следить за валидностью и временем жизни сертификата придется самостоятельно. Можно сделать заметку в календаре, но нередко встречал ситуации в больших компаниях, когда забывали выпустить новые сертификаты, и работа вставала на полдня.</li>
+</ul>
+<h3 id="ispol-zovanie-utility-certbot">Использование утилиты <code>certbot</code></h3>
+<p>Эта утилита позволяет в автоматическом режиме получить сертификат <strong>Let’s Encrypt</strong> для указанного домена. Можно получать сертификаты как на конкретные домены, так и по схеме wildcard (когда можно получить один сертификат на все возможные поддомены). Например, если запросить SSL для <code>example.com</code>, то он будет доступен только для него, а если запросить wildcard <code>*.example.com</code>, то его можно использовать как для <code>one.example.com</code>, так и для <code>two.example.com</code> и даже для <code>one.two.example.com</code>.</p>
+<p>Процесс получения сертификата достаточно прост. Необходимо установить утилиту, а затем использовать команду <code>certbot certonly {...params...}</code>. Для более подробной информации о процессе получения можно почитать <a class="external" rel="noopener external" target="_blank" href="https://habr.com/ru/articles/270273/">эту статью</a>.</p>
+<p>Следует упомянуть о двух способах получения (ACME challenges):</p>
+<ul>
+<li><strong>HTTP01 challenge</strong> — процесс, при котором на хосте, где запускается утилита, создается endpoint <code>{requested_domain}/.well-known/acme-challenge/{ID}</code>, который ссылается на содержимое файла, созданного <code>certbot</code>, в котором хранится секретный ключ. <code>certbot</code> отправляет callback-запрос на сторону Let’s Encrypt. В свою очередь, Let’s Encrypt должен вызвать наш домен с указанным адресом, чтобы получить и проверить секретный ключ. Если проверка пройдет успешно, то в ответ отправляется созданный сертификат и ключ. В этом случае необходимо, чтобы сервис, для которого выдается сертификат, был виден из глобальной сети. Либо нужно создать “сервис-заглушку”, который не будет настоящим сервисом, а просто будет отдавать по указанному пути данные секретного ключа. Кстати, в статье, приведенной ранее, есть описание процесса, позволяющего сделать такой “сервис-заглушку”.</li>
+<li><strong>DNS01 challenge</strong> — в этой ситуации нет необходимости, чтобы сервис, для которого запрашивается сертификат, был доступен из глобальной сети. Но здесь нужен доступ к PublicAPI сервиса, где был куплен искомый домен. При таком запросе мы должны указать логин, пароль или API-ключ от PublicAPI, чтобы <code>certbot</code> смог создать TXT-запись для запрашиваемого домена. После этого сервис Let’s Encrypt обращается по указанному домену, чтобы прочитать ключ из созданной TXT-записи. После проверки мы также получаем сертификат и секретный ключ.</li>
+</ul>
+<p>Использование <code>certbot</code> может решить огромное количество проблем, но все же остаются минусы:</p>
+<ul>
+<li>Отслеживать время жизни сертификата все еще приходится самостоятельно. Начиная с января 2025 года, Let’s Encrypt закрыла проект оповещения об окончании действия сертификата через email-рассылку, так как для них это стало дорого.</li>
+<li>Каждый раз необходимо вручную запрашивать новые сертификаты. Конечно, можно автоматизировать этот процесс через другие утилиты, но наша цель — интегрироваться в k3s-кластер, чтобы все работало “из коробки”. Да, я ленивый.</li>
+</ul>
+<h3 id="ispol-zovanie-servisa-cert-manager">Использование сервиса <code>cert-manager</code></h3>
+<p>И вот мы добрались до решения, которое сейчас используется в моем кластере. Сервис <code>cert-manager</code> берет на себя всю работу по выдаче, отслеживанию, обновлению и присвоению сертификатов. От пользователя требуется только настроить процесс выдачи и просто прописывать в Ingress новых сервисов указание использования TLS-соединения. И <code>cert-manager</code> увидит создание нового Ingress с TLS, сразу получит валидный сертификат и присвоит его сервису.</p>
+<p>Рассмотрим процесс установки и настройки. Для начала необходимо наличие кластера k3s или k8s (или другого Kubernetes). Установленная утилита <code>helm</code> для управления Helm-чартами.</p>
+<p>Для удобства я создал на машине с кластером папку <code>/home/ms/helms</code>, где хранятся все <code>values.yaml</code> и другие настройки Helm-чартов. Переходим в эту папку и начинаем выполнять команды:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> add</span><span class="z-l-5 z-d-7"> jetstack</span><span class="z-l-5 z-d-7"> https://charts.jetstack.io</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> update</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> pull</span><span class="z-l-5 z-d-7"> jetstack/cert-manager</span></span></code></pre>
+<p>Команды выше добавляют репозиторий <code>jetstack</code>, в котором расположен необходимый нам чарт. Далее загружаем чарт <code>cert-manager</code> с помощью команды <code>pull</code>.</p>
+<p>Проверяем, что архив был загружен, и разархивируем его. Необходимо обратить внимание на версию чарта: на момент написания статьи это версия <code>1.16.3</code>.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ls</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">la</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">tar</span><span class="z-l-5 z-d-7"> zxf</span><span class="z-l-5 z-d-7"> cert-manager-v1.16.3.tgz</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">rm</span><span class="z-l-5 z-d-7"> cert-manager-v1.16.3.tgz</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cp</span><span class="z-l-5 z-d-7"> cert-manager/values.yaml</span><span class="z-l-5 z-d-7"> cert-manager-values.yaml</span></span></code></pre>
+<p>Я использовал DNS01 challenge для получения сертификатов, так как кластер Kubernetes находится в локальной сети, и сервисы не выходят в глобальную сеть. Заморачиваться с отдельным “сервисом-заглушкой”, который бы помог использовать HTTP01, не стал. Мне показалось, что через DNS будет проще. Но столкнулся с проблемой, когда при запросе сертификата <code>cert-manager</code> бесконечно висел с ошибкой:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>DNS record for xxx not yet propagated</span></span></code></pre>
+<p>Потратил на решение этой проблемы около трех дней, пока не нашел Issue на GitHub с решением. <a class="external" rel="noopener external" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5042">Ссылка на Issue</a> и еще одна <a class="external" rel="noopener external" target="_blank" href="https://github.com/cert-manager/cert-manager/issues/5515#issuecomment-1479054700">ссылка с решением</a>.</p>
+<p>Необходимо подправить файл <code>values.yaml</code>, найти следующие строки и исправить их следующим образом:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">c</span><span class="z-l-3 z-d-3">rds</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">e</span><span class="z-l-3 z-d-3">xtraArgs</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">enable-certificate-owner-ref=true</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">dns01-recursive-nameservers-only</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> --</span><span class="z-l-5 z-d-7">dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">p</span><span class="z-l-3 z-d-3">rometheus</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  s</span><span class="z-l-3 z-d-3">ervicemonitor</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">nabled</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span></code></pre>
+<p>Далее устанавливаем сам сервис <code>cert-manager</code> в кластер:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">helm</span><span class="z-l-5 z-d-7"> upgrade</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-install</span><span class="z-l-5 z-d-7"> cert-manager</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> cert-manager-values.yaml</span><span class="z-l-5 z-d-7"> cert-manager/</span></span></code></pre>
+<p>Для того чтобы использовать DNS challenge, нам нужно получить API-ключ провайдера, где был приобретен домен. Настройка для многих зарубежных провайдеров схожа, но я использую reg.ru. Для него нет стандартной реализации webhook для <code>cert-manager</code>. Поэтому воспользуемся еще одним <a class="external" rel="noopener external" target="_blank" href="https://github.com/flant/cert-manager-webhook-regru">сервисом</a>. В этом репозитории лежит реализация webhook для использования DNS challenge через reg.ru. В README репозитория есть инструкция по использованию, оттуда можно взять все, кроме процесса создания файла сертификата. Я предпочитаю использовать wildcard-сертификат, а не выдавать для каждого домена отдельно.</p>
+<p>Теперь нужно настроить объект <code>ClusterIssuer</code>, который отвечает за настройки процесса выдачи сертификатов. Для этого создадим отдельную папку <code>/home/ms/ci</code> и в этой папке создадим файл <code>cert-manager-issuer.yml</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-15 z-d-16">---</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">ert-manager.io/v1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> C</span><span class="z-l-5 z-d-7">lusterIssuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> l</span><span class="z-l-5 z-d-7">etsencrypt-prod-issuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  a</span><span class="z-l-3 z-d-3">cme</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">mail</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> &lt;</span><span class="z-l-5 z-d-7">YOUR_EMAIL&gt;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">erver</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> h</span><span class="z-l-5 z-d-7">ttps://acme-v02.api.letsencrypt.org/directory</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    p</span><span class="z-l-3 z-d-3">rivateKeySecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> &lt;</span><span class="z-l-5 z-d-7">SUPER_SECRET_KEY&gt;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">olvers</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">      -</span><span class="z-l-3 z-d-3"> d</span><span class="z-l-3 z-d-3">ns01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">          w</span><span class="z-l-3 z-d-3">ebhook</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            c</span><span class="z-l-3 z-d-3">onfig</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">              #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> здесь могут быть настройки для другого webhook-провайдера.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">              r</span><span class="z-l-3 z-d-3">egruPasswordSecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">egru-password</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                k</span><span class="z-l-3 z-d-3">ey</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> R</span><span class="z-l-5 z-d-7">EGRU_PASSWORD</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">            #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> groupName должен совпадать с `groupName.name` в файле `values.yaml`.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            g</span><span class="z-l-3 z-d-3">roupName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> a</span><span class="z-l-5 z-d-7">cme.regru.ru</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            s</span><span class="z-l-3 z-d-3">olverName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">egru-dns</span></span>
+<span class="giallo-l"><span class="z-l-15 z-d-16">---</span></span></code></pre>
+<p>Пример <code>solver</code> DNS01 для Cloudflare:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-8 z-d-4">-</span><span class="z-l-3 z-d-3"> d</span><span class="z-l-3 z-d-3">ns01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  c</span><span class="z-l-3 z-d-3">loudflare</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    e</span><span class="z-l-3 z-d-3">mail</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> x</span><span class="z-l-5 z-d-7">xx</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    a</span><span class="z-l-3 z-d-3">piTokenSecretRef</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">loudflare-token-secret</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      k</span><span class="z-l-3 z-d-3">ey</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> c</span><span class="z-l-5 z-d-7">loudflare-token</span></span></code></pre>
+<p>Если не хочется заморачиваться с получением сертификата через DNS challenge, то можно использовать HTTP challenge. Для этого в секции <code>solvers</code> необходимо прописать следующее:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-8 z-d-4">-</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">ttp01</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> The ingressClass used to create the necessary ingress routes</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    i</span><span class="z-l-3 z-d-3">ngress</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      s</span><span class="z-l-3 z-d-3">erviceType</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> C</span><span class="z-l-5 z-d-7">lusterIP</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      i</span><span class="z-l-3 z-d-3">ngressClassName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik</span></span></code></pre>
+<p>Но следует учесть, что для работы этого способа домен должен быть доступен из внешней сети. Либо необходимо использовать отдельный сервис, который сможет подтвердить право на владение ресурсом.</p>
+<p>Применяем параметры через команду:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> cert-manager-issuer.yml</span></span></code></pre>
+<p>Теперь настраиваем файл Ingress на примере сервиса Portainer. YAML-файлы для Ingress удобно хранить в отдельной папке, например <code>/home/ms/ingress</code>. В качестве ReverseProxy используется Traefik, так как он был установлен по умолчанию при развертывании k3s.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> n</span><span class="z-l-5 z-d-7">etworking.k8s.io/v1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> I</span><span class="z-l-5 z-d-7">ngress</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer-ingress</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">amespace</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> d</span><span class="z-l-5 z-d-7">efault</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  l</span><span class="z-l-3 z-d-3">abels</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    a</span><span class="z-l-3 z-d-3">pp</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  a</span><span class="z-l-3 z-d-3">nnotations</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    t</span><span class="z-l-3 z-d-3">raefik.ingress.kubernetes.io/router.entrypoints</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> w</span><span class="z-l-5 z-d-7">ebsecure</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> указываем название созданного ранее ClusterIssuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    c</span><span class="z-l-3 z-d-3">ert-manager.io/cluster-issuer</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> l</span><span class="z-l-5 z-d-7">etsencrypt-prod-issuer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  r</span><span class="z-l-3 z-d-3">ules</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">ost</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer.EXAMPLE.COM</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      h</span><span class="z-l-3 z-d-3">ttp</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">        p</span><span class="z-l-3 z-d-3">aths</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">          -</span><span class="z-l-3 z-d-3"> p</span><span class="z-l-3 z-d-3">ath</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> /</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            p</span><span class="z-l-3 z-d-3">athType</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> P</span><span class="z-l-5 z-d-7">refix</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">            b</span><span class="z-l-3 z-d-3">ackend</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">              s</span><span class="z-l-3 z-d-3">ervice</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                p</span><span class="z-l-3 z-d-3">ort</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">                  n</span><span class="z-l-3 z-d-3">umber</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> 9000</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  i</span><span class="z-l-3 z-d-3">ngressClassName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  t</span><span class="z-l-3 z-d-3">ls</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-3 z-d-3"> h</span><span class="z-l-3 z-d-3">osts</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        -</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer.EXAMPLE.COM</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">      s</span><span class="z-l-3 z-d-3">ecretName</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> p</span><span class="z-l-5 z-d-7">ortainer-ssl</span></span></code></pre>
+<p>Применяем параметры Ingress:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> portainer-ingress.yml</span></span></code></pre>
+<p>И вишенкой на торте будет файл, который будет перенаправлять все http запросы к ingress на https. Для этого создадим <code>middleware</code> файл в папке <code>home/ms/middlewares</code> и назовем его <code>traefik-https-redirect-middleware.yaml</code>. Теперь наполним содержимое файла следующими строками:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">piVersion</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> t</span><span class="z-l-5 z-d-7">raefik.containo.us/v1alpha1</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">k</span><span class="z-l-3 z-d-3">ind</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> M</span><span class="z-l-5 z-d-7">iddleware</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">m</span><span class="z-l-3 z-d-3">etadata</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  n</span><span class="z-l-3 z-d-3">ame</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> r</span><span class="z-l-5 z-d-7">edirect-https</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">s</span><span class="z-l-3 z-d-3">pec</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  r</span><span class="z-l-3 z-d-3">edirectScheme</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    s</span><span class="z-l-3 z-d-3">cheme</span><span class="z-l-2 z-d-1">:</span><span class="z-l-5 z-d-7"> h</span><span class="z-l-5 z-d-7">ttps</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">    p</span><span class="z-l-3 z-d-3">ermanent</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> true</span></span></code></pre>
+<p>И применяем конфигурацию</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">kubectl</span><span class="z-l-5 z-d-7"> apply</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">f</span><span class="z-l-5 z-d-7"> traefik-https-redirect-middleware.yaml</span></span></code></pre>
+<p>На этом все. После применения настроек Ingress <code>cert-manager</code> автоматически их найдет и начнет процесс выдачи сертификата для указанного домена в файле Ingress в секции <code>tls.hosts</code>.</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="kuber-cert-manager"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/about/">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/contact/">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

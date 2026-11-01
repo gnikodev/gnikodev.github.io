@@ -1,0 +1,834 @@
+
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>bald_man • Базовая настройка VPS.</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера." />
+        <meta property="og:description" content="Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера." />
+
+    
+
+    <meta property="og:title" content="Базовая настройка VPS." />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/blog/base-configuration-for-vps/" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script><script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+<script defer src="https://baldman.justsquad.su/js/search-ru.js?h=7fc47aa3d3667cfc8ef2"></script>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский
+                
+                    
+                <a role="menuitem" lang="en" aria-label="English" href="https://baldman.justsquad.su/en/blog/base-configuration-for-vps/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный/светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Базовая настройка VPS.
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/base-configuration-for-vps/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-08-24">24 авг. 2025</time></li><li title="2050 слов"><span class='separator' aria-hidden='true'>•</span>11 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/linux/">linux</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/vps/">vps</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/servers/">servers</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-08-24">Обновлено 24 авг. 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/base-configuration-for-vps/index.md" target=_blank rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Содержание</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-0-predvaritel-nye-trebovaniia">Шаг 0: Предварительные требования</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-1-pervoe-podkliuchenie-i-obnovlenie-sistemy">Шаг 1: Первое подключение и обновление системы</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-2-sozdaem-novogo-pol-zovatelia-i-zapreshchaem-root-login-po-ssh">Шаг 2: Создаем нового пользователя и запрещаем root-логин по SSH</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-3-izmenenie-standartnogo-porta-dlia-ssh-podkliucheniia-optsional-no">Шаг 3: Изменение стандартного порта для SSH подключения (опционально)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-4-nastraivaem-bazovyi-faervol-ufw">Шаг 4: Настраиваем базовый фаервол (UFW)</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-5-nastraivaem-fail2ban-dlia-zashchity-ot-atak">Шаг 5: Настраиваем Fail2Ban для защиты от атак</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-6-nastroika-chasovogo-poiasa-lokalizatsii-i-monitoringa">Шаг 6: Настройка часового пояса, локализации и мониторинга</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-7-optsional-no-no-rekomenduetsia-nastroika-rezervnogo-kopirovaniia">Шаг 7: (Опционально, но рекомендуется) Настройка резервного копирования</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-8-mozhno-provesti-audit-bezopasnosti">Шаг 8: Можно провести аудит безопасности</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-9-vkliuchenie-logirovaniia-vsekh-sudo-komand">Шаг 9: Включение логирования всех sudo команд</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-10-nastroika-avtomaticheskogo-obnovleniia-paketov-bezopasnosti">Шаг 10: Настройка автоматического обновления пакетов безопасности</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#shag-11-nastroika-politiki-ispol-zovaniia-sil-nykh-parolei">Шаг 11: Настройка политики использования сильных паролей</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/base-configuration-for-vps/#proverka-slozhnosti-parolia">Проверка сложности пароля</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>Перечень базовых настроек, которые желательно сразу сделать после запуска нового сервера.</p><section class="e-content body"><p>Представь, что ты только что создал новый <code>VPS</code>-сервер и готов использовать его в качестве надежного шлюза для своих домашних серверов? Первые несколько минут жизни сервера — самые критичные с точки зрения безопасности. Свежие серверы в облаке — любимая мишень для автоматических сканеров и ботов.</p>
+<p>В этом руководстве мы шаг за шагом разберем необходимый и достаточный минимум первоначальной настройки <strong>Ubuntu Server</strong>, который превратит “голую” систему в удобный и хорошо защищенный форпост для твоих сервисов. Наша цель — не только обезопасить его от атак, но и сделать работу с ним комфортной.</p>
+<h2 id="shag-0-predvaritel-nye-trebovaniia">Шаг 0: Предварительные требования</h2>
+<ul>
+<li>VPS-сервер с установленной Ubuntu Server 22.04 LTS или 24.04 LTS.</li>
+<li>Root-доступ к серверу (логин и пароль, который тебе предоставил хостинг-провайдер, или SSH-ключ).</li>
+<li>SSH-клиент на твоем компьютере (обычно подходит стандартный терминал).</li>
+</ul>
+<hr />
+<h2 id="shag-1-pervoe-podkliuchenie-i-obnovlenie-sistemy">Шаг 1: Первое подключение и обновление системы</h2>
+<p>Первым делом подключимся к серверу. Если провайдер предоставил пароль root, команда будет выглядеть так (нужно заменить your_server_ip на реальный IP-адрес):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh</span><span class="z-l-5 z-d-7"> root@your_server_ip</span></span></code></pre>
+<p>Появится запрос на подтверждение fingerprint. Нужно ответить «yes» на вопрос о доверии fingerprint и ввести пароль.</p>
+<p>Сразу после входа:</p>
+<ol>
+<li>
+<p>Обновляем индекс пакетов и устанавливаем обновления:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">apt</span><span class="z-l-5 z-d-7"> update</span><span class="z-l-8 z-d-4"> &amp;&amp;</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> apt</span><span class="z-l-5 z-d-7"> upgrade</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span></span></code></pre>
+<p>Это гарантирует, что все системные компоненты и библиотеки имеют последние патчи безопасности.</p>
+</li>
+<li>
+<p>Устанавливаем базовые полезные утилиты:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7"> curl</span><span class="z-l-5 z-d-7"> wget</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> fail2ban</span></span></code></pre>
+<p>· <strong>curl</strong>, <strong>wget</strong> — для загрузки файлов из интернета.
+· <strong>nano</strong> — простой текстовый редактор для новичков (вы можете использовать vim, если знакомы с ним).
+· <strong>ufw</strong> — фаервол для простого управления сетевым трафиком.
+· <strong>fail2ban</strong> — система для блокировки bruteforce-атак (подбор паролей).</p>
+</li>
+<li>
+<p>Перезагружаем сервер (если обновление затрагивало ядро):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">reboot</span></span></code></pre>
+<p>Подождем минуту и подключаемся снова.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-2-sozdaem-novogo-pol-zovatelia-i-zapreshchaem-root-login-po-ssh">Шаг 2: Создаем нового пользователя и запрещаем root-логин по SSH</h2>
+<p>Работать под <code>root</code> — плохая практика. Создадим нового пользователя с привилегированными правами.</p>
+<ol>
+<li>
+<p>Создаем пользователя (вместо username подставьте ваше имя пользователя):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">adduser</span><span class="z-l-5 z-d-7"> username</span></span></code></pre>
+<p>Задай надежный пароль и заполни информацию (можно пропустить).</p>
+</li>
+<li>
+<p>Добавляем пользователя в группу sudo: Это даст ему право выполнять команды с правами root.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">usermod</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">aG</span><span class="z-l-5 z-d-7"> sudo</span><span class="z-l-5 z-d-7"> username</span></span></code></pre></li>
+<li>
+<p>Настраиваем SSH-ключи для безопасного входа (рекомендуется):
+· На своем компьютере (не на сервере!) сгенерируй пару SSH-ключей, если у тебя её еще нет:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh-keygen</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7"> ed25519</span></span></code></pre>
+<p>· Скопируй публичный ключ на сервер для твоего нового пользователя:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh-copy-id</span><span class="z-l-5 z-d-7"> username@your_server_ip</span></span></code></pre>
+<p>(На Windows без ssh-copy-id можно скопировать содержимое файла ~/.ssh/id_ed25519.pub и вручную добавить его на сервер в файл ~/.ssh/authorized_keys).</p>
+</li>
+<li>
+<p>Настраиваем SSH-демон для повышения безопасности: Откроем конфигурационный файл:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">nano</span><span class="z-l-5 z-d-7"> /etc/ssh/sshd_config</span></span></code></pre>
+<p>Найди и измени следующие директивы (если строки закомментированы #, раскомментируй их):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PermitRootLogin</span><span class="z-l-5 z-d-7"> no</span><span class="z-l-8 z-l-i z-d-4 z-d-i">          #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Запрещаем вход под root</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PasswordAuthentication</span><span class="z-l-5 z-d-7"> no</span><span class="z-l-8 z-l-i z-d-4 z-d-i">   #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Запрещаем вход по паролю, только по ключу</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">PubkeyAuthentication</span><span class="z-l-5 z-d-7"> yes</span><span class="z-l-8 z-l-i z-d-4 z-d-i">    #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Разрешаем аутентификацию по ключу</span></span></code></pre>
+<p>Внимание! Убедись, что твой SSH-ключ скопирован и работает, прежде чем перезапускать SSH! Иначе ты потеряете доступ. И придется заходить через админ панель хост провайдера.</p>
+</li>
+<li>
+<p>Перезагружаем SSH-сервис для применения изменений:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> reload</span><span class="z-l-5 z-d-7"> sshd</span></span></code></pre>
+<p>Теперь открой новое окно терминала и попробуй подключиться как новый пользователь: ssh username@your_server_ip. Если все работает, можно закрывать сессию root.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-3-izmenenie-standartnogo-porta-dlia-ssh-podkliucheniia-optsional-no">Шаг 3: Изменение стандартного порта для SSH подключения (опционально)</h2>
+<p>Изменение порта SSH по умолчанию — это не про настоящую безопасность. Безопасность в этом случае выражается через неясность (Security through obscurity). Изменение значения порта не отменяет необходимость использования <code>SSH-ключей</code> и <code>Fail2Ban</code>. Это дополнительный, очень легкий в реализации слой, который значительно снижает уровень шума от автоматических сканеров.</p>
+<p>Безопасно ли оставлять порт 22? Да, если и только если ты уже реализовал:</p>
+<ol>
+<li>Полный запрет на вход по паролю (PasswordAuthentication no).</li>
+<li>Использование только SSH-ключей (PubkeyAuthentication yes).</li>
+<li>Запрет входа под root (PermitRootLogin no).</li>
+<li>Защиту с помощью Fail2Ban.</li>
+</ol>
+<p>При этих условиях оставить порт 22 — абсолютно безопасное решение. Автоматические боты, сканирующие порт 22, просто будут получать отказ на попытку аутентификации и уходить ни с чем.</p>
+<p>Хотя это и не добавляет криптографической стойкости, я настоятельно рекомендую заменить стандартный порт. Это дает практические преимущества:</p>
+<ol>
+<li>Резкое снижение “шума” в логах. Твои логи <code>/var/log/auth.log</code> и таблица банов <code>Fail2Ban</code> не будут засоряться тысячами попыток от примитивных ботов, которые сканируют только порт <code>22</code>. Это упрощает анализ логов и снижает небольшую, но бесполезную нагрузку на систему.</li>
+<li>Затруднение для целевых атак. Злоумышленник, который целенаправленно ищет твою систему, все равно найдет <code>SSH-порт</code> сканером всего диапазона портов (Nmap). Но это уже не низкоуровневый скрипт-бот, а более продвинутая атака. Вы отсекаете <code>99.9%</code> автоматического мусора.</li>
+</ol>
+<p>Недостаток:</p>
+<p>· Удобство. Тебе всегда нужно указывать нестандартный порт при подключении: <code>ssh -p 12345 user@server.ip</code>. Однако это легко решается настройкой конфига <code>SSH</code> на твоей клиентском машине.</p>
+<p>Какой порт выбрать? Лучшие практики.</p>
+<p>Главное правило: не выбирай порт, который занят другим известным сервисом (например, 80 — HTTP, 443 — HTTPS, 21 — FTP), чтобы не создать конфликт в будущем.</p>
+<p>Хороший выбор:</p>
+<p>· Порты из диапазона <code>1024-49151</code> (зарегистрированные/пользовательские).
+· Избегай “модных” нестандартных портов для SSH, типа <code>2222</code>, <code>22222</code>, <code>22225</code>. Их тоже массово сканируют, потому что их популярность сделала их очевидными.
+· Выбери случайное, ничем не примечательное число.</p>
+<p>Примеры хороших портов: <code>53982</code>, <code>28465</code>, <code>49123</code>, <code>13574</code></p>
+<p>Примеры плохих портов: <code>22</code> (стандартный), <code>2222</code> (очевидный), <code>22222</code> (очевидный), <code>9022</code> (очевидная вариация), <code>21</code>, <code>80</code>, <code>443</code> (конфликтующие).</p>
+<p>Как сменить порт</p>
+<ol>
+<li>
+<p>Подключись к серверу и открой конфигурационный файл SSH:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/ssh/sshd_config</span></span></code></pre></li>
+<li>
+<p>Найди строку #Port 22. Раскомментируй ее (убери знак комментария #) и измени номер порта на выбранный ранее.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>Port 53982   # Замени 53982 на свой порт</span></span></code></pre></li>
+<li>
+<p>Сохрани файл и перезагрузи SSH-сервис.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> reload</span><span class="z-l-5 z-d-7"> ssh</span></span></code></pre>
+<p>ВНИМАНИЕ! Не закрывай текущую сессию SSH! Убедись, что новое подключение работает.</p>
+</li>
+<li>
+<p>Открой новое окно терминала и попробуй подключиться к серверу, указав новый порт.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">p</span><span class="z-l-16 z-d-14"> 53982</span><span class="z-l-5 z-d-7"> username@your_server_ip</span></span></code></pre>
+<p>Если подключение прошло успешно, можно закрыть старую сессию.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-4-nastraivaem-bazovyi-faervol-ufw">Шаг 4: Настраиваем базовый фаервол (<code>UFW</code>)</h2>
+<p>Мы разрешим только самые необходимые порты: <code>SSH</code> для управления и позже — порт для нашей сети связывающий локальные машины и удаленный сервер.</p>
+<ol>
+<li>
+<p>Разрешаем <code>SSH</code>-соединения: Важно сделать это до включения фаервола.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> OpenSSH</span></span></code></pre>
+<p>Если ты планируешь использовать нестандартный порт для <code>SSH</code>, укажи его явно: <code>ufw allow 2222/tcp</code> (пример для порта 2222).</p>
+<ul>
+<li>Если же уже был выставлен базовый порт для SSH, то обнови правила фаервола <code>UFW</code>. Сначала удали старое правило для <code>OpenSSH</code> (которое открывало порт <code>22</code>), затем добавь новое.</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> delete</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> OpenSSH</span><span class="z-l-8 z-l-i z-d-4 z-d-i">  #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Или просто &#39;ufw delete allow 22/tcp&#39;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> allow</span><span class="z-l-5 z-d-7"> 53982/tcp</span><span class="z-l-8 z-l-i z-d-4 z-d-i">       #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Разрешаем новый порт</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> ufw</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-8 z-l-i z-d-4 z-d-i">                #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Убедитесь, что порт 22 закрыт, а новый открыт</span></span></code></pre></li>
+<li>
+<p>Включаем фаервол:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> enable</span></span></code></pre>
+<p>Ответь y. Фаервол активирован и уже блокирует все неразрешенные входящие соединения.</p>
+</li>
+<li>
+<p>Проверяем статус:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ufw</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> verbose</span></span></code></pre>
+<p>Ты должен увидеть, что разрешен только <code>OpenSSH</code> или новый порт для <code>SSH</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-5-nastraivaem-fail2ban-dlia-zashchity-ot-atak">Шаг 5: Настраиваем <code>Fail2Ban</code> для защиты от атак</h2>
+<p><code>Fail2Ban</code> будет мониторить логи <code>SSH</code> и автоматически блокировать <code>IP</code>-адреса, которые пытаются подобрать пароль.</p>
+<ol>
+<li>
+<p>Создаем простую конфигурацию для <code>SSH</code>: Скопируем стандартный файл настроек для <code>jail</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cp</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.conf</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<p>Отредактируем его:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">nano</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<p>В секции [sshd] убедись, что настройки выглядят так:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="ini"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-d-10">sshd</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">enabled</span><span class="z-l-2 z-d-1"> =</span><span> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">port</span><span class="z-l-2 z-d-1">    =</span><span> ssh</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">logpath</span><span class="z-l-2 z-d-1"> =</span><span> %(sshd_log)s</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">backend</span><span class="z-l-2 z-d-1"> =</span><span> %(sshd_backend)s</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">maxretry</span><span class="z-l-2 z-d-1"> =</span><span> 3</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">bantime</span><span class="z-l-2 z-d-1"> =</span><span> 1h</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">findtime</span><span class="z-l-2 z-d-1"> =</span><span> 1h</span></span></code></pre>
+<ul>
+<li><code>maxretry</code> = 3: количество неудачных попыток перед блокировкой.</li>
+<li><code>bantime</code> = 1h: время блокировки (1 час). Можно поставить -1 для перманентной блокировки.</li>
+<li><code>findtime</code> = 1h: окно времени, в котором считаются неудачные попытки.</li>
+</ul>
+</li>
+<li>
+<p>Запускаем и активируем <code>Fail2Ban</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> enable</span><span class="z-l-5 z-d-7"> fail2ban</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-now</span></span></code></pre></li>
+<li>
+<p>Проверяем статус:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">fail2ban-client</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> sshd</span></span></code></pre>
+<p>Ты увидишь список забаненных <code>IP</code>-адресов, если атаки уже были.</p>
+</li>
+<li>
+<p>(Важно!) Обнови конфигурацию <code>Fail2Ban</code> если был изменен стандартный порт для <code>SSH</code>. <code>Fail2Ban</code> по умолчанию следит за портом <code>22</code>. Нужно сказать ему, чтобы он смотрел на новый порт.</p>
+<ul>
+<li>Отредактируй конфиг <code>Fail2Ban</code> для <code>SSH</code>:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/fail2ban/jail.local</span></span></code></pre>
+<ul>
+<li>В секции [sshd] найди параметр <code>port</code> и измени его:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="ini"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-d-10">sshd</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">enabled</span><span class="z-l-2 z-d-1"> =</span><span> true</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">port</span><span class="z-l-2 z-d-1">    =</span><span> 53982    </span><span class="z-l-8 z-l-i z-d-4 z-d-i">#</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Укажи свой новый порт здесь!</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">#</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> ... остальные настройки (maxretry, bantime) ...</span></span></code></pre>
+<ul>
+<li>Перезапусти <code>Fail2Ban</code>:</li>
+</ul>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> restart</span><span class="z-l-5 z-d-7"> fail2ban</span></span></code></pre></li>
+</ol>
+<hr />
+<h2 id="shag-6-nastroika-chasovogo-poiasa-lokalizatsii-i-monitoringa">Шаг 6: Настройка часового пояса, локализации и мониторинга</h2>
+<ol>
+<li>
+<p>Установим правильный часовой пояс:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> timedatectl</span><span class="z-l-5 z-d-7"> set-timezone</span><span class="z-l-5 z-d-7"> Europe/Moscow</span><span class="z-l-8 z-l-i z-d-4 z-d-i">  #</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Замените на ваш пояс</span></span></code></pre></li>
+<li>
+<p>Установим нужную локаль (язык системы):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dpkg-reconfigure</span><span class="z-l-5 z-d-7"> locales</span></span></code></pre>
+<p>Выбери en_US.UTF-8 UTF-8 (рекомендуется для серверов) или ru_RU.UTF-8 UTF-8.</p>
+</li>
+<li>
+<p>Установим утилиты для мониторинга ресурсов:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7"> htop</span></span></code></pre>
+<p>htop — отличная замена стандартной top, позволяет интерактивно следить за нагрузкой на CPU, RAM и процессы.</p>
+</li>
+</ol>
+<hr />
+<h2 id="shag-7-optsional-no-no-rekomenduetsia-nastroika-rezervnogo-kopirovaniia">Шаг 7: (Опционально, но рекомендуется) Настройка резервного копирования</h2>
+<p>Твой VPS — это важная инфраструктура. Его поломка не должна стать катастрофой. Поэтому очень рекомендую организовать резервное копирование критически важный директорий (/etc, /home, /root). Можно использовать как встроенные утилиты, предоставляемые провайдером. Либо же создать свое хранилище, и отправлять информацию в тот же S3.</p>
+<hr />
+<h2 id="shag-8-mozhno-provesti-audit-bezopasnosti">Шаг 8: Можно провести аудит безопасности</h2>
+<p>В сети есть утилиты, которые могут провести базовый аудит безопасности вашего сервера. Например есть bash script <a class="external" rel="noopener external" target="_blank" href="https://github.com/vernu/vps-audit">VPS Audit</a>. Запустив который можно получить отчет по анализу системы. Отчет сохраняется в отдельный файлик, чтобы потом можно было еще раз его проанализировать.</p>
+<p>В рамках анализа проверяется не только те пункты, которые мы затронули, но и такие не обычные вещи, как автоматическое обновление критически важных пакетов, или установку правила для установки пароля пользователя. Список проводимых проверок</p>
+<ul>
+<li><code>System Restart</code> - Проверяется, нужен ли перезапуск сервера после обновления</li>
+<li><code>SSH Root Login</code> - Проверка, включен ли логин из под root пользователя через SSH</li>
+<li><code>SSH Password Auth</code> - Проверка, включен ли метод аутентификации SSH через пароль</li>
+<li><code>SSH Port</code> - Проверяет стандартный порт для SSH, если выставлен в 22 то рекомендуется изменить</li>
+<li><code>Firewall Status (UFW)</code> - Проверка статуса UFW firewall</li>
+<li><code>Unattended Upgrades</code> - Проверка на автоматическое обновление пакетов безопасности</li>
+<li><code>Intrusion Prevention</code> - Наличие Fail2ban или CrowdSec а так же статус их активности</li>
+<li><code>Failed Logins</code> - Проверка количества ошибочных попыток входа</li>
+<li><code>System Updates</code> - Проверяется все ли системные пакеты обновлены</li>
+<li><code>Running Services</code> - Проверка количества запущенных сервисов, если больше 16 то это уже не хорошо</li>
+<li><code>Port Security</code> - Проверяется открытые порты, если их много, то это тоже не хорошо</li>
+<li><code>Disk Usage</code> - Проверяем доступное место на диске</li>
+<li><code>Memory Usage</code> - Проверяем количество использованной оперативной памяти</li>
+<li><code>CPU Usage</code> - Проверяем нагрузку на CPU, если большая нагрузка, то это тоже повод задуматься</li>
+<li><code>Sudo Logging</code> - Проверяем включение/отключение логирование sudo команд</li>
+<li><code>Password Policy</code> - Проверяется настройка парольных политик</li>
+<li><code>SUID Files</code> - Поиск наличия SUID файлов</li>
+</ul>
+<hr />
+<h2 id="shag-9-vkliuchenie-logirovaniia-vsekh-sudo-komand">Шаг 9: Включение логирования всех <code>sudo</code> команд</h2>
+<p>Для включения логирования необходимо отредактировать файл конфигурации <code>sudo</code>. Для этого, достаточно выполнить команду</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> visudo</span></span></code></pre>
+<p>Которая откроет редактор с конфигурацией утилиты. По умолчанию открывается редактор <code>nano</code>. После этого необходимо прописать следующие строки, после блока со всеми настройками <code>Defaults</code></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>Defaults logfile=/var/log/sudo.log</span></span>
+<span class="giallo-l"><span>Defaults log_input,log_output</span></span></code></pre>
+<hr />
+<h2 id="shag-10-nastroika-avtomaticheskogo-obnovleniia-paketov-bezopasnosti">Шаг 10: Настройка автоматического обновления пакетов безопасности</h2>
+<p>Чтобы настроить автоматическое обновление пакетов безопасности на большинстве дистрибутивов Linux достаточно установить и сконфигурировать приложения <code>unattended-upgrades</code> (Для дистрибутивов Debian/Ubuntu) или <code>dnf-automatic</code> (для Fedora/RHEL), а так же включить их, настроив сами сервиса или таймеры. Ты можешь впоследствии кастомизировать утилиты, включив только обновление пакетов безопасности.</p>
+<p>Установка и настройка для Debian/Ubuntu</p>
+<ol>
+<li>
+<p>Нужно установить пакет <code>unattended-upgrades</code></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> update</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> unattended-upgrades</span></span></code></pre></li>
+<li>
+<p>Теперь нужно сконфигурировать утилиту</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dpkg-reconfigure</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-priority=low</span><span class="z-l-5 z-d-7"> unattended-upgrades</span></span></code></pre>
+<p>Появится окно подтверждения на котором нужно будет ответить <code>yes</code> для включения автоматического обновления.</p>
+</li>
+<li>
+<p>Проверяем конфигурацию. Для этого можно запустить обновление в режиме <code>--dry-run</code></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> unattended-upgrades</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-dry-run</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-debug</span></span></code></pre></li>
+</ol>
+<p>Установка и настройка для Fedora и RHEL</p>
+<ol>
+<li>
+<p>Устанавливаем пакет <code>dnf-automatic</code></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> dnf</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> dnf-automatic</span></span></code></pre></li>
+<li>
+<p>Настраиваем файл конфигурации <code>dnf-automatic.conf</code></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/dnf/automatic.conf</span></span></code></pre>
+<p>там нужно будет прописать строки</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>apply_updates = yes</span></span>
+<span class="giallo-l"><span>upgrade_type = security</span></span></code></pre></li>
+<li>
+<p>Нужно включить и запустить таймер</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> systemctl</span><span class="z-l-5 z-d-7"> enable</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-now</span><span class="z-l-5 z-d-7"> dnf-automatic.timer</span></span></code></pre></li>
+<li>
+<p>И проверить статус работы</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">systemctl</span><span class="z-l-5 z-d-7"> status</span><span class="z-l-5 z-d-7"> dnf-automatic.timer</span></span></code></pre></li>
+</ol>
+<p>Помимо этого можно сконфигурировать</p>
+<ul>
+<li>Оповещения по Email. Для обоих систем можно активировать алерты по факту действий. Для этого необходимо отредактировать файл <code>/etc/apt/apt.conf.d/50unattended-upgrades</code> и установить адрес для отправки сообщений системному администратору</li>
+<li>Автоматическая перезагрузка. Так же можно настроить и ее, но тут нужно быть осторожным, и не желательно включать эту функцию в продакшн среде.</li>
+<li>А так же нужно контролировать файл логирования после обновлений. Например для <code>unattended-upgrades</code> этот файл располагается тут <code>/var/log/unattended-upgrades</code></li>
+</ul>
+<hr />
+<h2 id="shag-11-nastroika-politiki-ispol-zovaniia-sil-nykh-parolei">Шаг 11: Настройка политики использования сильных паролей</h2>
+<p>Подключаемые модули аутентификации (PAM) установлены по умолчанию в системах на базе DEB (Ubuntu/Debian). Однако тебе необходимо установить дополнительный модуль <code>libpam-cracklib</code>.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> libpam-cracklib</span></span></code></pre>
+<p>В системах на базе Debian политики паролей определяются в файле <code>/etc/pam.d/common-password</code>. Прежде чем вносить в него какие-либо изменения, лучше всего сделать резервную копию файла.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> cp</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password.bak</span></span></code></pre>
+<p>Теперь отредактируй файл <code>/etc/pam.d/common-password</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sudo</span><span class="z-l-5 z-d-7"> nano</span><span class="z-l-5 z-d-7"> /etc/pam.d/common-password</span></span></code></pre>
+<p>Нужно найти следующую строку и отредактировать ее, если такой строки нет, то нужно будет ее создать.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>password required pam_cracklib.so try_first_pass retry=3 minlen=12 lcredit=1 ucredit=1 dcredit=2 ocredit=1 difok=2 reject_username</span></span></code></pre>
+<p>Что каждая опция обозначает</p>
+<ul>
+<li><strong>try_first_pass retry=N</strong> – Максимальное количество повторных попыток смены пароля. N указывает на число. По умолчанию этот параметр равен 1.</li>
+<li><strong>minlen=N</strong> – Минимально допустимый размер нового пароля (плюс один, если кредиты не отключены, что является значением по умолчанию). В дополнение к количеству символов в новом пароле, за каждый символ (другой, верхний, нижний и цифру) дается кредит (+1 в длину). Значение по умолчанию равно 9.</li>
+<li><strong>lcredit=N</strong> – Определить максимальный кредит за содержание строчных букв в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ucredit=N</strong> – Определить максимальное количество заглавных букв в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>dcredit=N</strong> – Определить максимальный кредит для содержания цифр в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ocredit=N</strong> – Определить максимальный кредит для содержания других символов в пароле. Значение по умолчанию равно 1.</li>
+<li><strong>ifok=N</strong> – Определить количество символов, которые должны отличаться от предыдущего пароля.</li>
+<li><strong>reject_username</strong> – Запретить пользователям использовать свое имя в качестве пароля.</li>
+</ul>
+<p>Пользователи теперь должны использовать пароль с показателем сложности пароля, равным 12. Один “кредит” будет даваться за 1 строчную букву, 1 кредит за 1 заглавную букву, 1 кредит за минимум 2 цифры и 1 кредит за 1 другой символ.</p>
+<p>Можно так же отключить кредиты, присвоив им отрицательные значения, и заставить пользователя использовать комбинацию различных символов минимальной длины.</p>
+<p>Разберем работу на примере:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="plain"><span class="giallo-l"><span>password required pam_cracklib.so minlen=8 lcredit=-1 ucredit=-1 dcredit=-2 ocredit=-1 difok=2 reject_username</span></span></code></pre>
+<p>Как определено выше, пользователи должны использовать пароль сложности 8 символов, включая 1 строчную букву, 1 заглавную букву, 2 цифры и 1 другой символ. Обратим внимание, эти ограничения будут применяться только для обычных пользователей, но не для пользователя root. Пользователь root может использовать любой тип пароля.</p>
+<h3 id="proverka-slozhnosti-parolia">Проверка сложности пароля</h3>
+<p>После определения самой политики, нужно проверить работает ли она вообще. Назначим простой пароль, который не соответствует политике паролей, и посмотрим, что произойдет. Чтобы изменить или назначить пароль текущему пользователю, выполните команду:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">$</span><span class="z-l-5 z-d-7"> passwd</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Пример</span><span class="z-l-5 z-d-7"> вывода:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Changing</span><span class="z-l-5 z-d-7"> password</span><span class="z-l-5 z-d-7"> for</span><span class="z-l-5 z-d-7"> myuser.</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Current</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> it</span><span class="z-l-5 z-d-7"> does</span><span class="z-l-5 z-d-7"> not</span><span class="z-l-5 z-d-7"> contain</span><span class="z-l-5 z-d-7"> enough</span><span class="z-l-5 z-d-7"> DIFFERENT</span><span class="z-l-5 z-d-7"> characters</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> it</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> based</span><span class="z-l-5 z-d-7"> on</span><span class="z-l-5 z-d-7"> a</span><span class="z-l-5 z-d-7"> dictionary</span><span class="z-l-5 z-d-7"> word</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">Retype</span><span class="z-l-5 z-d-7"> new</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">New</span><span class="z-l-5 z-d-7"> password:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BAD</span><span class="z-l-5 z-d-7"> PASSWORD:</span><span class="z-l-5 z-d-7"> is</span><span class="z-l-5 z-d-7"> too</span><span class="z-l-5 z-d-7"> simple</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">passwd:</span><span class="z-l-5 z-d-7"> Have</span><span class="z-l-5 z-d-7"> exhausted</span><span class="z-l-5 z-d-7"> maximum</span><span class="z-l-5 z-d-7"> number</span><span class="z-l-5 z-d-7"> of</span><span class="z-l-5 z-d-7"> retries</span><span class="z-l-5 z-d-7"> for</span><span class="z-l-5 z-d-7"> service</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">passwd:</span><span class="z-l-5 z-d-7"> password</span><span class="z-l-5 z-d-7"> unchanged</span></span></code></pre>
+<p>Получается пользователь не может установить пароль, поскольку заданный пароль не соответствует требованиям.</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="base-configuration-for-vps"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/about/">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/contact/">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

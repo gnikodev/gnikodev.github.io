@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<html lang="ru" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>bald_man • Ускоряем работу C# Dictionary в 2 раза.</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="Способ оптимизации работы типа Dictionary в языке программирования C#." />
+        <meta property="og:description" content="Способ оптимизации работы типа Dictionary в языке программирования C#." />
+
+    
+
+    <meta property="og:title" content="Ускоряем работу C# Dictionary в 2 раза." />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/csharp-dictionary-speed-improvment/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/" /><meta property="og:site_name" content="bald_man">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        <script defer src="https://baldman.justsquad.su/js/lunr/lunrStemmerSupport.min.js"></script><script defer src="https://baldman.justsquad.su/js/lunr/lunr.ru.min.js"></script>
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+<script defer src="https://baldman.justsquad.su/js/search-ru.js?h=7fc47aa3d3667cfc8ef2"></script>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Перейти к содержанию</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/">bald_man</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/blog/">блог
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/archive/">архив
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/tags/">теги
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/projects/">проекты
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Нажмите или используйте $SHORTCUT для открытия поиска" aria-label="Нажмите или используйте $SHORTCUT для открытия поиска">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Выбор языка" aria-label="Выбор языка"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">Русский
+                
+                    
+                <a role="menuitem" lang="en" aria-label="English" href="https://baldman.justsquad.su/en/blog/csharp-dictionary-speed-improvment/">English</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Переключить на режим тёмный/светлый"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Переключить на режим тёмный"
+        aria-pressed="false">
+    </div><div
+        title="Сбросить режим к стандартным настройкам сайта"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Сбросить режим к стандартным настройкам сайта">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Ускоряем работу C# Dictionary в 2 раза.
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-04-18">18 апр. 2025</time></li><li title="689 слов"><span class='separator' aria-hidden='true'>•</span>4 мин чтения</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Теги:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/dotnet/">dotnet</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/csharp/">csharp</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/dictionary/">dictionary</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/tags/cs/">cs</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-04-18">Обновлено 18 апр. 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/csharp-dictionary-speed-improvment/index.md" target=_blank rel="noopener">Смотреть изменения</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Содержание</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#kak-rabotaet-dictionary">Как работает Dictionary?</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#problema-dvoinogo-kheshirovaniia">Проблема двойного хеширования</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#reshenie-problemy-cherez-trygetvalue">Решение проблемы через TryGetValue</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#effektivnoe-reshenie-cherez-collectionmarshal">Эффективное решение через CollectionMarshal</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#rasshirenie-funktsional-nosti">Расширение функциональности</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#tryupdate">TryUpdate</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#removeifexists">RemoveIfExists</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#upsert">Upsert</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#prakticheskii-primer">Практический пример</a>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/#zakliuchenie">Заключение</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>Способ оптимизации работы типа Dictionary в языке программирования C#.</p><section class="e-content body"><p>Давайте поговорим о том, как оптимизировать производительность типа <code>Dictionary</code> в C#.</p>
+<p>Этот тип данных — один из самых популярных типов коллекций .NET, и его правильное использование может значительно улучшить производительность вашего приложения. Сначала рассмотрим немного теории работы словаря, а после познакомимся со способами ускорения методов вставки элементов.</p>
+<h2 id="kak-rabotaet-dictionary">Как работает Dictionary?</h2>
+<p>Перед тем как перейти к оптимизации, давайте разберемся, как вообще работает <code>Dictionary</code>.</p>
+<p>Словарь представляет собой реализацию стандартной хеш-таблицы. Его суть работы состоит в том, чтобы однозначно связать ключ с его значением. И каждый раз когда мы делаем запрос по этому ключу, мы всегда должны получать одно и то же значение. Ключи могут быть как ссылочными, так и значимыми типами. Инициализация происходит либо при создании (если передана начальный размер коллекции), либо при добавлении первого элемента, причем в качестве размера будет выбрано ближайшее простое число. При этом создаются 2 внутренние коллекции — <strong>int[] buckets</strong> и <strong>Entry[] entries</strong>.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> class</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4"> :</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IDictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    ICollection</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">KeyValuePair</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IEnumerable</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">KeyValuePair</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IEnumerable</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IDictionary</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    ICollection</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IReadOnlyDictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IReadOnlyCollection</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">KeyValuePair</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    ISerializable</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    IDeserializationCallback</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    where</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span class="z-l-8 z-d-4"> :</span><span class="z-l-9 z-d-9"> notnull</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  {</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    #</span><span>nullable disable</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> int</span><span class="z-l-8 z-d-4">[</span><span class="z-l-8 z-d-4">]</span><span> _buckets</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-2 z-d-1">.</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Entry</span><span class="z-l-8 z-d-4">[</span><span class="z-l-8 z-d-4">]</span><span> _entries</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> ulong</span><span> _fastModMultiplier</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> int</span><span> _count</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> int</span><span> _freeList</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> int</span><span> _freeCount</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> int</span><span> _version</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> IEqualityComparer</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-1 z-d-5">&gt;</span><span> _comparer</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-2 z-d-1">.</span><span class="z-l-13 z-l-i z-d-10 z-d-i">KeyCollection</span><span> _keys</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-2 z-d-1">.</span><span class="z-l-13 z-l-i z-d-10 z-d-i">ValueCollection</span><span> _values</span><span class="z-l-8 z-d-4">;</span></span></code></pre>
+<p>Первая будет содержать индексы элементов во второй коллекции, а она, в свою очередь, сами элементы в таком виде:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">    private</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Entry</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">   {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">     public</span><span class="z-l-9 z-d-9"> uint</span><span> hashCode</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">     public</span><span class="z-l-9 z-d-9"> int</span><span> next</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">     public</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">     public</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">   }</span></span></code></pre>
+<p>При добавлении элемента вычисляется хэшкод его ключа и затем — индекс корзины в которую он будет добавлен по модулю от величины коллекции. Затем проверяется нет ли уже такого ключа в коллекции, если есть — то операция Add выбросит исключение, а присваивание по индексу просто заменит элемент на новый.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">//</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> выбросит исключение</span></span>
+<span class="giallo-l"><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">Add</span><span class="z-l-8 z-d-4">(</span><span class="z-l-16 z-d-14">10</span><span class="z-l-8 z-d-4">,</span><span class="z-l-16 z-d-14"> 20</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">//</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> просто подменит значение на новое</span></span>
+<span class="giallo-l"><span>dictionary</span><span class="z-l-8 z-d-4">[</span><span class="z-l-16 z-d-14">10</span><span class="z-l-8 z-d-4">]</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-16 z-d-14"> 20</span><span class="z-l-8 z-d-4">;</span></span></code></pre>
+<p>Если достигнут максимальный размер словаря, то происходит расширение (выбирается новый размер в 2 раза больше предыдущего, и округляется до ближайшего простого числа). Дальше старый словарь полностью копируется в новое выделенное место. А старая область памяти будет подвержена сборки мусора. Сложность такой операции будет соответственно — O(n).</p>
+<p>Если происходит коллизия (в корзине индексов <code>_buckets</code> уже есть элемент), то новый элемент добавляется в коллекцию, его индекс сохраняется в корзине, а индекс старого элемента — в его поле next.</p>
+<p><img src="https://baldman.justsquad.su/blog/csharp-dictionary-speed-improvment/./images/image_1.png" alt="Пример работы с колизией" /></p>
+<p>В результате мы получаем односвязный список относительно дублируемого ключа хеширования. Данный механизм разрешения коллизий называется <strong>chaining</strong>. Чтобы предотвратить такое поведение, необходимо выбирать такой алгоритм в методе <code>GetHashCode</code>, который будет давать максимально уникальные значения.</p>
+<h2 id="problema-dvoinogo-kheshirovaniia">Проблема двойного хеширования</h2>
+<p>Предположим, необходимо выполнить вставку в словарь какого-либо значения, но перед этим проверить, если ключ уже существует, то вернуть то значение которое уже было записано:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">if</span><span class="z-l-8 z-d-4"> (</span><span class="z-l-2 z-d-1">!</span><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ContainsKey</span><span class="z-l-8 z-d-4">(</span><span>key</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    dictionary</span><span class="z-l-8 z-d-4">[</span><span>key</span><span class="z-l-8 z-d-4">]</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>На первый взгляд, это кажется логичным решением. Но проблема заключается в том, что здесь происходит <strong>двойное хеширование</strong>:</p>
+<ol>
+<li>При вызове <code>ContainsKey</code> вычисляется хеш для проверки существования ключа.</li>
+<li>При добавлении элемента снова вычисляется хеш.</li>
+</ol>
+<p>Это приводит к дополнительной нагрузке, особенно если такая операция выполняется в цикле или в горячих путях программы.</p>
+<h2 id="reshenie-problemy-cherez-trygetvalue">Решение проблемы через TryGetValue</h2>
+<p>Одним из способов минимизировать эту проблему является использование метода <code>TryGetValue</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">if</span><span class="z-l-8 z-d-4"> (</span><span class="z-l-2 z-d-1">!</span><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">TryGetValue</span><span class="z-l-8 z-d-4">(</span><span>key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-9 z-d-9"> out</span><span> _</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    dictionary</span><span class="z-l-8 z-d-4">[</span><span>key</span><span class="z-l-8 z-d-4">]</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>Этот подход позволяет избежать явного вызова <code>ContainsKey</code>, но все равно требует двух обращений к словарю:</p>
+<ol>
+<li>Проверка наличия ключа.</li>
+<li>Добавление значения.</li>
+</ol>
+<p>Например, у класса ConcurrentDictionary есть метод GetOrAdd, который лишен проблемы с двойным доступом к словарю.</p>
+<p>Как можно упростить работу и сохранить функционал? Для начала можно обернуть двойной доступ в отдельный метод GetOrAdd и там разместить методы по добавлению значения.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-9 z-d-9"> class</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> DictionaryExtensions</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> GetOrAdd</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">this</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span> dictionary</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span> value</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        where</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span class="z-l-8 z-d-4"> :</span><span class="z-l-9 z-d-9"> notnull</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        if</span><span class="z-l-8 z-d-4"> (</span><span class="z-l-2 z-d-1">!</span><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">TryGetValue</span><span class="z-l-8 z-d-4">(</span><span>key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-9 z-d-9"> out</span><span> existedValue</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        {</span></span>
+<span class="giallo-l"><span>            dictionary</span><span class="z-l-8 z-d-4">[</span><span>key</span><span class="z-l-8 z-d-4">]</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">            return</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        }</span><span>       </span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        return</span><span> existedValue</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    }</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span></code></pre>
+<p>Но это не решает проблему. Мы все равно делаем две операции доступа по ключу.</p>
+<p>Можно ли сделать лучше?</p>
+<h2 id="effektivnoe-reshenie-cherez-collectionmarshal">Эффективное решение через CollectionMarshal</h2>
+<p>Да, можно! В современном .NET есть класс <code>System.Runtime.InteropServices.CollectionsMarshal</code>, который предоставляет метод <code>TryGetValueRefOrAddDefault</code>. Он позволяет получить ссылку на значение по ключу или добавить значение за одно обращение к словарю. Вот пример использования:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">using</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> System</span><span class="z-l-2 z-d-1">.</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Runtime</span><span class="z-l-2 z-d-1">.</span><span class="z-l-13 z-l-i z-d-10 z-d-i">InteropServices</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> GetOrAdd</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">this</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span> dictionary</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span> defaultValue</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    ArgumentNullException</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ThrowIfNull</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    ref</span><span class="z-l-9 z-d-9"> var</span><span> slot</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-9 z-d-9"> ref</span><span> CollectionsMarshal</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">GetValueRefOrAddDefault</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">,</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-9 z-d-9"> out</span><span class="z-l-9 z-d-9"> bool</span><span> exists</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    if</span><span class="z-l-8 z-d-4"> (</span><span>exists</span><span class="z-l-8 z-d-4">)</span><span class="z-l-9 z-d-9"> return</span><span> slot</span><span class="z-l-2 z-d-1">!</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>    slot</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    return</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>Этот метод доступен начиная с .NET 6 и выше. Он особенно полезен, когда вам нужно выполнять операции “получить или добавить” в высокопроизводительных частях кода.</p>
+<h2 id="rasshirenie-funktsional-nosti">Расширение функциональности</h2>
+<p>Кроме <code>GetOrAdd</code>, вы можете реализовать другие полезные методы для словарей, например:</p>
+<h3 id="tryupdate">TryUpdate</h3>
+<p>Метод <code>TryUpdate</code> позволяет обновить значение по ключу, если ключ уже существует:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-9 z-d-9"> bool</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> TryUpdate</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">this</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span> dictionary</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span> value</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    where</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span class="z-l-8 z-d-4"> :</span><span class="z-l-9 z-d-9"> notnull</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    ArgumentNullException</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ThrowIfNull</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    ref</span><span class="z-l-9 z-d-9"> var</span><span> slot</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-9 z-d-9"> ref</span><span> CollectionsMarshal</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">GetValueRefOrNullRef</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">,</span><span> key</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    if</span><span class="z-l-8 z-d-4"> (</span><span>Unsafe</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">IsNullRef</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">ref</span><span> slot</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-9 z-d-9"> return</span><span class="z-l-16 z-d-14"> false</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>    slot</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    return</span><span class="z-l-16 z-d-14"> true</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>Таким же образом можно создать другие методы расширения для словарей, например:</p>
+<h3 id="removeifexists">RemoveIfExists</h3>
+<p>Позволяет удалить ключ, если он существует.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-9 z-d-9"> bool</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> RemoveIfExists</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">this</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span> dictionary</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    where</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span class="z-l-8 z-d-4"> :</span><span class="z-l-9 z-d-9"> notnull</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    ArgumentNullException</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ThrowIfNull</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Получаем ссылку на значение по ключу или null, если ключа нет</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    ref</span><span class="z-l-9 z-d-9"> var</span><span> slot</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-9 z-d-9"> ref</span><span> CollectionsMarshal</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">GetValueRefOrNullRef</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">,</span><span> key</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Если ссылка не является null, значит ключ существует</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    if</span><span class="z-l-8 z-d-4"> (</span><span>Unsafe</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">IsNullRef</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">ref</span><span> slot</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-9 z-d-9"> return</span><span class="z-l-16 z-d-14"> false</span><span class="z-l-8 z-d-4">;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Ключ не существует, ничего не делаем</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>    dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">Remove</span><span class="z-l-8 z-d-4">(</span><span>key</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Удаляем ключ</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    return</span><span class="z-l-16 z-d-14"> true</span><span class="z-l-8 z-d-4">;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Возвращаем true, так как ключ был удален</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h3 id="upsert">Upsert</h3>
+<p>Позволяет обновить значение, если ключ существует, или добавить новое значение.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">public</span><span class="z-l-9 z-d-9"> static</span><span class="z-l-9 z-d-9"> void</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> Upsert</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-9 z-d-9">this</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">TKey</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span class="z-l-1 z-d-5">&gt;</span><span> dictionary</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TValue</span><span> value</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    where</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> TKey</span><span class="z-l-8 z-d-4"> :</span><span class="z-l-9 z-d-9"> notnull</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">{</span></span>
+<span class="giallo-l"><span>    ArgumentNullException</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ThrowIfNull</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Получаем ссылку на значение по ключу или default(TValue), если ключа нет</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    ref</span><span class="z-l-9 z-d-9"> var</span><span> slot</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-9 z-d-9"> ref</span><span> CollectionsMarshal</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">GetValueRefOrAddDefault</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">,</span><span> key</span><span class="z-l-8 z-d-4">,</span><span class="z-l-9 z-d-9"> out</span><span> _</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Если ключ существует, обновляем значение</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">    //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Если же не существует, то добавляем значение</span></span>
+<span class="giallo-l"><span>    slot</span><span class="z-l-2 z-d-1"> =</span><span> value</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h2 id="prakticheskii-primer">Практический пример</h2>
+<p>Давайте рассмотрим практический пример использования этих методов:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="csharp"><span class="giallo-l"><span class="z-l-9 z-d-9">var</span><span> dictionary</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-2 z-d-1"> new</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Dictionary</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-9 z-d-9">int</span><span class="z-l-8 z-d-4">,</span><span class="z-l-9 z-d-9"> string</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">GetOrAdd</span><span class="z-l-8 z-d-4">(</span><span class="z-l-16 z-d-14">1</span><span class="z-l-8 z-d-4">,</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">Value1</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span>dictionary</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">TryUpdate</span><span class="z-l-8 z-d-4">(</span><span class="z-l-16 z-d-14">1</span><span class="z-l-8 z-d-4">,</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">UpdatedValue1</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>Console</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">WriteLine</span><span class="z-l-8 z-d-4">(</span><span>JsonSerializer</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">Serialize</span><span class="z-l-8 z-d-4">(</span><span>dictionary</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> {&quot;1&quot;:&quot;UpdatedValue1&quot;}</span></span></code></pre>
+<p>Как видите, эти методы делают работу со словарем более эффективной и чистой.</p>
+<h2 id="zakliuchenie">Заключение</h2>
+<p>Подведем итоги:</p>
+<ul>
+<li>Использование <code>ContainsKey</code> и <code>TryGetValue</code> может быть неэффективным из-за двойного хеширования.</li>
+<li>Методы <code>CollectionsMarshal</code> позволяют оптимизировать работу со словарями.</li>
+<li>Создание своих методов расширения поможет сделать ваш код более удобным и производительным.</li>
+</ul>
+<p>Дополнительные источники:</p>
+<ul>
+<li><a class="external" rel="noopener external" target="_blank" href="https://github.com/just-squad/just-platform-dotnet/blob/main/src/JustPlatform.Extensions/DictionaryExtensions.cs">Ссылка на проект с исходным кодом</a></li>
+<li><a class="external" rel="noopener external" target="_blank" href="https://www.youtube.com/watch?v=6CWQXQISYpk">YouTube видео</a></li>
+</ul>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="csharp-dictionary-speed-improvment"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="ru"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Скопировано!
+    </span>
+    <span id="copy-init" class="hidden">
+        Скопировать код в буфер обмена
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/about/">
+                                обо мне
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/contact/">
+                                контакт
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                карта сайта
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Под управлением
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Исходный код сайта
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Поиск</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Поиск…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Очистить поиск">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> Нет результатов</span>
+                <span id="one_results"> $NUMBER результат</span>
+                <span id="many_results"> $NUMBER результатов</span><span id="two_results"> $NUMBER результата</span>
+                <span id="few_results"> $NUMBER результата</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>

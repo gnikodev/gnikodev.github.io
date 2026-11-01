@@ -1,0 +1,25 @@
+/* Add the channel avatar without copying tabi's navigation template. */
+.home-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar .home-title::before,
+.navbar .home-title:hover::before {
+    content: "";
+    display: block;
+    position: static;
+    inset: auto;
+    z-index: auto;
+    max-inline-size: none;
+    flex: 0 0 4rem;
+    width: 4rem;
+    height: 4rem;
+    background: url("../m192.png") center / contain no-repeat;
+}
+
+.navbar .home-title:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+}

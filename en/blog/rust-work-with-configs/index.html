@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+    <meta charset="UTF-8"><meta http-equiv="Content-Security-Policy"
+content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;media-src 'self';style-src 'self' https://giscus.app;frame-src https://www.youtube-nocookie.com https://player.vimeo.com giscus.app;object-src 'none';base-uri 'self';connect-src &#39;self&#39; &#39;self&#39; https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com;script-src &#39;self&#39;  giscus.app &#39;self&#39; https://www.googletagmanager.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https://baldman.justsquad.su">
+
+    
+    <title>BaldMan • Rust. Working with configurations</title>
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+        
+            <link rel="stylesheet" href="https://baldman.justsquad.su/inter_subset_en.css?h=d8cf4ad058d6c3a4015b">
+        
+    
+
+    
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css?h=1962aef30b54e6cdc15f" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css?h=099478def97fa237536d" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/main.css?h=a0529235e6b8ecc8389e" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/css/branding.css?h=08ded56858f66c56f658" />
+        <link rel="stylesheet" href="https://baldman.justsquad.su/skins/monochrome.css?h=1332fb72f59c930d9969" />
+
+    <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="description" content="A way to hook up and use configurations in Rust projects." />
+        <meta property="og:description" content="A way to hook up and use configurations in Rust projects." />
+
+    
+
+    <meta property="og:title" content="Rust. Working with configurations" />
+    <meta property="og:type" content="article" />
+
+    
+    
+        
+            
+        
+    
+
+    
+    
+
+    
+    
+    
+    
+        
+    
+    
+
+    
+        
+        
+    
+
+    <meta property="og:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:image" content="https://baldman.justsquad.su/m1024.png?h=68d7c422d71fc649c34c" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+<meta property="og:locale:alternate" content="en_GB" />
+
+        <link rel="alternate" hreflang="en" href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/" /><meta property="og:locale:alternate" content="ru_RU" />
+
+        <link rel="alternate" hreflang="ru" href="https://baldman.justsquad.su/blog/rust-work-with-configs/" />
+
+    <meta property="og:url" content="https://baldman.justsquad.su/en/blog/rust-work-with-configs/" /><meta property="og:site_name" content="BaldMan">
+        <noscript><link rel="stylesheet" href="https://baldman.justsquad.su/no_js.css"/></noscript>
+        <script type="text/javascript" src="https://baldman.justsquad.su/js/initializeTheme.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/themeSwitcher.min.js"></script>
+        <script defer src="https://baldman.justsquad.su/js/searchElasticlunr.min.js?h=28faa8abcfc2ce7469eb"></script>
+
+        
+    <meta name="yandex-verification" content="b387010222fc81c7" />
+
+<link rel="canonical" href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/" />
+
+<link rel="icon" type="image/png" sizes="96x96" href="https://baldman.justsquad.su/m96.png?h=e674d500bb42ae6efe49" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://baldman.justsquad.su/favicon-32x32.png?h=e0d898db83c7e766b592" />
+<link rel="icon" type="image/svg+xml" href="https://baldman.justsquad.su/favicon.svg?h=dcfebf7abc6a14ffb7dd" />
+<link rel="shortcut icon" href="https://baldman.justsquad.su/favicon.ico?h=34c7f0b3a835020fb056" />
+<link rel="apple-touch-icon" href="https://baldman.justsquad.su/apple-touch-icon.png?h=aadfd0406cd1e584a61f" />
+<link rel="manifest" href="https://baldman.justsquad.su/manifest.json?h=7f60de19e2003faf87b3" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8T5L2SDRTX"></script>
+<script defer src="https://baldman.justsquad.su/js/analytics.js"></script>
+<script defer src="https://baldman.justsquad.su/js/highlighting.js?h=3a1da770ecf1f5b4e677"></script>
+<script defer src="https://baldman.justsquad.su/js/comments-theme.js?h=0bca46b7b07bf81dbe26"></script>
+<noscript>
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-light.css" media="(prefers-color-scheme: light)" />
+    <link rel="stylesheet" href="https://baldman.justsquad.su/giallo-dark.css" media="(prefers-color-scheme: dark)" />
+</noscript>
+
+
+</head>
+
+
+<body dir="ltr">
+    <a href="#main-content" id="skip-link">Skip to content</a>
+    <header>
+    <nav class="navbar">
+        <div class="nav-title">
+            <a class="home-title" href="https://baldman.justsquad.su/en/">BaldMan</a>
+        </div>
+            <div class="nav-navs">
+                <ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/blog/">blog
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/archive/">archive
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/tags/">tags
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/projects/">projects
+                                </a>
+                            </li>
+                        <li class="menu-icons-container">
+                        <ul class="menu-icons-group">
+                            <li class="js menu-icon">
+                                <div role="button" tabindex="0" id="search-button" class="search-icon interactive-icon" title="Click or press $SHORTCUT to open search" aria-label="Click or press $SHORTCUT to open search">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                                    </svg>
+                                </div>
+                            </li>
+
+                            
+                            
+                            <li class="language-switcher">
+    <details class="dropdown">
+        <summary role="button" aria-haspopup="true" title="Language selection" aria-label="Language selection"><div class="language-switcher-icon"></div></summary>
+        <div class="dropdown-content" role="menu">English
+                
+                    
+                <a role="menuitem" lang="ru" aria-label="Русский" href="https://baldman.justsquad.su/blog/rust-work-with-configs/">Русский</a></div>
+    </details>
+</li>
+
+
+                            <li class="theme-switcher-wrapper js"><div
+        title="Toggle dark/light mode"
+        class="theme-switcher"
+        tabindex="0"
+        role="button"
+        aria-label="Toggle dark mode"
+        aria-pressed="false">
+    </div><div
+        title="Reset mode to default"
+        class="theme-resetter arrow"
+        tabindex="0"
+        role="button"
+        aria-hidden="true"
+        aria-label="Reset mode to default">
+    </div>
+
+</li>
+</ul>
+                    </li>
+                </ul>
+            </div>
+        
+    </nav>
+</header>
+
+    <div class="content" id="main-content">
+
+        
+        
+
+
+
+
+
+<main>
+    <article class="h-entry">
+        <h1 class="p-name article-title">
+            Rust. Working with configurations
+        </h1>
+        <a class="u-url u-uid" href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/"></a>
+
+        <ul class="meta"><span class="hidden p-author h-card">
+<a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
+</span>
+<li><time class="dt-published" datetime="2025-08-17">17th Aug 2025</time></li><li title="665 words"><span class='separator' aria-hidden='true'>•</span>3 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/rust/">rust</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/config/">config</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/config-rs/">config-rs</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/dotenvy/">dotenvy</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-08-17">Updated on 17th Aug 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/rust-work-with-configs/index.en.md" target=_blank rel="noopener">See changes</a></li>
+        </ul>
+            
+
+<div class="toc-container">
+    
+        <h3>Table of Contents</h3>
+    
+
+    <ul>
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#1-dotenvy-working-with-env-files">1. dotenvy — working with .env files</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#installation">Installation</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#usage-example">Usage example</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#best-practices">Best practices</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#2-envconfig-automatically-parsing-environment-variables-into-structs">2. envconfig — automatically parsing environment variables into structs</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#installation-1">Installation</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#usage-example-1">Usage example</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#best-practices-1">Best practices</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#3-config-rs-a-universal-configuration-crate">3. config-rs — a universal configuration crate</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#installation-2">Installation</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#usage-example-toml-environment-variables">Usage example (TOML + environment variables)</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#nested-structs-with-toml">Nested structs with TOML</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#nested-structs-with-arrays">Nested structs with arrays</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#using-config-rs-with-environment-variables-for-nested-structs">Using config-rs with environment variables for nested structs</a>
+                                        
+                                            <ul>
+                                                
+                                                    
+                                                        <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#standard-approach-with-as-separator">Standard approach (with _ as separator)</a>
+                                                            
+                                                        </li>
+                                                    
+                                                
+                                                    
+                                                        <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#alternative-naming-options">Alternative naming options</a>
+                                                            
+                                                        </li>
+                                                    
+                                                
+                                            </ul>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#how-to-make-the-naming-more-convenient">How to make the naming more convenient</a>
+                    
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#best-practices-2">Best practices</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+            
+            
+                <li><a href="https://baldman.justsquad.su/en/blog/rust-work-with-configs/#conclusion">Conclusion</a>
+                    
+                </li>
+            
+        
+    </ul>
+</div>
+
+
+        
+            <p class="p-summary" hidden>A way to hook up and use configurations in Rust projects.</p><section class="e-content body"><p>Like in any application, whether it’s Web or Desktop, you need to use configurations. They can be stored in the runtime environment’s variables, or in separate files, like <code>json</code>, <code>xml</code>, <code>env</code>, or <code>toml</code>.</p>
+<p>In many programming languages, C# for example, working with configurations is already standardized, and you can use ready-made libraries that provide full-fledged functionality. In Rust, though, you have to hunt for separate crates. In this article we’ll look at the crates I use myself in my own projects for working with configurations.</p>
+<h2 id="1-dotenvy-working-with-env-files">1. <code>dotenvy</code> — working with <code>.env</code> files</h2>
+<p>The <code>dotenvy</code> crate provides a convenient way to load environment variables from <code>.env</code> files. This is especially handy during application development, when you don’t want to write configuration values into the system’s environment variables.</p>
+<h3 id="installation">Installation</h3>
+<p>Add to <code>Cargo.toml</code>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="toml"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span>dependencies</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span>dotenvy</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">0.15</span><span class="z-l-5 z-d-7">&quot;</span></span></code></pre>
+<p>or you can just run</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cargo</span><span class="z-l-5 z-d-7"> add</span><span class="z-l-5 z-d-7"> dotenvy</span></span></code></pre><h3 id="usage-example">Usage example</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> dotenvy</span><span class="z-l-2 z-d-1">::</span><span>dotenv</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> std</span><span class="z-l-2 z-d-1">::</span><span>env</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> main</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    dotenv</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">ok</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Loads variables from the .env file</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> database_url</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-d-10"> env</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">var</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">DATABASE_URL</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">expect</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">DATABASE_URL must be set</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">Database URL: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> database_url</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h3 id="best-practices">Best practices</h3>
+<ol>
+<li><strong>Don’t commit <code>.env</code> files</strong> — add them to <code>.gitignore</code>. To give users a template for the configuration, it’s enough to make a separate <code>.env.example</code> file that contains examples without any actual values.</li>
+<li><strong>Check that variables are present</strong> — always handle the error case when a variable isn’t set.</li>
+<li><strong><code>.env.local</code> for local development</strong> — I use this file for a simplified local config, and it’s simply added to <code>.gitignore</code>.</li>
+</ol>
+<p>If you use an <code>.env.local</code> file, you can slightly improve the <code>dotenvy</code> initialization so it decides which source file to use:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> add_configuration</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> -&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Result</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Config</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AddConfigurationError</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    load_env_file</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">?</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">    ...</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> load_env_file</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> -&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Result</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AddConfigurationError</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> local_env_path</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Path</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">new</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">.env.local</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    if</span><span> local_env_path</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">exists</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        let</span><span> load_result</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-d-10"> dotenvy</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">from_path</span><span class="z-l-8 z-d-4">(</span><span>local_env_path</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        match</span><span> load_result</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">            Ok</span><span class="z-l-8 z-d-4">(</span><span>_</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> =&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Ok</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">            Err</span><span class="z-l-8 z-d-4">(</span><span>err</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> =&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Err</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">AddConfigurationError</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">from</span><span class="z-l-8 z-d-4">(</span><span>err</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        }</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    }</span><span class="z-l-9 z-d-9"> else</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        let</span><span> load_result</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-d-10"> dotenvy</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">dotenv</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">        match</span><span> load_result</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">            Ok</span><span class="z-l-8 z-d-4">(</span><span>_</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> =&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Ok</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">            Err</span><span class="z-l-8 z-d-4">(</span><span>err</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1"> =&gt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Err</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">AddConfigurationError</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">from</span><span class="z-l-8 z-d-4">(</span><span>err</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">        }</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    }</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>Unfortunately, I couldn’t cleanly factor out the common handling of <code>load_result</code>, because <code>from_path</code> and <code>dotenv</code> have different return types.</p>
+<hr />
+<h2 id="2-envconfig-automatically-parsing-environment-variables-into-structs">2. <code>envconfig</code> — automatically parsing environment variables into structs</h2>
+<p><code>envconfig</code> lets you automatically parse environment variables into Rust structs, which makes working with configuration more convenient and type-safe.</p>
+<h3 id="installation-1">Installation</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="toml"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span>dependencies</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span>envconfig</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> {</span><span> version</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">0.13</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> features</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> [</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">derive</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">]</span><span class="z-l-8 z-d-4"> }</span></span></code></pre><h3 id="usage-example-1">Usage example</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> envconfig</span><span class="z-l-2 z-d-1">::</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Envconfig</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Envconfig</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Config</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    #</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">envconfig</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">from </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">DATABASE_URL</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> default </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">postgres://localhost:5432</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> database_url</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    #</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">envconfig</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">from </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">PORT</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> default </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">8080</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> port</span><span class="z-l-2 z-d-1">:</span><span class="z-l-9 z-d-9"> u16</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> main</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> config</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">init</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">unwrap</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">Database URL: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> config</span><span class="z-l-2 z-d-1">.</span><span>database_url</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">Port: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> config</span><span class="z-l-2 z-d-1">.</span><span>port</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h3 id="best-practices-1">Best practices</h3>
+<ol>
+<li><strong>Use <code>default</code></strong> — set default values for variables that aren’t critical.</li>
+<li><strong>Group your configurations</strong> — create separate structs for different parts of the application (for example, <code>DatabaseConfig</code>, <code>ServerConfig</code>).</li>
+<li><strong>Document the variables</strong> — add comments to struct fields so it’s clear which variables are required.</li>
+</ol>
+<hr />
+<h2 id="3-config-rs-a-universal-configuration-crate">3. <code>config-rs</code> — a universal configuration crate</h2>
+<p><code>config-rs</code> is a powerful crate for working with configurations, supporting a wide range of formats (<code>JSON</code>, <code>YAML</code>, <code>TOML</code>, and others) and sources (files, environment variables).</p>
+<h3 id="installation-2">Installation</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="toml"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span>dependencies</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span>config</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> {</span><span> version</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">0.15</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> features</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> [</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">json</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">]</span><span class="z-l-8 z-d-4"> }</span></span>
+<span class="giallo-l"><span>serde</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> {</span><span> version</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">1.0</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> features</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-8 z-d-4"> [</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">derive</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">]</span><span class="z-l-8 z-d-4"> }</span></span></code></pre><h3 id="usage-example-toml-environment-variables">Usage example (TOML + environment variables)</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-8 z-d-4">{</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Config</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Environment</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> File</span><span class="z-l-8 z-d-4">}</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> serde</span><span class="z-l-2 z-d-1">::</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Deserialize</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppConfig</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span>    database_url</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span>    port</span><span class="z-l-2 z-d-1">:</span><span class="z-l-9 z-d-9"> u16</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span>    debug</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> bool</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> main</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> config</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">builder</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">        //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Read from `config.toml`</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">add_source</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-d-10">File</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">with_name</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">config</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">        //</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Environment variables prefixed with `APP_` (e.g. `APP_PORT=8080`)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">add_source</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-d-10">Environment</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">with_prefix</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">APP</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">build</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">unwrap</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> app_config</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppConfig</span><span class="z-l-2 z-d-1"> =</span><span> config</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">try_deserialize</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">unwrap</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">Config: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-5 z-d-7">:?</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> app_config</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h3 id="nested-structs-with-toml">Nested structs with TOML</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> serde</span><span class="z-l-2 z-d-1">::</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Deserialize</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> DatabaseConfig</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> url</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> pool_size</span><span class="z-l-2 z-d-1">:</span><span class="z-l-9 z-d-9"> u32</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> ServerConfig</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> host</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> port</span><span class="z-l-2 z-d-1">:</span><span class="z-l-9 z-d-9"> u16</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppCfg</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> database</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> DatabaseConfig</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> server</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> ServerConfig</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> debug</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> bool</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>config.toml:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="toml"><span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span>database</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span>url</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">postgres://user:pass@localhost:5432/db</span><span class="z-l-5 z-d-7">&quot;</span></span>
+<span class="giallo-l"><span>pool_size</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-16 z-d-14"> 20</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">[</span><span>server</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span>host</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">0.0.0.0</span><span class="z-l-5 z-d-7">&quot;</span></span>
+<span class="giallo-l"><span>port</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-16 z-d-14"> 8080</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>debug</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-16 z-d-14"> true</span></span></code></pre>
+<p>Loading the config:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">use</span><span class="z-l-13 z-d-10"> config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Config</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">fn</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> main</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> cfg</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">builder</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">add_source</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-d-10">config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-13 z-d-10">File</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">with_name</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">config</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">build</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">        .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">unwrap</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    let</span><span> app_cfg</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppCfg</span><span class="z-l-2 z-d-1"> =</span><span> cfg</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">try_deserialize</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">unwrap</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">DB URL: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> app_cfg</span><span class="z-l-2 z-d-1">.</span><span>database</span><span class="z-l-2 z-d-1">.</span><span>url</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">    println!</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">Server port: </span><span class="z-l-8 z-d-4">{</span><span class="z-l-8 z-d-4">}</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">,</span><span> app_cfg</span><span class="z-l-2 z-d-1">.</span><span>server</span><span class="z-l-2 z-d-1">.</span><span>port</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre><h3 id="nested-structs-with-arrays">Nested structs with arrays</h3>
+<p>Structs:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> RedisConfig</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> hosts</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Vec</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">String</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> timeout_ms</span><span class="z-l-2 z-d-1">:</span><span class="z-l-9 z-d-9"> u64</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Debug</span><span class="z-l-8 z-d-4">,</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppCfg</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> redis</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> RedisConfig</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> allowed_origins</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Vec</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-13 z-l-i z-d-10 z-d-i">String</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>config.yaml:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="yaml"><span class="giallo-l"><span class="z-l-3 z-d-3">r</span><span class="z-l-3 z-d-3">edis</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  h</span><span class="z-l-3 z-d-3">osts</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-5 z-d-7"> &#39;</span><span class="z-l-5 z-d-7">redis1:6379</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">    -</span><span class="z-l-5 z-d-7"> &#39;</span><span class="z-l-5 z-d-7">redis2:6379</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">  t</span><span class="z-l-3 z-d-3">imeout_ms</span><span class="z-l-2 z-d-1">:</span><span class="z-l-16 z-d-14"> 500</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-3 z-d-3">a</span><span class="z-l-3 z-d-3">llowed_origins</span><span class="z-l-2 z-d-1">:</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> &#39;</span><span class="z-l-5 z-d-7">https://example.com</span><span class="z-l-5 z-d-7">&#39;</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">  -</span><span class="z-l-5 z-d-7"> &#39;</span><span class="z-l-5 z-d-7">https://api.example.com</span><span class="z-l-5 z-d-7">&#39;</span></span></code></pre><h3 id="using-config-rs-with-environment-variables-for-nested-structs">Using <code>config-rs</code> with environment variables for nested structs</h3>
+<p>In this case, variable names are formed according to the following rules:</p>
+<h4 id="standard-approach-with-as-separator">Standard approach (with <code>_</code> as separator)</h4>
+<p>For the struct above, the environment variables would be named like this:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span>APP_DATABASE_CFG_CONNECTION_STRING</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">c</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">c</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">s</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">i</span><span class="z-l-5 z-d-7">n</span><span class="z-l-5 z-d-7">g</span></span>
+<span class="giallo-l"><span>APP_DATABASE_CFG_CONNECTION_ROLE</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">l</span><span class="z-l-5 z-d-7">e</span></span>
+<span class="giallo-l"><span>APP_BOT_CFG_TOKEN</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">b</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">k</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">n</span></span>
+<span class="giallo-l"><span>APP_BOT_CFG_WEBHOOK_URL</span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">w</span><span class="z-l-5 z-d-7">e</span><span class="z-l-5 z-d-7">b</span><span class="z-l-5 z-d-7">h</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">o</span><span class="z-l-5 z-d-7">k</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">u</span><span class="z-l-5 z-d-7">r</span><span class="z-l-5 z-d-7">l</span></span></code></pre>
+<p>Loading example:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">let</span><span> cfg</span><span class="z-l-2 z-d-1"> =</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Config</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">builder</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">    .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">add_source</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-d-10">Environment</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">with_prefix</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">APP</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">separator</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">_</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">    .</span><span class="z-l-3 z-l-i z-d-3 z-d-i">build</span><span class="z-l-8 z-d-4">(</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">?</span><span class="z-l-8 z-d-4">;</span></span></code></pre><h4 id="alternative-naming-options">Alternative naming options</h4>
+<ol>
+<li>
+<p><strong>Custom separator</strong> (for example, <code>__</code>):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">//</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> Variables will look like: APP__DATABASE_CFG__CONNECTION_STRING</span></span>
+<span class="giallo-l"><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">add_source</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-d-10">Environment</span><span class="z-l-2 z-d-1">::</span><span class="z-l-3 z-l-i z-d-3 z-d-i">with_prefix</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">APP</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-2 z-d-1">.</span><span class="z-l-3 z-l-i z-d-3 z-d-i">separator</span><span class="z-l-8 z-d-4">(</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-5 z-d-7">__</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">)</span></span></code></pre></li>
+<li>
+<p><strong>Simplified naming</strong> (ignoring the names of nested structs):</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">APP_DB_CONNECTION_STRING</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">APP_BOT_TOKEN</span></span></code></pre>
+<p>(but then you have to map the fields manually)</p>
+</li>
+<li>
+<p><strong>Prefixes by feature area</strong>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">DB_CONNECTION_STRING</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">BOT_TOKEN</span></span></code></pre>
+<p>(using different prefixes for different components)</p>
+</li>
+</ol>
+<h2 id="how-to-make-the-naming-more-convenient">How to make the naming more convenient</h2>
+<ol>
+<li>
+<p><strong>Use a flatter structure</strong>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> AppCfg</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> db_connection_string</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> db_connection_role</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> bot_token</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> bot_webhook_url</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre>
+<p>Then the variables become simpler:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">APP_DB_CONNECTION_STRING</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">APP_BOT_TOKEN</span></span></code></pre></li>
+<li>
+<p><strong>Customize names via attributes</strong>:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> DatabaseCfg</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    #</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">serde</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">rename </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">DB_CONN_STR</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> connection_string</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    #</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">serde</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">rename </span><span class="z-l-2 z-d-1">=</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">DB_ROLE</span><span class="z-l-5 z-d-7">&quot;</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> connection_role</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre></li>
+</ol>
+<h3 id="best-practices-2">Best practices</h3>
+<ol>
+<li>
+<p><strong>Use hierarchical configs</strong> — split the configuration across different files (<code>database.toml</code>, <code>server.toml</code>).</p>
+</li>
+<li>
+<p><strong>Use separate configurations for different environments</strong> — this is an approach that exists in <code>dotnet</code> too, namely files like <code>appsettings.staging.json</code>, <code>appsettings.production.json</code>.</p>
+</li>
+<li>
+<p><strong>Override values via environment variables</strong> — this is useful for deployment (for example, in Docker).</p>
+</li>
+<li>
+<p><strong>Combine sources</strong> — you can load configuration from a file and override part of the values through env variables.</p>
+</li>
+<li>
+<p><strong>Use optional fields</strong></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">#</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">derive</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">Deserialize</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">pub</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> OptionalConfig</span><span class="z-l-8 z-d-4"> {</span></span>
+<span class="giallo-l"><span class="z-l-13 z-l-i z-d-10 z-d-i">    #</span><span class="z-l-8 z-d-4">[</span><span class="z-l-13 z-l-i z-d-10 z-d-i">serde</span><span class="z-l-8 z-d-4">(</span><span class="z-l-13 z-l-i z-d-10 z-d-i">default</span><span class="z-l-8 z-d-4">)</span><span class="z-l-8 z-d-4">]</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">    pub</span><span> cache_size</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> Option</span><span class="z-l-1 z-d-5">&lt;</span><span class="z-l-9 z-d-9">usize</span><span class="z-l-1 z-d-5">&gt;</span><span class="z-l-8 z-d-4">,</span></span>
+<span class="giallo-l"><span class="z-l-8 z-d-4">}</span></span></code></pre></li>
+<li>
+<p><strong>Use prefixes for env variables</strong></p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="rust"><span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">//</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> For a config like:</span></span>
+<span class="giallo-l"><span class="z-l-9 z-d-9">struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> A</span><span class="z-l-8 z-d-4"> {</span><span class="z-l-9 z-d-9"> struct</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> B</span><span class="z-l-8 z-d-4"> {</span><span> field</span><span class="z-l-2 z-d-1">:</span><span class="z-l-13 z-l-i z-d-10 z-d-i"> String</span><span class="z-l-8 z-d-4"> }</span><span class="z-l-8 z-d-4"> }</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-l-8 z-l-i z-d-4 z-d-i">//</span><span class="z-l-8 z-l-i z-d-4 z-d-i"> it will look up the variable:</span></span>
+<span class="giallo-l"><span class="z-l-16 z-d-14">APP_A_B_FIELD</span><span class="z-l-2 z-d-1">=</span><span>value</span></span></code></pre></li>
+</ol>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<p>Rust has no “official” way of working with configurations, but thanks to crates you can pick whatever approach suits you:</p>
+<ul>
+<li><strong><code>dotenvy</code></strong> — a simple way to load <code>.env</code> files.</li>
+<li><strong><code>envconfig</code></strong> — automatic parsing of env variables into structs.</li>
+<li><strong><code>config-rs</code></strong> — a powerful tool for complex configurations with support for many formats.</li>
+</ul>
+<p>The choice depends on your needs: for small projects, <code>dotenvy</code> + <code>envconfig</code> will do fine, while for larger ones — <code>config-rs</code>.</p>
+<hr />
+<p>In my own projects I use <code>dotenvy</code> and <code>config-rs</code>. At first I only worked with <code>envconfig</code>, but its functionality just wasn’t enough for full-fledged work.</p>
+<p>Hope this article helps you work with configurations in Rust more conveniently! 🚀</p>
+
+        </section>
+        
+        
+
+        
+            
+            
+            
+
+            
+                
+                
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+            
+            
+            
+
+            
+        
+        
+            
+
+<div id="comments" class="comments"
+
+
+    data-repo="gnikodev/gnikodev.github.io"
+    data-repo-id="R_kgDOMkqe1A"
+    data-category="Q&amp;A"
+    data-category-id="DIC_kwDOMkqe1M4C0Y8a"
+    
+        data-mapping="specific"
+        data-term="rust-work-with-configs"
+    
+    data-strict="1"
+    data-reactions-enabled="1"
+    
+        data-input-position="bottom"
+    
+    data-light-theme="noborder_light"
+    data-dark-theme="noborder_dark"
+    
+        data-lang="en"
+    
+    data-lazy-loading="true"
+    >
+
+
+
+
+    <script src="https://baldman.justsquad.su/js/giscus.min.js" async></script>
+
+
+<noscript>You need JavaScript to view the comments.</noscript>
+</div>
+
+        </article>
+</main>
+
+<span id="copy-success" class="hidden">
+        Copied!
+    </span>
+    <span id="copy-init" class="hidden">
+        Copy code to clipboard
+    </span>
+    <script defer src="https://baldman.justsquad.su/js/copyCodeToClipboard.min.js"></script>
+    </div>
+    <footer>
+    <section>
+        <nav class="socials nav-navs"><ul>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://github.com/gnikodev/">
+                                    <img loading="lazy" alt="github" title="github" src="https://baldman.justsquad.su/social_icons/github.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://t.me/bald_man_g">
+                                    <img loading="lazy" alt="telegram" title="telegram" src="https://baldman.justsquad.su/social_icons/telegram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://instagram.com/gnikodev">
+                                    <img loading="lazy" alt="instagram" title="instagram" src="https://baldman.justsquad.su/social_icons/instagram.svg">
+                                </a>
+                            </li>
+                        
+                            <li>
+                                <a class="nav-links no-hover-padding social" rel="noopener me" target=_blank href="https://youtube.com/@baldman_g">
+                                    <img loading="lazy" alt="youtube" title="youtube" src="https://baldman.justsquad.su/social_icons/youtube.svg">
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            
+        </nav>
+
+        
+        <nav class="nav-navs">
+                <small>
+                    <ul>
+                        
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/about/">
+                                about
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/en/contact/">
+                                contact
+                            </a>
+                        </li>
+                    
+                        <li><a class="nav-links no-hover-padding" href="https://baldman.justsquad.su/sitemap.xml">
+                                sitemap
+                            </a>
+                        </li>
+                    
+                    </ul>
+                </small>
+        
+        </nav>
+
+        <div class="credits">
+            <small>
+                
+
+                
+                Powered by
+                <a rel="noopener" target=_blank href="https://www.getzola.org">Zola</a>
+                &
+                <a rel="noopener" target=_blank href="https://github.com/welpo/tabi">tabi</a>
+
+                •
+                    <a rel="noopener" target=_blank href="https://github.com/gnikodev/gnikodev.github.io">
+                        Site source
+                    </a></small>
+        </div>
+    </section>
+
+    <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+    <h1 id="modalTitle" class="visually-hidden">Search</h1>
+    <div id="modal-content">
+        <div id="searchBar">
+            <div class="search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+                </svg>
+            </div>
+            <input id="searchInput" role="combobox" autocomplete="off" spellcheck="false" aria-expanded="false" aria-controls="results-container" placeholder="Search…"/>
+            <div id="clear-search" class="close-icon interactive-icon" tabindex="0" role="button" title="Clear search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results-info"><span id="zero_results"> No results</span>
+                <span id="one_results"> $NUMBER result</span>
+                <span id="many_results"> $NUMBER results</span><span id="two_results"> $NUMBER results</span>
+                <span id="few_results"> $NUMBER results</span>
+            </div>
+            <div id="results" role="listbox"></div>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+    
+    
+</body>
+
+</html>
