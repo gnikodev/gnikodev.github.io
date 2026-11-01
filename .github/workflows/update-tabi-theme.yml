@@ -1,4 +1,4 @@
-name: Update Goyo Theme
+name: Update tabi theme
 
 on:
   schedule:
@@ -9,7 +9,7 @@ on:
 env:
   GIT_USER_NAME: "github-actions[bot]"
   GIT_USER_EMAIL: "github-actions[bot]@users.noreply.github.com"
-  THEME_PATH: "themes/goyo"
+  THEME_PATH: "themes/tabi"
 
 jobs:
   update-theme:
@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
 
-      - name: Update Goyo submodule
+      - name: Update tabi to the latest stable release
         id: update
         run: |
           git config user.name "${{ env.GIT_USER_NAME }}"
@@ -34,12 +34,15 @@ jobs:
           # Get current commit hash
           OLD_COMMIT=$(git rev-parse HEAD:${{ env.THEME_PATH }})
 
-          # Update submodule to latest
-          git submodule update --remote ${{ env.THEME_PATH }}
+          # Follow stable releases, not potentially incompatible development commits.
+          git -C "${{ env.THEME_PATH }}" fetch --tags
+          LATEST_TAG=$(git -C "${{ env.THEME_PATH }}" tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          test -n "$LATEST_TAG"
+          git -C "${{ env.THEME_PATH }}" checkout --detach "$LATEST_TAG"
           git add ${{ env.THEME_PATH }}
 
           # Get new commit hash
-          NEW_COMMIT=$(git --git-dir=${{ env.THEME_PATH }}/.git rev-parse HEAD)
+          NEW_COMMIT=$(git -C "${{ env.THEME_PATH }}" rev-parse HEAD)
 
           # Check if there are changes
           if [ "$OLD_COMMIT" != "$NEW_COMMIT" ]; then
@@ -52,20 +55,21 @@ jobs:
 
       - name: Create Pull Request
         if: steps.update.outputs.updated == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update Goyo theme to latest version"
-          title: "Update Goyo theme"
+          # A PAT is needed so this PR triggers the site-check workflow.
+          token: ${{ secrets.TOKEN }}
+          commit-message: "Update tabi theme to latest stable release"
+          title: "Update tabi theme"
           body: |
-            This PR updates the Goyo theme to the latest version.
+            This PR updates tabi to the latest stable release. Site checks must pass before merging.
 
             **Changes:** ${{ steps.update.outputs.old_commit }} → ${{ steps.update.outputs.new_commit }}
 
-            Please review the [Goyo changelog](https://github.com/hahwul/goyo/releases) for details on what's new.
+            Please review the [tabi changelog](https://github.com/welpo/tabi/releases) for compatibility requirements.
 
             ---
-            *This PR was automatically created by the Update Goyo Theme workflow.*
-          branch: update-goyo-theme
+            *This PR was automatically created by the Update tabi theme workflow.*
+          branch: update-tabi-theme
           delete-branch: true
           labels: dependencies, documentation
