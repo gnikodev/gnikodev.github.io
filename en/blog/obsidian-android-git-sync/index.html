@@ -205,7 +205,7 @@ content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;me
         <ul class="meta"><span class="hidden p-author h-card">
 <a rel="author" href="https://baldman.justsquad.su" class="u-url " title="gnikodev">gnikodev</a>
 </span>
-<li><time class="dt-published" datetime="2024-08-18">18th Aug 2024</time></li><li title="1289 words"><span class='separator' aria-hidden='true'>•</span>6 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/obsidian/">obsidian</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/git/">git</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2025-02-23">Updated on 23rd Feb 2025</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/obsidian-android-git-sync/index.en.md" target=_blank rel="noopener">See changes</a></li>
+<li><time class="dt-published" datetime="2024-08-18">18th Aug 2024</time></li><li title="1905 words"><span class='separator' aria-hidden='true'>•</span>9 min read</li><li class="tag"><span class='separator' aria-hidden='true'>•</span>Tags:&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/obsidian/">obsidian</a>,&nbsp;</li><li class="tag"><a class="p-category" href="https://baldman.justsquad.su/en/tags/git/">git</a></li></ul><ul class="meta last-updated"><li><time class="dt-updated" datetime="2026-11-01">Updated on 1st Nov 2026</time></li><li><span class='separator' aria-hidden='true'>•</span><a class="external" href="https://github.com/gnikodev/gnikodev.github.io/commits/main/content/blog/obsidian-android-git-sync/index.en.md" target=_blank rel="noopener">See changes</a></li>
         </ul>
             
 
@@ -258,7 +258,7 @@ content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;me
         
             
             
-                <li><a href="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/#using-the-termux-emulator">Using the Termux emulator</a>
+                <li><a href="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/#using-the-termux-terminal">Using the Termux terminal</a>
                     
                 </li>
             
@@ -274,6 +274,16 @@ content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;me
             
                 <li><a href="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/#using-termux-with-the-cron-scheduler">Using Termux with the cron scheduler</a>
                     
+                        <ul>
+                            
+                                
+                                    <li><a href="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/#sources-and-currency">Sources and currency</a>
+                                        
+                                    </li>
+                                
+                            
+                        </ul>
+                    
                 </li>
             
         
@@ -284,39 +294,46 @@ content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;me
         
             <p class="p-summary" hidden>Ways to sync your Obsidian vaults on Android devices via Git.</p><section class="e-content body"><p><strong>Obsidian</strong> is a very handy tool for keeping all kinds of notes. You can jot down a simple to-do list for the day, and some people use it to write scripts or draft entire books.</p>
 <p>But using it raises the question of syncing your data. Sure, you could use the cloud sync built by Obsidian’s developers, but sometimes you want independence from “the corporations.” And <strong>Obsidian</strong> can give you that option.</p>
-<p>There are two approaches: run a local sync server that uses CouchDB, or use the Git version control system.</p>
+<p>Options include the Self-hosted LiveSync plugin with a CouchDB server, or the Git version control system.</p>
 <p>This article covers how to set up vault syncing via Git on Android devices.</p>
+<p>Make a separate backup of your notes before setting things up. A private repository restricts access, but doesn’t provide end-to-end encryption or replace backups.</p>
 <h2 id="preparation">Preparation</h2>
 <p>Whichever approach we go with, we need a repository to store all the documents in. So head over to wherever you’ll be creating the repository (GitLab, GitHub…), log in, and create an empty private repository. To get a branch created automatically, you can add a <code>.gitignore</code> file to the repo right away.</p>
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_1.jpg" alt="github_repo" /></p>
-<p>Next we need to clone that repository onto the Android device somehow. Since Android has no built-in command-line support, we’ll need a third-party app that emulates a Unix-style command line.</p>
+<p>Next we need to clone that repository onto the Android device somehow. Android has a system shell, but doesn’t include a regular user terminal with Git. So we’ll use a third-party app.</p>
 <h3 id="installing-termux-and-setting-up-git">Installing Termux and setting up Git</h3>
-<p><strong>Termux</strong> is an open-source app that emulates a Linux command line, complete with package manager support. You can download it from <a class="external" rel="noopener external" target="_blank" href="https://play.google.com/store/apps/details?id=com.termux&amp;hl=ru">Google Play</a> or from the alternative <a class="external" rel="noopener external" target="_blank" href="https://f-droid.org/packages/com.termux/">F-Droid</a> store, which only carries open-source apps. For more details, check their official <a class="external" rel="noopener external" target="_blank" href="https://wiki.termux.com/wiki/Installation">Wiki page</a>.</p>
+<p><strong>Termux</strong> is an open-source terminal app and Linux environment with a package manager. For this guide, use <a class="external" rel="noopener external" target="_blank" href="https://f-droid.org/packages/com.termux/">F-Droid</a> or the official GitHub repository. The Google Play version is developed separately and has limitations. See the <a class="external" rel="noopener external" target="_blank" href="https://github.com/termux/termux-app#installation">official installation guide</a> for current options. Install Termux and its Android add-ons from the same source: builds from different sources have different signatures.</p>
 <p>Now let’s launch the app and start installing the packages we need.</p>
 <pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">pkg</span><span class="z-l-5 z-d-7"> update</span><span class="z-l-8 z-d-4"> &amp;&amp;</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> pkg</span><span class="z-l-5 z-d-7"> upgrade</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-8 z-d-4"> &amp;&amp;</span><span class="z-l-3 z-l-i z-d-3 z-d-i"> pkg</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">y</span><span class="z-l-5 z-d-7"> git</span><span class="z-l-5 z-d-7"> openssh</span><span class="z-l-5 z-d-7"> termux-api</span></span></code></pre>
+<p>Then enable access to Android shared storage:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">termux-setup-storage</span></span></code></pre>
+<p>Grant file access when prompted. This command creates the links under <code>~/storage</code> used below. The <code>termux-api</code> package is needed for the Tasker script later on; ordinary Git doesn’t require it, and it doesn’t replace the Android Termux:API app.</p>
 <p>Next, let’s decide which folder our vault repositories will live in. As an example, we’ll create a <code>repos</code> folder inside <code>Documents</code>.</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">mkdir</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos</span><span class="z-l-15 z-d-16"> \</span></span>
-<span class="giallo-l"><span>mkdir</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos/obsidian/</span></span>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">mkdir</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">p</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos/obsidian</span></span>
 <span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">cd</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos/obsidian</span></span></code></pre>
 <p>Now we need to clone the repository into the folder we just created.</p>
 <p>If our repository were public, there’d be no issue. But ours is private, so cloning it requires authentication first.</p>
 <p>For GitHub, you can use their official CLI app, <code>gh</code>. To install it, run:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">apt</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> gh</span></span></code></pre>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">pkg</span><span class="z-l-5 z-d-7"> install</span><span class="z-l-5 z-d-7"> gh</span></span></code></pre>
 <p>To authenticate on the website, use:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">gh</span><span class="z-l-5 z-d-7"> login</span></span></code></pre>
-<p>You’ll need to pick an authentication method. I usually go with the browser option… after choosing your settings, you’ll be dropped into a browser where you’ll need to enter an additional code generated in the console.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">gh</span><span class="z-l-5 z-d-7"> auth</span><span class="z-l-5 z-d-7"> login</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-hostname</span><span class="z-l-5 z-d-7"> github.com</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-git-protocol</span><span class="z-l-5 z-d-7"> https</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">gh</span><span class="z-l-5 z-d-7"> auth</span><span class="z-l-5 z-d-7"> setup-git</span></span></code></pre>
+<p>You’ll need to pick an authentication method. I usually go with the browser option… After choosing your settings, open the specified page and enter the code generated in the console. Don’t share this code or your tokens with anyone.</p>
 <p>Once connected, you’ll get a link that looks like this:</p>
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_2.jpg" alt="repo_link" /></p>
 <p>Running it in the Termux console will clone the repository into whatever folder you’re currently in.</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">gh</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-2 z-d-1"> &lt;</span><span class="z-l-5 z-d-7">repo-lin</span><span>k</span><span class="z-l-2 z-d-1">&gt;</span></span></code></pre><h3 id="adding-the-vault-to-obsidian">Adding the vault to Obsidian</h3>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">gh</span><span class="z-l-5 z-d-7"> repo</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> OWNER/REPOSITORY</span></span></code></pre>
+<p>Replace <code>OWNER/REPOSITORY</code> with your repository’s owner and name.</p>
+<h3 id="adding-the-vault-to-obsidian">Adding the vault to Obsidian</h3>
 <p>Once the repository is cloned, we can add that folder as a vault in Obsidian.</p>
-<p>If you just downloaded the app, you’ll see a “Choose folder as vault” button on the start screen. Tap it and point it at the folder that was created when the repository was cloned.</p>
-<p>Now every file you add will be indexed by <code>git</code>, and you can push them to the remote repository.</p>
+<p>If you just downloaded the app, you’ll see a “Choose folder as vault” button on the start screen. Tap it and point it at the folder that was created when the repository was cloned. The label may differ in your version.</p>
+<p>You can now stage files in Git and push them to the remote repository. Git doesn’t do this automatically: you need <code>git add</code> and <code>git commit</code>, or the equivalent plugin actions.</p>
 <p>That wraps up the preparation stage. Now let’s look at the actual syncing methods.</p>
 <h2 id="using-the-git-plugin">Using the Git plugin</h2>
-<p>The simplest approach. It works on any device, but the developers note it can be pretty unstable on mobile, since the plugin can’t use the native Git CLI commands and instead relies on a JavaScript library that also happens to know how to work with Git.</p>
+<p>The simplest approach to configure. However, the <a class="external" rel="noopener external" target="_blank" href="https://github.com/Vinzent03/obsidian-git#mobile-support-experimental">developers warn</a> that mobile support is experimental and very unstable. Instead of the Git CLI, it uses the JavaScript library <code>isomorphic-git</code>. The mobile version doesn’t support SSH authentication or rebase, and large repositories can hang or run out of memory.</p>
 <p>It didn’t work for me on the first try. But after successfully setting up sync via the command line, the plugin started working. I think that was just a coincidence. Let’s walk through the steps.</p>
 <h3 id="installing-the-plugin">Installing the plugin</h3>
+<p>The screenshots below are from the original article: the interface and setting names may have changed.</p>
 <p>The plugin is developed by the community, so it’s not part of <code>CorePlugins</code>. You first need to enable <code>Community plugins</code> support. To do that, tap the gear icon in the top-right corner of the menu.</p>
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_3.jpg" alt="obs-1" /></p>
 <p>Then enable <code>Community plugins</code> support, as shown in the screenshot.</p>
@@ -331,44 +348,63 @@ content="default-src 'self';font-src 'self' data:;img-src 'self' https: data:;me
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_9.png" alt="obs-5" /></p>
 <p>Enable checking for updates on app startup, pushing changes after a local commit, and updating the local repository before pushing to the remote one (Pull before Push).</p>
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_10.png" alt="obs-6" /></p>
-<p>You’ll also need to enter your login and password (a Personal Access Token for GitHub, which you can generate in your GitHub user settings), as well as your Git username and email.</p>
+<p>You’ll also need to configure HTTPS authentication: for GitHub, use a Personal Access Token from your GitHub user settings rather than your account password. Restrict it to the relevant repository and the minimum content read/write permissions. The mobile plugin doesn’t automatically inherit your <code>gh</code> login from Termux. Separately, enter the Git commit author’s name and email: these aren’t login credentials.</p>
 <p><img src="https://baldman.justsquad.su/en/blog/obsidian-android-git-sync/./images/img_11.png" alt="obs-7" /></p>
-<p>Now your vault’s repository will update automatically. You’ll notice pop-up notifications appearing automatically describing each sync action.</p>
-<h2 id="using-the-termux-emulator">Using the Termux emulator</h2>
-<p>We’re almost all set to implement this approach. The only thing left is to set your username and email, and configure an SSH key for syncing. Open the Termux app and run:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> config</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-global</span><span class="z-l-5 z-d-7"> user.name</span><span class="z-l-2 z-d-1"> &lt;</span><span class="z-l-5 z-d-7">nam</span><span>e</span><span class="z-l-2 z-d-1">&gt;</span></span>
-<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> config</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-global</span><span class="z-l-5 z-d-7"> user.email</span><span class="z-l-2 z-d-1"> &lt;</span><span class="z-l-5 z-d-7">emai</span><span>l</span><span class="z-l-2 z-d-1">&gt;</span></span></code></pre>
-<p>To get your SSH key, run:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cat</span><span class="z-l-5 z-d-7"> ~/.ssh/id_rsa.pub</span></span></code></pre>
-<p>Copy what the command prints out, go to your user settings on GitHub or whichever repository host you use, and add it as an authentication SSH key.</p>
-<p>The downside of this approach is that there’s no automation at all — you’ll have to type every command by hand. But on the plus side, it’s guaranteed to work :D</p>
+<p>The plugin will now attempt to update your vault’s repository automatically. You’ll notice pop-up notifications describing sync actions. Check for errors: update intervals alone don’t prevent conflicts.</p>
+<p>Don’t commit the plugin’s token: check its settings and exclude <code>.obsidian/plugins/obsidian-git/data.json</code> through <code>.gitignore</code> if that’s where it stores the token. Revoke any token already committed to history. Don’t run the plugin and external Git automation against the same vault at the same time.</p>
+<h2 id="using-the-termux-terminal">Using the Termux terminal</h2>
+<p>We’re almost all set to implement this approach. We need to set your name and email. If you selected HTTPS and configured <code>gh</code> above, an SSH key isn’t required. Open Termux and run these commands, replacing the name and email with yours:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> config</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-global</span><span class="z-l-5 z-d-7"> user.name</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">Your Name</span><span class="z-l-5 z-d-7">&quot;</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> config</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-global</span><span class="z-l-5 z-d-7"> user.email</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">you@example.com</span><span class="z-l-5 z-d-7">&quot;</span></span></code></pre>
+<p>If you prefer SSH, first generate a key if you don’t already have a suitable one, then display its public part. Don’t overwrite an existing key:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">ssh-keygen</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">t</span><span class="z-l-5 z-d-7"> ed25519</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">cat</span><span class="z-l-5 z-d-7"> ~/.ssh/id_ed25519.pub</span></span></code></pre>
+<p>Copy the public key, go to your user settings on GitHub or whichever repository host you use, and add it as an authentication SSH key. Keep the private key in Termux’s <code>~/.ssh</code>, not shared storage. On the first connection, check the server’s key fingerprint against your Git host’s documentation. SSH also needs an <code>origin</code> URL such as <code>git@github.com:OWNER/REPOSITORY.git</code>: having a key doesn’t switch an HTTPS repository to SSH. This SSH URL won’t work with the mobile Git plugin.</p>
+<p>The downside of this approach is that there’s no automation at all — you’ll have to type every command by hand. But on the plus side, you can see which step went wrong :D</p>
 <p>Go into the folder where your vault lives:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">cd</span><span class="z-l-5 z-d-7"> ~/storage/Documents/repos/obsidian/my-obsidian-vault-repo</span></span></code></pre>
-<p>Update the remote repository’s index:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> fetch</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-prune</span></span>
-<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> pull</span></span></code></pre>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-10 z-l-i z-d-11 z-d-i">cd</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos/obsidian/my-obsidian-vault-repo</span></span></code></pre>
+<p>Replace <code>my-obsidian-vault-repo</code> with your folder’s name. Before editing notes, check the state and retrieve changes with a clean working tree:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> status</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> fetch</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-prune</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> pull</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-ff-only</span></span></code></pre>
+<p>If the branches have diverged or local changes prevent the update, stop and resolve the situation rather than blindly continuing. <code>--ff-only</code> doesn’t automatically reconcile diverging histories.</p>
 <blockquote>
-<p>Note: instead of running <code>prune</code> every time to clean up the local index, you can set it globally:</p>
+<p>Note: <code>prune</code> removes stale remote-tracking references, not files from the index. To enable it for <code>origin</code> in the current repository, use:</p>
 <pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> config</span><span class="z-l-5 z-d-7"> remote.origin.prune</span><span class="z-l-16 z-d-14"> true</span></span></code></pre></blockquote>
 <p>Once your local copy is synced with the remote one and you’ve added new files, you can push those changes to the remote repository. To do that, run:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> add</span><span class="z-l-5 z-d-7"> .</span></span>
-<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> commit</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">m</span><span class="z-l-2 z-d-1"> &lt;</span><span class="z-l-5 z-d-7">messag</span><span>e</span><span class="z-l-2 z-d-1">&gt;</span></span>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> status</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> diff</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> add</span><span class="z-l-5 z-d-7"> .</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> diff</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">-cached</span></span>
+<span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> commit</span><span class="z-l-5 z-d-7"> -</span><span class="z-l-5 z-d-7">m</span><span class="z-l-5 z-d-7"> &quot;</span><span class="z-l-5 z-d-7">Update notes</span><span class="z-l-5 z-d-7">&quot;</span></span>
 <span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> push</span></span></code></pre>
+<p>If there are no changes, no commit is needed. If a push is rejected because new remote commits appeared, save your work first, then merge or rebase separately and resolve any conflicts. Don’t use <code>push --force</code> or <code>reset --hard</code> as a generic sync fix.</p>
 <p>That’s how you can update the data in the remote repository by hand. But this approach isn’t exactly convenient. Let’s try to improve on it.</p>
 <h2 id="using-termux-with-the-tasker-scheduler">Using Termux with the Tasker scheduler</h2>
-<p>If you’ve already gone through the steps above, you can pick up <a class="external" rel="noopener external" target="_blank" href="https://github.com/DovieW/obsidian-android-sync/blob/master/README.md">THIS</a> guide starting at step 7, in the <strong>Termux Setup</strong> section.</p>
-<p>The only difference in our case is that the folder the script gets cloned into will be slightly different:</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> https://github.com/DovieW/obsidian-android-sync.git</span><span class="z-l-5 z-d-7"> ~/storage/shared/Documents/repos/obsidian/obsidian-android-sync</span></span></code></pre>
+<p>For this approach, follow the <strong>Termux Setup</strong> and <strong>Tasker Setup</strong> sections of <a class="external" rel="noopener external" target="_blank" href="https://github.com/DovieW/obsidian-android-sync/blob/master/README.md">this guide</a>. Review them in full: besides the <code>termux-api</code> package, you’ll need the Android Termux:API and Termux:Tasker apps, permissions, and SSH configuration.</p>
+<p>The current script contains hard-coded paths. Start by cloning it to the location in its README:</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">git</span><span class="z-l-5 z-d-7"> clone</span><span class="z-l-5 z-d-7"> https://github.com/DovieW/obsidian-android-sync.git</span><span class="z-l-5 z-d-7"> ~/storage/shared/repos/obsidian-android-sync</span></span></code></pre>
+<p>For the vault in this article, adjust the paths in the script configuration and Tasker: upstream expects vaults under <code>/storage/emulated/0/repos/Obsidian</code>, while ours are in <code>Documents/repos/obsidian</code>. Don’t run setup blindly: at the time of checking, it globally sets <code>safe.directory=*</code>, disabling Git’s ownership checks for all repositories. Prefer allowing only specific, verified paths. Read the script and test it on a copy of your vault first.</p>
 <p>The <strong>upside</strong> of this method is potential full automation, if you get all the settings right. And even if you can’t get the Tasker app working, you’re still left with a script you can call manually to sync your vault.</p>
-<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">./sync-vaults.sh</span></span></code></pre>
-<p>This script automatically pulls changes from the remote repository, commits, and pushes them back to the remote.</p>
+<pre class="giallo z-l-code z-d-code" ><code data-lang="shellscript"><span class="giallo-l"><span class="z-l-3 z-l-i z-d-3 z-d-i">sync</span></span></code></pre>
+<p>After the project’s full setup, the <code>sync</code> alias runs its vault-syncing script. Without that setup, the ordinary system <code>sync</code> command has nothing to do with Git. The script attempts to retrieve changes, commit, and push; success depends on authentication and the absence of unresolved conflicts.</p>
 <p>The <strong>downside</strong> of this approach is that the <strong>Tasker</strong> app is PAID! And why would we want to handle syncing ourselves and pay for an app on top of that? But if you already own it, this method is for you.</p>
 <h2 id="using-termux-with-the-cron-scheduler">Using Termux with the cron scheduler</h2>
 <p>There’s one more approach, which is really just an alternative to the previous one. Here we swap out the Tasker app for cron’s scheduling capabilities. You can run and manage it right from within <strong>Termux</strong> itself.</p>
 <p>To set this up, you can follow <a class="external" rel="noopener external" target="_blank" href="https://www.reddit.com/r/ObsidianMD/comments/qep4gn/guide_obsidian_vault_github_sync_cron_on_termux/">this guide</a>. You can reuse the same script we got from the previous method.</p>
 <p>With cron, you can very flexibly configure your sync schedule.</p>
+<p>However, cron only works while its daemon is running. Android may stop Termux in the background, so a schedule doesn’t guarantee syncing: check battery restrictions and startup after reboot on your device.</p>
 <p>That’s it. We’ve covered a few ways to set up vault syncing through a Git repository.</p>
 <p>If you still have questions, feel free to ask them under the posts in the <a class="external" rel="noopener external" target="_blank" href="https://t.me/bald_man_gushcharin">tg channel</a>.</p>
+<h3 id="sources-and-currency">Sources and currency</h3>
+<p>Technical corrections were checked against documentation on November 1, 2026; the setup wasn’t repeated on an Android device.</p>
+<ul>
+<li><a class="external" rel="noopener external" target="_blank" href="https://github.com/termux/termux-app#installation">Termux installation and build limitations</a></li>
+<li><a class="external" rel="noopener external" target="_blank" href="https://cli.github.com/manual/gh_auth_login">GitHub CLI authentication</a></li>
+<li><a class="external" rel="noopener external" target="_blank" href="https://github.com/Vinzent03/obsidian-git#mobile-support-experimental">Obsidian Git mobile limitations</a></li>
+<li><a class="external" rel="noopener external" target="_blank" href="https://github.com/DovieW/obsidian-android-sync">Obsidian Android Sync: current instructions and scripts</a></li>
+<li><a class="external" rel="noopener external" target="_blank" href="https://git-scm.com/docs/git-pull">Git: retrieving and integrating changes</a></li>
+</ul>
 
         </section>
         
